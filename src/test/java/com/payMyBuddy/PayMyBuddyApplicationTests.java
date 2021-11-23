@@ -1,4 +1,4 @@
-package com.openclassrooms.payMyBuddy;
+package com.payMyBuddy;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

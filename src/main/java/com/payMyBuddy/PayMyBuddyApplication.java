@@ -1,4 +1,4 @@
-package com.openclassrooms.payMyBuddy;
+package com.payMyBuddy;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
