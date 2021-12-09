@@ -15,6 +15,6 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
 
     public List<Transaction> findAllByUser(User user) {
-        return transactionRepository.findAllByCreditorOrDebtor(user, user);
+        return transactionRepository.findAllByCreditorIdOrDebtorId(user, user);
     }
 }

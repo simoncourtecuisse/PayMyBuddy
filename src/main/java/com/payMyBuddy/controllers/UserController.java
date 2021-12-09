@@ -15,22 +15,60 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+//    @PostMapping(value = "/user")
+//    public ResponseEntity<?> createUser(@RequestBody User user) {
+//        System.out.println(user);
+//        if (userService.getUserByEmail(user.getEmail()).isEmpty()) {
+//            userService.createUser(user);
+//            return new ResponseEntity<>("User Created", HttpStatus.CREATED);
+//        }
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();        // DIFFERENCE ENTRE LES DEUX ????
+//        //return ResponseEntity.badRequest().build();
+//    }
+
     @PostMapping(value = "/user")
     public ResponseEntity<?> createUser(@RequestBody User user) {
-        if(userService.getUserByEmail(user.getEmail()).isEmpty()) {
-            userService.createUser(user);
+        System.out.println(user);
+                    userService.createUser(user);
             return new ResponseEntity<>("User Created", HttpStatus.CREATED);
-        }
-        return ResponseEntity.badRequest().build();
+
     }
 
     @GetMapping(value = "/user")
     public ResponseEntity<?> getUserByEmail(@RequestParam("email") String email) {
         Optional<User> user = userService.getUserByEmail(email);
-        if (user.isEmpty()){
+        if (user.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         return new ResponseEntity<>("User found", HttpStatus.OK);
+    }
+
+    @PutMapping(value = "/addFriend")
+    public ResponseEntity<?> addFriend(@RequestParam int fromUser, @RequestParam int toUser) {
+        if (userService.getUserById(fromUser).isEmpty() || userService.getUserById(toUser).isEmpty()) {
+            return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.BAD_REQUEST);
+        }
+        User user = userService.getUserById(fromUser).get();
+        User friendUser = userService.getUserById(toUser).get();
+        if (!user.getFriendList().contains(friendUser)) {
+            userService.addFriend(user, friendUser);
+            return new ResponseEntity<>("Friend Added", HttpStatus.CREATED);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @PutMapping(value = "/removeFriend")
+    public ResponseEntity<?> removeFriend(@RequestParam int fromUser, @RequestParam int toUser) {
+        if (userService.getUserById(fromUser).isEmpty() || userService.getUserById(toUser).isEmpty()) {
+            return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.BAD_REQUEST);
+        }
+        User user = userService.getUserById(fromUser).get();
+        User friendUser = userService.getUserById(toUser).get();
+        if (user.getFriendList().contains(friendUser)) {
+            userService.removeFriend(user, friendUser);
+            return new ResponseEntity<>("Friend Removed", HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
 }

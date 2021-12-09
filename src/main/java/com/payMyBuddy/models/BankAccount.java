@@ -1,8 +1,11 @@
 package com.payMyBuddy.models;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 
 @Entity
+@DynamicUpdate
 @Table(name = "bank_account")
 public class BankAccount {
 

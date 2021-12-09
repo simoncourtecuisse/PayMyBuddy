@@ -14,8 +14,24 @@ public class BankAccountService {
     @Autowired
     private BankAccountRepository bankAccountRepository;
 
-    public List<BankAccount> findByUser(User user){
-        return bankAccountRepository.findAllByUser(user);
+    public void addBankAccount(BankAccount bankAccount) {
+        bankAccountRepository.save(bankAccount);
     }
 
+
+//    public BankAccount createBankTransaction (int bankAccountId, int iban, User userBankAccount) {
+//        BankAccount bankTransaction = new BankAccount(bankAccountId, iban, userBankAccount);
+//        bankTransaction.setBankAccountId(bankAccountId);
+//        bankTransaction.setIban(iban);
+//        bankTransaction.setUserBankAccount(userBankAccount);
+//        return bankTransaction;
+//    }
+//
+//    public List<BankAccount> findByUser(User userBankAccount){
+//        return bankAccountRepository.findAllByUserBankAccount(userBankAccount);
+//    }
+//
+//    public BankAccount saveBankTransaction(BankAccount bankTransaction) {
+//        return bankAccountRepository.save(bankTransaction);
+//    }
 }

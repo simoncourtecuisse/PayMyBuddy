@@ -13,7 +13,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public Iterable<User> getUsers(){
+    public Iterable<User> getAllUsers() {
         return userRepository.findAll();
     }
 
@@ -25,7 +25,17 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public User createUser(User user){
-        return userRepository.save(user);
+    public void createUser(User user) {
+        userRepository.save(user);
+    }
+
+    public void addFriend(User user, User friendUser) {
+        user.getFriendList().add(friendUser);
+        userRepository.save(user);
+    }
+
+    public void removeFriend(User user, User friendUser) {
+        user.getFriendList().remove(friendUser);
+        userRepository.save(user);
     }
 }

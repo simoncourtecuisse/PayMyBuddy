@@ -9,5 +9,6 @@ import java.util.List;
 
 @Repository
 public interface TransactionRepository extends CrudRepository<Transaction, Integer> {
-   List<Transaction> findAllByCreditorOrDebtor(User creditor, User debtor);
+   List<Transaction> findAllByCreditorIdOrDebtorId(User creditorId, User debtorId);
 }
+

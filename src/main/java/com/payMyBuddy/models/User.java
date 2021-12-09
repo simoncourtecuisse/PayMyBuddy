@@ -1,5 +1,7 @@
 package com.payMyBuddy.models;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -7,8 +9,10 @@ import java.util.List;
 import java.util.function.LongUnaryOperator;
 
 @Entity
+@DynamicUpdate
 @Table(name = "user")
 public class User {
+    public User(){}
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
