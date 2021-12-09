@@ -27,10 +27,10 @@ public class User {
     @Column(name = "password", nullable = false, length = 100)
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "contact", joinColumns =
-            @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_user_id"))
-    private List<User> friendList;
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(name = "contact", joinColumns =
+//            @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_user_id"))
+//    private List<User> friendList;
 
     public int getUserId() {
         return userId;
@@ -80,11 +80,11 @@ public class User {
         this.password = password;
     }
 
-    public List<User> getFriendList() {
-        return friendList;
-    }
-
-    public void setFriendList(List<User> friendList) {
-        this.friendList = friendList;
-    }
+//    public List<User> getFriendList() {
+//        return friendList;
+//    }
+//
+//    public void setFriendList(List<User> friendList) {
+//        this.friendList = friendList;
+//    }
 }
