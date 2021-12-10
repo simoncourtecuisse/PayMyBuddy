@@ -30,4 +30,31 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void updateUser(User user) {
+        Optional<User> maj = userRepository.findByEmail(user.getEmail());
+        if (maj.isPresent()){
+                userRepository.save(user);
+        }
+//        Optional<User> majUser = userRepository.findById(user.getUserId());
+//        if (majUser.isPresent()){
+//            userRepository.save(user);
+//        }
+    }
+
+    public void deleteUser(User user) {
+        Optional<User> removeUser = userRepository.findByEmail(user.getEmail());
+        if(removeUser.isPresent()) {
+            userRepository.deleteById(user.getUserId());
+        }
+    }
+
+    public void addFriend(User user, User friendUser) {
+        user.getFriendList().add(friendUser);
+        userRepository.save(user);
+    }
+
+    public void removeFriend(User user, User friendUser) {
+        user.getFriendList().remove(friendUser);
+        userRepository.save(user);
+    }
 }

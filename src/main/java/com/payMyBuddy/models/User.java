@@ -4,6 +4,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @DynamicUpdate
@@ -42,10 +43,10 @@ public class User {
 //            cascade = CascadeType.ALL)
 //    List<Transaction> debtorList = new ArrayList<>();
 //
-//    @ManyToMany (fetch = FetchType.EAGER)
-//    @JoinTable(name = "contact", joinColumns =
-//    @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_user_id"))
-//    private List<User> friendList;
+    @ManyToMany (fetch = FetchType.EAGER)
+    @JoinTable(name = "contact", joinColumns =
+    @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_user_id"))
+    private List<User> friendList;
 
     public User(int userId, String firstName, String lastName, String email, String password, BigDecimal balance) {
         this.userId = userId;
@@ -104,13 +105,13 @@ public class User {
         this.balance = balance;
     }
 
-//    public List<User> getFriendList() {
-//        return friendList;
-//    }
-//
-//    public void setFriendList(List<User> friendList) {
-//        this.friendList = friendList;
-//    }
+    public List<User> getFriendList() {
+        return friendList;
+    }
+
+    public void setFriendList(List<User> friendList) {
+        this.friendList = friendList;
+    }
 
 //    public void addBankAccount(BankAccount bankAccount) {
 //        bankAccountList.add(bankAccount);
