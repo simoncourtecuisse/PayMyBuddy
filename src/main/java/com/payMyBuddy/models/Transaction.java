@@ -10,6 +10,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @DynamicUpdate
@@ -36,16 +38,32 @@ public class Transaction {
     @Column(name = "commission", nullable = false, precision = 6, scale = 2)
     private BigDecimal commission;
 
+    @OneToMany(
+            mappedBy = "transaction",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<TransactionLabel> transactionLabels = new ArrayList<>();
+
     public Transaction() {
 
     }
 
-    public Transaction(int transactionId, BigDecimal amount, LocalDate date, int labelId, BigDecimal commission) {
+//    public Transaction(int transactionId, BigDecimal amount, LocalDate date, int labelId, BigDecimal commission) {
+//        this.transactionId = transactionId;
+//        this.amount = amount;
+//        this.date = date;
+//        this.labelId = labelId;
+//        this.commission = commission;
+//    }
+
+    public Transaction(int transactionId, BigDecimal amount, LocalDate date, int labelId, BigDecimal commission, List<TransactionLabel> transactionLabels) {
         this.transactionId = transactionId;
         this.amount = amount;
         this.date = date;
         this.labelId = labelId;
         this.commission = commission;
+        this.transactionLabels = transactionLabels;
     }
 
     public int getTransactionId() {
@@ -86,5 +104,13 @@ public class Transaction {
 
     public void setCommission(BigDecimal commission) {
         this.commission = commission;
+    }
+
+    public List<TransactionLabel> getTransactionLabels() {
+        return transactionLabels;
+    }
+
+    public void setTransactionLabels(List<TransactionLabel> transactionLabels) {
+        this.transactionLabels = transactionLabels;
     }
 }

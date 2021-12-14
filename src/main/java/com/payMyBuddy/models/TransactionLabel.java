@@ -17,11 +17,18 @@ public class TransactionLabel {
     @Column(name = "description", nullable = false, length = 1000)
     private String description;
 
+    @ManyToOne(
+            cascade = CascadeType.ALL
+    )
+    @JoinColumn(name = "transaction_id")
+    private Transaction transaction;
+
     public TransactionLabel(){}
 
-    public TransactionLabel(int transactionLabelId, String description) {
+    public TransactionLabel(int transactionLabelId, String description, Transaction transaction) {
         this.transactionLabelId = transactionLabelId;
         this.description = description;
+        this.transaction = transaction;
     }
 
     public int getTransactionLabelId() {
@@ -38,5 +45,13 @@ public class TransactionLabel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Transaction getTransaction() {
+        return transaction;
+    }
+
+    public void setTransaction(Transaction transaction) {
+        this.transaction = transaction;
     }
 }

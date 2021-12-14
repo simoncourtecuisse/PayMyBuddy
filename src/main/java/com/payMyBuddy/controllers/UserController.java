@@ -60,7 +60,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PutMapping(value = "/removeFriend")
+    @DeleteMapping(value = "/removeFriend")
     public ResponseEntity<?> removeFriend(@RequestParam int fromUser, @RequestParam int toUser) {
         if (userService.getUserById(fromUser).isEmpty() || userService.getUserById(toUser).isEmpty()) {
             return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.BAD_REQUEST);
