@@ -33,7 +33,7 @@ public class UserController {
 
     @PutMapping(value = "/user")
     public ResponseEntity<?> updateUser(@RequestBody User user) {
-        if(userService.getUserByEmail(user.getEmail()).isPresent()) {
+        if(userService.getUserById(user.getUserId()).isPresent()) {
             userService.updateUser(user);
             return new ResponseEntity<>("User updated", HttpStatus.OK);
         }
