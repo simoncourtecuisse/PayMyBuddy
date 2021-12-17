@@ -18,7 +18,7 @@ public class BankAccountService {
         return bankAccountRepository.findAll();
     }
 
-    public Optional<BankAccount> getBankAccountById(Integer id) {
+    public Optional<BankAccount> getBankAccountById(Long id) {
         return bankAccountRepository.findById(id);
     }
 

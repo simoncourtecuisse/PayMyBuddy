@@ -12,23 +12,22 @@ public class BankAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bank_account_id")
-    private int bankAccountId;
+    private Long bankAccountId;
 
     @Column(name = "iban", nullable = false)
     private int iban;
 
     public BankAccount(){}
 
-    public BankAccount(int bankAccountId, int iban) {
-        this.bankAccountId = bankAccountId;
+    public BankAccount(int iban) {
         this.iban = iban;
     }
 
-    public int getBankAccountId() {
+    public Long getBankAccountId() {
         return bankAccountId;
     }
 
-    public void setBankAccountId(int bankAccountId) {
+    public void setBankAccountId(Long bankAccountId) {
         this.bankAccountId = bankAccountId;
     }
 

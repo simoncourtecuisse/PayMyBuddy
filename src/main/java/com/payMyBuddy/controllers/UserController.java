@@ -41,14 +41,14 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/user")
-    public ResponseEntity<?> deleteUser(@RequestParam int id){
+    public ResponseEntity<?> deleteUser(@RequestParam Long id){
         User user = userService.getUserById(id).get();
         userService.deleteUser(user);
         return new ResponseEntity<>("Successful Operation", HttpStatus.OK);
     }
 
     @PutMapping(value = "/addFriend")
-    public ResponseEntity<?> addFriend(@RequestParam int fromUser, @RequestParam int toUser) {
+    public ResponseEntity<?> addFriend(@RequestParam Long fromUser, @RequestParam Long toUser) {
         if (userService.getUserById(fromUser).isEmpty() || userService.getUserById(toUser).isEmpty()) {
             return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.BAD_REQUEST);
         }
@@ -62,7 +62,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/removeFriend")
-    public ResponseEntity<?> removeFriend(@RequestParam int fromUser, @RequestParam int toUser) {
+    public ResponseEntity<?> removeFriend(@RequestParam Long fromUser, @RequestParam Long toUser) {
         if (userService.getUserById(fromUser).isEmpty() || userService.getUserById(toUser).isEmpty()) {
             return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.BAD_REQUEST);
         }

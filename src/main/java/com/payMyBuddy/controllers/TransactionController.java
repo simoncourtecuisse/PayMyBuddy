@@ -27,7 +27,7 @@ public class TransactionController {
     }
 
     @GetMapping(value = "/transaction")
-    public ResponseEntity<?> getTransactionById(@RequestParam("transactionId")int id) {
+    public ResponseEntity<?> getTransactionById(@RequestParam("transactionId")Long id) {
         Optional<Transaction> transaction = transactionService.getTransactionById(id);
         if (transaction.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

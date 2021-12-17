@@ -18,7 +18,7 @@ public class TransactionService {
         return transactionRepository.findAll();
     }
 
-    public Optional<Transaction> getTransactionById(Integer id) {
+    public Optional<Transaction> getTransactionById(Long id) {
         return transactionRepository.findById(id);
     }
 

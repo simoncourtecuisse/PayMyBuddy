@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface TransactionRepository extends CrudRepository<Transaction, Integer> {
+public interface TransactionRepository extends CrudRepository<Transaction, Long> {
 }

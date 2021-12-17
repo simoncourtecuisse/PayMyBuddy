@@ -18,7 +18,7 @@ public class TransactionLabelService {
         return transactionLabelRepository.findAll();
     }
 
-    public Optional<TransactionLabel> getTransactionLabelById(Integer id) {
+    public Optional<TransactionLabel> getTransactionLabelById(Long id) {
         return transactionLabelRepository.findById(id);
     }
 

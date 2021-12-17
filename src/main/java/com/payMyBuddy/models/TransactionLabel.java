@@ -14,7 +14,7 @@ public class TransactionLabel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "transaction_label_id", nullable = false)
-    private int transactionLabelId;
+    private Long transactionLabelId;
 
     @Column(name = "description", nullable = false, length = 1000)
     private String description;
@@ -31,17 +31,16 @@ public class TransactionLabel {
 
     public TransactionLabel(){}
 
-    public TransactionLabel(int transactionLabelId, String description) {
-        this.transactionLabelId = transactionLabelId;
+    public TransactionLabel(String description, List<Transaction> transaction) {
         this.description = description;
-//        this.transaction = transaction;
+        this.transaction = transaction;
     }
 
-    public int getTransactionLabelId() {
+    public Long getTransactionLabelId() {
         return transactionLabelId;
     }
 
-    public void setTransactionLabelId(int transactionLabelId) {
+    public void setTransactionLabelId(Long transactionLabelId) {
         this.transactionLabelId = transactionLabelId;
     }
 

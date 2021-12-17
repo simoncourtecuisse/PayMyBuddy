@@ -21,7 +21,7 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "transaction_id", nullable = false)
-    private int transactionId;
+    private Long transactionId;
 
     @Column(name = "amount", nullable = false, precision = 6, scale = 2)
     private BigDecimal amount;
@@ -31,9 +31,6 @@ public class Transaction {
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
     private LocalDate date;
-
-//    @Column(name = "label_id", nullable = false)
-//    private int labelId;
 
     @Column(name = "commission", nullable = false, precision = 6, scale = 2)
     private BigDecimal commission;
@@ -58,28 +55,18 @@ public class Transaction {
 
     }
 
-//    public Transaction(int transactionId, BigDecimal amount, LocalDate date, int labelId, BigDecimal commission) {
-//        this.transactionId = transactionId;
-//        this.amount = amount;
-//        this.date = date;
-//        this.labelId = labelId;
-//        this.commission = commission;
-//    }
-
-    public Transaction(int transactionId, BigDecimal amount, LocalDate date, BigDecimal commission, TransactionLabel transactionLabelsId) {
-        this.transactionId = transactionId;
+    public Transaction(BigDecimal amount, LocalDate date, BigDecimal commission, TransactionLabel transactionLabelsId) {
         this.amount = amount;
         this.date = date;
-//        this.labelId = labelId;
         this.commission = commission;
         this.transactionLabelsId = transactionLabelsId;
     }
 
-    public int getTransactionId() {
+    public Long getTransactionId() {
         return transactionId;
     }
 
-    public void setTransactionId(int transactionId) {
+    public void setTransactionId(Long transactionId) {
         this.transactionId = transactionId;
     }
 
@@ -98,14 +85,6 @@ public class Transaction {
     public void setDate(LocalDate date) {
         this.date = date;
     }
-
-//    public int getLabelId() {
-//        return labelId;
-//    }
-//
-//    public void setLabelId(int labelId) {
-//        this.labelId = labelId;
-//    }
 
     public BigDecimal getCommission() {
         return commission;

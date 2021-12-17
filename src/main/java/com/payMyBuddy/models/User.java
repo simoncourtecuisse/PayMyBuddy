@@ -14,7 +14,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private int userId;
+    private Long userId;
     @Column(name = "first_name", nullable = false)
     private String firstName;
     @Column(name = "last_name", nullable = false)
@@ -49,20 +49,20 @@ public class User {
     @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_user_id"))
     private List<User> friendList;
 
-    public User(int userId, String firstName, String lastName, String email, String password, BigDecimal balance) {
-        this.userId = userId;
+    public User(String firstName, String lastName, String email, String password, BigDecimal balance, List<User> friendList) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.balance = balance;
+        this.friendList = friendList;
     }
 
-    public int getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
