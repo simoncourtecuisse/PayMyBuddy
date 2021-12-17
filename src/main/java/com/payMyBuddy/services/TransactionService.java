@@ -40,13 +40,13 @@ public class TransactionService {
         }
     }
 
-    public void addTransactionLabel(Transaction transaction, TransactionLabel transactionLabel) {
-        transaction.getTransactionLabels().add(transactionLabel);
-        transactionRepository.save(transaction);
-    }
-
-    public void removeTransactionLabel(Transaction transaction, TransactionLabel transactionLabel) {
-        transaction.getTransactionLabels().remove(transactionLabel);
-        transactionRepository.save(transaction);
-    }
+//    public void addTransactionLabel(Transaction transaction, TransactionLabel transactionLabel) {
+//        transaction.getTransactionLabels().add(transactionLabel);
+//        transactionRepository.save(transaction);
+//    }
+//
+//    public void removeTransactionLabel(Transaction transaction, TransactionLabel transactionLabel) {
+//        transaction.getTransactionLabels().remove(transactionLabel);
+//        transactionRepository.save(transaction);
+//    }
 }

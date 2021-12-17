@@ -32,18 +32,27 @@ public class Transaction {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
     private LocalDate date;
 
-    @Column(name = "label_id", nullable = false)
-    private int labelId;
+//    @Column(name = "label_id", nullable = false)
+//    private int labelId;
 
     @Column(name = "commission", nullable = false, precision = 6, scale = 2)
     private BigDecimal commission;
 
-    @OneToMany(
-            mappedBy = "transaction",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<TransactionLabel> transactionLabels = new ArrayList<>();
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "transaction_label_id")
+    private TransactionLabel transactionLabelsId;
+
+//
+//    @OneToMany(/*mappedBy = "transaction",*/ cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "transaction_id")
+//    private List<TransactionLabel> transactionLabels;
+
+//    @OneToMany(
+//            mappedBy = "transaction",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true
+//    )
+//    private List<TransactionLabel> transactionLabels = new ArrayList<>();
 
     public Transaction() {
 
@@ -57,13 +66,13 @@ public class Transaction {
 //        this.commission = commission;
 //    }
 
-    public Transaction(int transactionId, BigDecimal amount, LocalDate date, int labelId, BigDecimal commission, List<TransactionLabel> transactionLabels) {
+    public Transaction(int transactionId, BigDecimal amount, LocalDate date, BigDecimal commission, TransactionLabel transactionLabelsId) {
         this.transactionId = transactionId;
         this.amount = amount;
         this.date = date;
-        this.labelId = labelId;
+//        this.labelId = labelId;
         this.commission = commission;
-        this.transactionLabels = transactionLabels;
+        this.transactionLabelsId = transactionLabelsId;
     }
 
     public int getTransactionId() {
@@ -90,13 +99,13 @@ public class Transaction {
         this.date = date;
     }
 
-    public int getLabelId() {
-        return labelId;
-    }
-
-    public void setLabelId(int labelId) {
-        this.labelId = labelId;
-    }
+//    public int getLabelId() {
+//        return labelId;
+//    }
+//
+//    public void setLabelId(int labelId) {
+//        this.labelId = labelId;
+//    }
 
     public BigDecimal getCommission() {
         return commission;
@@ -106,11 +115,12 @@ public class Transaction {
         this.commission = commission;
     }
 
-    public List<TransactionLabel> getTransactionLabels() {
-        return transactionLabels;
+    public TransactionLabel getTransactionLabels() {
+        return transactionLabelsId;
     }
 
-    public void setTransactionLabels(List<TransactionLabel> transactionLabels) {
-        this.transactionLabels = transactionLabels;
+    public void setTransactionLabels(TransactionLabel transactionLabels) {
+        this.transactionLabelsId = transactionLabels;
     }
+
 }

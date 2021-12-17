@@ -41,7 +41,8 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/user")
-    public ResponseEntity<?> deleteUser(@RequestBody User user){
+    public ResponseEntity<?> deleteUser(@RequestParam int id){
+        User user = userService.getUserById(id).get();
         userService.deleteUser(user);
         return new ResponseEntity<>("Successful Operation", HttpStatus.OK);
     }

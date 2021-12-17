@@ -1,5 +1,6 @@
 package com.payMyBuddy.services;
 
+import com.payMyBuddy.models.Transaction;
 import com.payMyBuddy.models.TransactionLabel;
 import com.payMyBuddy.repositories.TransactionLabelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,15 @@ public class TransactionLabelService {
         if (removeTransactionLabel.isPresent()) {
             transactionLabelRepository.deleteById(transactionLabel.getTransactionLabelId());
         }
+    }
+
+    public void addTransactionLabel(TransactionLabel transactionLabel, Transaction transaction) {
+        transactionLabel.getTransactions().add(transaction);
+        transactionLabelRepository.save(transactionLabel);
+    }
+
+    public void removeTransactionLabel(TransactionLabel transactionLabel, Transaction transaction) {
+        transactionLabel.getTransactions().remove(transaction);
+        transactionLabelRepository.save(transactionLabel);
     }
 }
