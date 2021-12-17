@@ -31,7 +31,7 @@ public class BankAccountService {
     }
 
     public void updateBankAccount(BankAccount bankAccount) {
-        Optional<BankAccount> maj = bankAccountRepository.findByIban(bankAccount.getIban());
+        Optional<BankAccount> maj = bankAccountRepository.findById(bankAccount.getBankAccountId());
         if (maj.isPresent()){
             bankAccountRepository.save(bankAccount);
         }

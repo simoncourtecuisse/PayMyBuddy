@@ -17,6 +17,18 @@ public class BankAccount {
     @Column(name = "iban", nullable = false)
     private int iban;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private User userId;
+
+    public User getUserId() {
+        return userId;
+    }
+
+    public void setUserId(User userId) {
+        this.userId = userId;
+    }
+
     public BankAccount(){}
 
     public BankAccount(int iban) {

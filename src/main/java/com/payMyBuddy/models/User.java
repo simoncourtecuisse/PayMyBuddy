@@ -4,6 +4,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,8 +27,10 @@ public class User {
     @Column(name = "balance", nullable = false, precision = 6, scale = 2)
     private BigDecimal balance;
 
-    public User() {
-    }
+    @OneToMany(mappedBy = "userId", cascade =CascadeType.ALL, orphanRemoval = true)
+    private List<BankAccount> bankAccountId = new ArrayList<>();
+
+    public User() {}
 
 //    @OneToMany(
 //            mappedBy = "userBankAccount",
@@ -48,6 +51,14 @@ public class User {
     @JoinTable(name = "contact", joinColumns =
     @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_user_id"))
     private List<User> friendList;
+
+    public List<BankAccount> getBankAccountId() {
+        return bankAccountId;
+    }
+
+    public void setBankAccountId(List<BankAccount> bankAccountId) {
+        this.bankAccountId = bankAccountId;
+    }
 
     public User(String firstName, String lastName, String email, String password, BigDecimal balance, List<User> friendList) {
         this.firstName = firstName;

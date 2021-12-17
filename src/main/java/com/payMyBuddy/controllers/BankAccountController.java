@@ -1,14 +1,12 @@
 package com.payMyBuddy.controllers;
 
 import com.payMyBuddy.models.BankAccount;
-import com.payMyBuddy.models.User;
 import com.payMyBuddy.services.BankAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,8 +22,8 @@ public class BankAccountController {
     }
 
     @GetMapping(value = "/bankAccount")
-    public ResponseEntity<?> getBankAccount(@RequestParam(value = "iban") int iban) {
-        Optional<BankAccount> bankAccount = bankAccountService.getBankAccountByIban(iban);
+    public ResponseEntity<?> getBankAccount(@RequestParam(value = "bankAccountId") Long id) {
+        Optional<BankAccount> bankAccount = bankAccountService.getBankAccountById(id);
         if (bankAccount.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -34,7 +32,7 @@ public class BankAccountController {
 
     @PutMapping(value = "/bankAccount")
     public ResponseEntity<?> updateBankAccount(@RequestBody BankAccount bankAccount) {
-        if (bankAccountService.getBankAccountByIban(bankAccount.getIban()).isPresent()) {
+        if (bankAccountService.getBankAccountById(bankAccount.getBankAccountId()).isPresent()) {
             bankAccountService.updateBankAccount(bankAccount);
             return new ResponseEntity<>("Bank Account updated", HttpStatus.OK);
         }
@@ -42,7 +40,8 @@ public class BankAccountController {
     }
 
     @DeleteMapping(value = "/bankAccount")
-    public ResponseEntity<?> deleteBankAccount(@RequestBody BankAccount bankAccount){
+    public ResponseEntity<?> deleteBankAccount(@RequestParam(value = "bankAccountId") Long id) {
+        BankAccount bankAccount = bankAccountService.getBankAccountById(id).get();
         bankAccountService.deleteBankAccount(bankAccount);
         return new ResponseEntity<>("Successful Operation", HttpStatus.OK);
     }
