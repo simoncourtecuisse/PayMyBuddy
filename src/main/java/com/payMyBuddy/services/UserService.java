@@ -1,6 +1,8 @@
 package com.payMyBuddy.services;
 
 
+import com.payMyBuddy.models.BankAccount;
+import com.payMyBuddy.models.Transaction;
 import com.payMyBuddy.models.User;
 import com.payMyBuddy.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,4 +59,35 @@ public class UserService {
         user.getFriendList().remove(friendUser);
         userRepository.save(user);
     }
+
+    public void addBankAccount(User user, BankAccount bankAccount) {
+        user.getUserBankAccount().add(bankAccount);
+        userRepository.save(user);
+    }
+
+    public void removeBankAccount(User user, BankAccount bankAccount) {
+        user.getUserBankAccount().remove(bankAccount);
+        userRepository.save(user);
+    }
+
+    public void addCreditorToTransaction(User creditor, Transaction transaction) {
+        creditor.getCreditorList().add(transaction);
+        userRepository.save(creditor);
+    }
+
+    public void removeCreditorToTransaction(User creditor, Transaction transaction) {
+        creditor.getCreditorList().remove(transaction);
+        userRepository.save(creditor);
+    }
+
+    public void addDebtorToTransaction(User debtor, Transaction transaction) {
+        debtor.getDebtorList().add(transaction);
+        userRepository.save(debtor);
+    }
+
+    public void removeDebtorToTransaction(User debtor, Transaction transaction) {
+        debtor.getDebtorList().remove(transaction);
+        userRepository.save(debtor);
+    }
+
 }

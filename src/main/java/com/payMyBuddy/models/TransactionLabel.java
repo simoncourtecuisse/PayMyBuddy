@@ -6,28 +6,33 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity(name = "Transaction Label")
 @DynamicUpdate
 @Table(name = "transaction_label")
 public class TransactionLabel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(
+            name = "transaction_label_sequence",
+            sequenceName = "transaction_label_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "transaction_label_sequence"
+    )
     @Column(name = "transaction_label_id", nullable = false)
     private Long transactionLabelId;
 
     @Column(name = "description", nullable = false, length = 1000)
     private String description;
 
-   @OneToMany(/*mappedBy = "transactionLabelsId",*/ cascade = CascadeType.ALL)
-   @JoinColumn(name = "transaction_label_id")
-   private List<Transaction> transaction;
+//    @OneToMany(mappedBy = "transactionLabelId")
+//    private List<Transaction> transaction;
 
-//    @ManyToOne(
-//            cascade = CascadeType.ALL
-//    )
-//    @JoinColumn(name = "transaction_id")
-//    private Transaction transaction;
+    @OneToMany(/*mappedBy = "transactionLabelId",*/ cascade = CascadeType.ALL)
+    @JoinColumn(name = "transaction_label_id")
+    private List<Transaction> transaction;
 
     public TransactionLabel(){}
 

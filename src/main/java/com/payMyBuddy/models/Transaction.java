@@ -10,16 +10,22 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
-@Entity
+@Entity(name = "Transaction")
 @DynamicUpdate
 @Table(name = "transaction")
 public class Transaction {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(
+            name = "transaction_sequence",
+            sequenceName = "transaction_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "transaction_sequence"
+    )
     @Column(name = "transaction_id", nullable = false)
     private Long transactionId;
 
@@ -37,29 +43,25 @@ public class Transaction {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "transaction_label_id")
-    private TransactionLabel transactionLabelsId;
+    TransactionLabel transactionLabelId;
 
-//
-//    @OneToMany(/*mappedBy = "transaction",*/ cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "transaction_id")
-//    private List<TransactionLabel> transactionLabels;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "creditor_id")
+    User userId;
 
-//    @OneToMany(
-//            mappedBy = "transaction",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true
-//    )
-//    private List<TransactionLabel> transactionLabels = new ArrayList<>();
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "debtor_id")
+    User userIdDebtor;
 
     public Transaction() {
 
     }
 
-    public Transaction(BigDecimal amount, LocalDate date, BigDecimal commission, TransactionLabel transactionLabelsId) {
+    public Transaction(BigDecimal amount, LocalDate date, BigDecimal commission, TransactionLabel transactionLabelId) {
         this.amount = amount;
         this.date = date;
         this.commission = commission;
-        this.transactionLabelsId = transactionLabelsId;
+        this.transactionLabelId = transactionLabelId;
     }
 
     public Long getTransactionId() {
@@ -95,11 +97,26 @@ public class Transaction {
     }
 
     public TransactionLabel getTransactionLabels() {
-        return transactionLabelsId;
+        return transactionLabelId;
     }
 
     public void setTransactionLabels(TransactionLabel transactionLabels) {
-        this.transactionLabelsId = transactionLabels;
+        this.transactionLabelId = transactionLabels;
     }
 
+    public User getUserId() {
+        return userId;
+    }
+
+    public void setUserId(User userId) {
+        this.userId = userId;
+    }
+
+    public User getUserIdDebtor() {
+        return userIdDebtor;
+    }
+
+    public void setUserIdDebtor(User userId) {
+        this.userId = userIdDebtor;
+    }
 }

@@ -4,13 +4,21 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "Bank Account")
 @DynamicUpdate
 @Table(name = "bank_account")
 public class BankAccount {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(
+            name = "bank_account_sequence",
+            sequenceName = "bank_account_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "bank_account_sequence"
+    )
     @Column(name = "bank_account_id")
     private Long bankAccountId;
 
@@ -20,14 +28,6 @@ public class BankAccount {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User userId;
-
-    public User getUserId() {
-        return userId;
-    }
-
-    public void setUserId(User userId) {
-        this.userId = userId;
-    }
 
     public BankAccount(){}
 
@@ -49,5 +49,13 @@ public class BankAccount {
 
     public void setIban(int iban) {
         this.iban = iban;
+    }
+
+    public User getUserId() {
+        return userId;
+    }
+
+    public void setUserId(User userId) {
+        this.userId = userId;
     }
 }

@@ -53,7 +53,7 @@ public class TransactionLabelController {
     @PutMapping(value = "/addTransactionLabel")
     public ResponseEntity<?> addTransactionLabel(@RequestParam Long transactionLabelId, @RequestParam Long transactionId) {
         if (transactionLabelService.getTransactionLabelById(transactionLabelId).isEmpty() || transactionService.getTransactionById(transactionId).isEmpty()) {
-            return new ResponseEntity<>("Transaction Label doesn't exist in DB", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Transaction Label doesn't exist in DB", HttpStatus.NOT_FOUND);
         }
         TransactionLabel transactionLabel = transactionLabelService.getTransactionLabelById(transactionLabelId).get();
         Transaction transaction = transactionService.getTransactionById(transactionId).get();
@@ -67,7 +67,7 @@ public class TransactionLabelController {
     @DeleteMapping(value = "/removeTransactionLabel")
     public ResponseEntity<?> removeTransactionLabel(@RequestParam Long transactionLabelId, @RequestParam Long transactionId) {
         if (transactionLabelService.getTransactionLabelById(transactionLabelId).isEmpty() || transactionService.getTransactionById(transactionId).isEmpty()) {
-            return new ResponseEntity<>("Transaction Label doesn't exist in DB", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Transaction Label doesn't exist in DB", HttpStatus.NOT_FOUND);
         }
         TransactionLabel transactionLabel = transactionLabelService.getTransactionLabelById(transactionLabelId).get();
         Transaction transaction = transactionService.getTransactionById(transactionId).get();
