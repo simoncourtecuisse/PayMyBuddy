@@ -39,11 +39,14 @@ public class BankAccountController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping(value = "/bankAccount")
-    public ResponseEntity<?> deleteBankAccount(@RequestParam(value = "bankAccountId") Long id) {
-        BankAccount bankAccount = bankAccountService.getBankAccountById(id).get();
-        bankAccountService.deleteBankAccount(bankAccount);
-        return new ResponseEntity<>("Successful Operation", HttpStatus.OK);
+    @DeleteMapping("/bankAccount/{bankAccountId}")
+    public ResponseEntity<?> deleteBankAccount(@PathVariable("bankAccountId") Long id) {
+        if (bankAccountService.getBankAccountById(id).isPresent()) {
+            BankAccount bankAccount = bankAccountService.getBankAccountById(id).get();
+            bankAccountService.deleteBankAccount(bankAccount);
+            return new ResponseEntity<>("Successful Operation", HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
 }

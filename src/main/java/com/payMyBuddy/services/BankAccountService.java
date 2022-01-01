@@ -38,7 +38,7 @@ public class BankAccountService {
     }
 
     public void deleteBankAccount(BankAccount bankAccount) {
-        Optional<BankAccount> removeBankAccount = bankAccountRepository.findByIban(bankAccount.getIban());
+        Optional<BankAccount> removeBankAccount = bankAccountRepository.findById(bankAccount.getBankAccountId());
         if(removeBankAccount.isPresent()) {
             bankAccountRepository.deleteById(bankAccount.getBankAccountId());
         }

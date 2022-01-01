@@ -50,11 +50,14 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping(value = "/user")
-    public ResponseEntity<?> deleteUser(@RequestParam Long id){
-        User user = userService.getUserById(id).get();
-        userService.deleteUser(user);
-        return new ResponseEntity<>("Successful Operation", HttpStatus.OK);
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable("userId") Long id){
+        if (userService.getUserById(id).isPresent()) {
+            User user = userService.getUserById(id).get();
+            userService.deleteUser(user);
+            return new ResponseEntity<>("Successful Operation", HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @PutMapping(value = "/addFriend")

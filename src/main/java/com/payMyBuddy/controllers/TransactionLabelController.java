@@ -44,10 +44,14 @@ public class TransactionLabelController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping(value = "/transaction_label")
-    public ResponseEntity<?> deleteTransactionLabel(@RequestBody TransactionLabel transactionLabel) {
-        transactionLabelService.deleteTransactionLabel(transactionLabel);
-        return new ResponseEntity<>("Successful Operation", HttpStatus.OK);
+    @DeleteMapping("/transaction_label/{transactionLabelId}")
+    public ResponseEntity<?> deleteTransactionLabel(@PathVariable("transactionLabelId") Long id) {
+        if (transactionLabelService.getTransactionLabelById(id).isPresent()) {
+            TransactionLabel transactionLabel = transactionLabelService.getTransactionLabelById(id).get();
+            transactionLabelService.deleteTransactionLabel(transactionLabel);
+            return new ResponseEntity<>("Successful Operation", HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @PutMapping(value = "/addTransactionLabel")
