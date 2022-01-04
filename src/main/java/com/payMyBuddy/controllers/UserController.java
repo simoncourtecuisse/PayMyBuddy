@@ -41,14 +41,25 @@ public class UserController {
         return new ResponseEntity<>("User found", HttpStatus.OK);
     }
 
-    @PutMapping(value = "/user")
-    public ResponseEntity<?> updateUser(@RequestBody User user) {
-        if(userService.getUserById(user.getUserId()).isPresent()) {
+    @PutMapping("/user/{userId}")
+    public ResponseEntity<?> updateUser(@PathVariable("userId") Long id, @RequestBody User user) {
+        if(userService.getUserById(id).isPresent()) {
+            user = userService.getUserById(id).get();
+//        if(userService.getUserById(user.getUserId()).isPresent()) {
             userService.updateUser(user);
             return new ResponseEntity<>("User updated", HttpStatus.OK);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+
+//    @PutMapping(value = "/user")
+//    public ResponseEntity<?> updateUser(@RequestBody User user) {
+//        if(userService.getUserById(user.getUserId()).isPresent()) {
+//            userService.updateUser(user);
+//            return new ResponseEntity<>("User updated", HttpStatus.OK);
+//        }
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//    }
 
     @DeleteMapping("/user/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable("userId") Long id){

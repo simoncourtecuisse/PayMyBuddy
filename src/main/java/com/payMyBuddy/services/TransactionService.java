@@ -5,10 +5,13 @@ import com.payMyBuddy.models.TransactionLabel;
 import com.payMyBuddy.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class TransactionService {
 
     @Autowired
