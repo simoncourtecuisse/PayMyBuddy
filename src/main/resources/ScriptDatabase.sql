@@ -1,6 +1,7 @@
-CREATE DATABASE IF NOT EXISTS paymybuddytest;
+CREATE DATABASE IF NOT EXISTS paymybuddy;
+use paymybuddy;
 
-CREATE TABLE IF NOT EXISTS paymybuddytest.user (
+CREATE TABLE IF NOT EXISTS user (
 id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 firstname VARCHAR(255) NOT NULL,
 lastname VARCHAR(255) NOT NULL,
@@ -9,13 +10,13 @@ password VARCHAR(255) NOT NULL,
 balance DECIMAL(6,2) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS paymybuddytest.bank_account (
+CREATE TABLE IF NOT EXISTS bank_account (
 id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 user_id BIGINT NOT NULL,
 iban INTEGER NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS paymybuddytest.transaction (
+CREATE TABLE IF NOT EXISTS transaction (
 id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 transaction_label_id BIGINT NOT NULL,
 creditor_id BIGINT NOT NULL,
@@ -25,43 +26,43 @@ commission DECIMAL(6,2) NOT NULL,
 date DATE NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS paymybuddytest.transaction_label (
+CREATE TABLE IF NOT EXISTS transaction_label (
 id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 description VARCHAR(1000) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS paymybuddytest.contact (
+CREATE TABLE IF NOT EXISTS contact (
 user_id BIGINT NOT NULL,
 friend_user_id BIGINT NOT NULL,
 PRIMARY KEY (user_id, friend_user_id)
 );
 
-ALTER TABLE paymybuddytest.contact
+ALTER TABLE contact
 ADD CONSTRAINT user_contact_fk FOREIGN KEY (user_id) REFERENCES user (id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION;
 
-ALTER TABLE paymybuddytest.contact
+ALTER TABLE contact
 ADD CONSTRAINT user_contact_fk1 FOREIGN KEY (friend_user_id) REFERENCES user (id)
 ON DELETE NO ACTION
 ON UPDATE NO ACTION;
 
-ALTER TABLE paymybuddytest.bank_account
+ALTER TABLE bank_account
 ADD CONSTRAINT user_bank_account_fk FOREIGN KEY (user_id) REFERENCES user (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION;
 
-ALTER TABLE paymybuddytest.transaction
+ALTER TABLE transaction
 ADD CONSTRAINT user_transaction_fk FOREIGN KEY (creditor_id) REFERENCES user (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION;
 
-ALTER TABLE paymybuddytest.transaction
+ALTER TABLE transaction
 ADD CONSTRAINT user_transaction_fk1 FOREIGN KEY (debtor_id) REFERENCES user (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION;
 
-ALTER TABLE paymybuddytest.transaction
+ALTER TABLE transaction
 ADD CONSTRAINT transaction_label_fk FOREIGN KEY (transaction_label_id) REFERENCES transaction_label (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION;

@@ -44,8 +44,7 @@ public class UserController {
     @PutMapping("/user/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable("userId") Long id, @RequestBody User user) {
         if(userService.getUserById(id).isPresent()) {
-            user = userService.getUserById(id).get();
-//        if(userService.getUserById(user.getUserId()).isPresent()) {
+            user.setUserId(id);
             userService.updateUser(user);
             return new ResponseEntity<>("User updated", HttpStatus.OK);
         }
@@ -71,7 +70,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PutMapping(value = "/addFriend")
+    @PutMapping(value = "/user/addFriend")
     public ResponseEntity<?> addFriend(@RequestParam Long fromUser, @RequestParam Long toUser) {
         if (userService.getUserById(fromUser).isEmpty() || userService.getUserById(toUser).isEmpty()) {
             return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
@@ -85,7 +84,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping(value = "/removeFriend")
+    @DeleteMapping(value = "/user/removeFriend")
     public ResponseEntity<?> removeFriend(@RequestParam Long fromUser, @RequestParam Long toUser) {
         if (userService.getUserById(fromUser).isEmpty() || userService.getUserById(toUser).isEmpty()) {
             return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
@@ -99,7 +98,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PutMapping(value = "/addBankAccount")
+    @PutMapping(value = "/user/addBankAccount")
     public ResponseEntity<?> addBankAccount(@RequestParam Long userId, @RequestParam Long bankAccountId) {
         if (userService.getUserById(userId).isEmpty() || bankAccountService.getBankAccountById(bankAccountId).isEmpty()){
             return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
@@ -113,7 +112,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping(value = "/removeBankAccount")
+    @DeleteMapping(value = "/user/removeBankAccount")
     public ResponseEntity<?> removeBankAccount(@RequestParam Long userId, @RequestParam Long bankAccountId) {
         if (userService.getUserById(userId).isEmpty() || bankAccountService.getBankAccountById(bankAccountId).isEmpty()){
             return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
@@ -127,7 +126,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PutMapping(value = "/addCreditorToTransaction")
+    @PutMapping(value = "/user/addCreditorToTransaction")
     public ResponseEntity<?> addCreditorToTransaction(@RequestParam Long creditorId, @RequestParam Long transactionId) {
         if (userService.getUserById(creditorId).isEmpty() || transactionService.getTransactionById(transactionId).isEmpty()) {
             return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
@@ -141,7 +140,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping(value = "/removeCreditorToTransaction")
+    @DeleteMapping(value = "/user/removeCreditorToTransaction")
     public ResponseEntity<?> removeCreditorToTransaction(@RequestParam Long creditorId, @RequestParam Long transactionId) {
         if (userService.getUserById(creditorId).isEmpty() || transactionService.getTransactionById(transactionId).isEmpty()) {
             return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
@@ -155,7 +154,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PutMapping(value = "/addDebtorToTransaction")
+    @PutMapping(value = "/user/addDebtorToTransaction")
     public ResponseEntity<?> addDebtorToTransaction(@RequestParam Long debtorId, @RequestParam Long transactionId) {
         if (userService.getUserById(debtorId).isEmpty() || transactionService.getTransactionById(transactionId).isEmpty()) {
             return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
@@ -169,7 +168,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping(value = "/removeDebtorToTransaction")
+    @DeleteMapping(value = "/user/removeDebtorToTransaction")
     public ResponseEntity<?> removeDebtorToTransaction(@RequestParam Long debtorId, @RequestParam Long transactionId) {
         if (userService.getUserById(debtorId).isEmpty() || transactionService.getTransactionById(transactionId).isEmpty()) {
             return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
