@@ -5,6 +5,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity(name = "User")
@@ -81,6 +82,9 @@ public class User {
     @JoinTable(name = "contact", joinColumns =
     @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_user_id"))
     private List<User> friendList;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Collection<Role> roles = new ArrayList<>();
 
     public User() {}
 
@@ -173,4 +177,11 @@ public class User {
         this.creditorList = creditorList;
     }
 
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
+    }
 }

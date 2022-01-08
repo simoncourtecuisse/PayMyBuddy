@@ -5,6 +5,7 @@ import com.payMyBuddy.models.BankAccount;
 import com.payMyBuddy.models.Transaction;
 import com.payMyBuddy.models.User;
 import com.payMyBuddy.services.BankAccountService;
+import com.payMyBuddy.services.RoleService;
 import com.payMyBuddy.services.TransactionService;
 import com.payMyBuddy.services.UserService;
 
@@ -29,6 +30,9 @@ public class UserController {
     @Autowired
     private TransactionService transactionService;
 
+    @Autowired
+    private RoleService roleService;
+
     Logger LOGGER = LogManager.getLogger(UserController.class);
 
 //    @PostMapping(value = "/user")
@@ -50,7 +54,7 @@ public class UserController {
     public ResponseEntity<?> createUser(@RequestBody User user) {
         if (userService.getUserByEmail(user.getEmail()).isEmpty()) {
             userService.createUser(user);
-            LOGGER.info("User created successfully");
+            LOGGER.info("User {} created successfully", user.getEmail());
             return new ResponseEntity<>("User Created", HttpStatus.CREATED);
         }
         return ResponseEntity.badRequest().build();
@@ -235,5 +239,32 @@ public class UserController {
         }
         LOGGER.error("Remove debtor to transaction failed because of a bad request");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @PostMapping(value = "/addRoleToUser")
+    public ResponseEntity<?>addRoleToUser(@RequestBody RoleToUserForm form) {
+        roleService.addRoleToUser(form.getEmail(), form.getRoleName());
+        return ResponseEntity.ok().build();
+    }
+}
+
+class RoleToUserForm {
+    private String email;
+    private String roleName;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 }

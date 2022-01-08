@@ -1,23 +1,61 @@
 package com.payMyBuddy.services;
 
 
+import com.payMyBuddy.controllers.UserController;
 import com.payMyBuddy.models.BankAccount;
 import com.payMyBuddy.models.Transaction;
 import com.payMyBuddy.models.User;
 import com.payMyBuddy.repositories.UserRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Optional;
 
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW)
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    Logger LOGGER = LogManager.getLogger(UserService.class);
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findUserByEmail(email);
+        if (user == null) {
+            LOGGER.error("User not found in the database");
+            throw new UsernameNotFoundException("User not found in the database");
+        } else {
+            LOGGER.info("User found in the database: {}", email);
+        }
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//        user.
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
+    }
+//    @Override
+//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+//        Optional<User> user = userRepository.findByEmail(email);
+//        if (user == null) {
+//            LOGGER.error("User not found in the database");
+//            throw new UsernameNotFoundException("User not found in the database");
+//        } else {
+//            LOGGER.info("User found in the database: {}", email);
+//        }
+//        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//        user.
+//        return new org.springframework.security.core.userdetails.User();
+//    }
 
     public Iterable<User> getAllUsers() {
         return userRepository.findAll();
@@ -29,6 +67,10 @@ public class UserService {
 
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public User getOneUserByEmail(String email) {
+        return userRepository.findUserByEmail(email);
     }
 
     public void createUser(User user) {
@@ -92,5 +134,4 @@ public class UserService {
         debtor.getDebtorList().remove(transaction);
         userRepository.save(debtor);
     }
-
 }
