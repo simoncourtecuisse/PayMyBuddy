@@ -9,6 +9,7 @@
 //import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 //import org.springframework.security.core.userdetails.UserDetailsService;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 //
 //
 //@Configuration
@@ -16,13 +17,26 @@
 //public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 //
 //    private final UserDetailsService userDetailsService;
-//    private BCryptPasswordEncoder bCryptPasswordEncoder;
+//   // private BCryptPasswordEncoder bCryptPasswordEncoder;
 //
+//    @Bean
+//    public PasswordEncoder passwordEncoder()
+//    {
+//        return new BCryptPasswordEncoder();
+//    }
 //
 //    @Autowired
-//    public SecurityConfiguration(UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+//    private BCryptPasswordEncoder bCryptPasswordEncoder;
+//
+////    @Autowired
+////    public SecurityConfiguration(UserDetailsService userDetailsService, BCryptPasswordEncoder bCryptPasswordEncoder) {
+////        this.userDetailsService = userDetailsService;
+////        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+////    }
+//    @Autowired
+//    public SecurityConfiguration(UserDetailsService userDetailsService) {
 //        this.userDetailsService = userDetailsService;
-//        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+//        //this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 //    }
 //
 //    @Override

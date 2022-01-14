@@ -40,9 +40,10 @@ public class BankAccountController {
         return new ResponseEntity<>("Bank Account found", HttpStatus.OK);
     }
 
-    @PutMapping(value = "/bankAccount")
-    public ResponseEntity<?> updateBankAccount(@RequestBody BankAccount bankAccount) {
-        if (bankAccountService.getBankAccountById(bankAccount.getBankAccountId()).isPresent()) {
+    @PutMapping(value = "/bankAccount/{bankAccountId}")
+    public ResponseEntity<?> updateBankAccount(@PathVariable("bankAccountId") Long id, @RequestBody BankAccount bankAccount) {
+        if (bankAccountService.getBankAccountById(id).isPresent()) {
+            bankAccount.setBankAccountId(id);
             bankAccountService.updateBankAccount(bankAccount);
             LOGGER.info("Bank Account updated successfully");
             return new ResponseEntity<>("Bank Account updated", HttpStatus.OK);

@@ -19,11 +19,4 @@ public class PayMyBuddyApplication extends SpringBootServletInitializer {
 		SpringApplication.run(PayMyBuddyApplication.class, args);
 	}
 
-	@Bean
-	PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
-
-
 }

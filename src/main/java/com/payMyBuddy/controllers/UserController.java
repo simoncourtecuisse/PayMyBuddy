@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.Optional;
 
 @RestController
@@ -60,6 +61,7 @@ public class UserController {
         return ResponseEntity.badRequest().build();
     }
 
+    @RolesAllowed("ADMIN")
     @GetMapping(value = "/user")
     public ResponseEntity<?> getUserByEmail(@RequestParam("email") String email) {
         Optional<User> user = userService.getUserByEmail(email);
@@ -82,15 +84,6 @@ public class UserController {
         LOGGER.error("Failed to update user because the user was not found");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
-
-//    @PutMapping(value = "/user")
-//    public ResponseEntity<?> updateUser(@RequestBody User user) {
-//        if(userService.getUserById(user.getUserId()).isPresent()) {
-//            userService.updateUser(user);
-//            return new ResponseEntity<>("User updated", HttpStatus.OK);
-//        }
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//    }
 
     @DeleteMapping("/user/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable("userId") Long id){

@@ -45,9 +45,10 @@ public class TransactionController {
         return new ResponseEntity<>("Transaction found", HttpStatus.OK);
     }
 
-    @PutMapping(value = "/transaction")
-    public ResponseEntity<?> updateTransaction(@RequestBody Transaction transaction) {
-        if (transactionService.getTransactionById(transaction.getTransactionId()).isPresent()) {
+    @PutMapping(value = "/transaction/{transactionId}")
+    public ResponseEntity<?> updateTransaction(@PathVariable("transactionId") Long id, @RequestBody Transaction transaction) {
+        if (transactionService.getTransactionById(id).isPresent()) {
+            transaction.setTransactionId(id);
             transactionService.updateTransaction(transaction);
             LOGGER.info("Transaction updated successfully");
             return new ResponseEntity<>("Transaction updated", HttpStatus.OK);

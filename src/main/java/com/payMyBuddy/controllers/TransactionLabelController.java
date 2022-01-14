@@ -45,9 +45,10 @@ public class TransactionLabelController {
         return new ResponseEntity<>("Transaction Label found", HttpStatus.OK);
     }
 
-    @PutMapping(value = "/transaction_label")
-    public ResponseEntity<?> updateTransactionLabel(@RequestBody TransactionLabel transactionLabel) {
-        if (transactionLabelService.getTransactionLabelById(transactionLabel.getTransactionLabelId()).isPresent()) {
+    @PutMapping(value = "/transaction_label{transactionLabelId}")
+    public ResponseEntity<?> updateTransactionLabel(@PathVariable("transactionLabelId") Long id, @RequestBody TransactionLabel transactionLabel) {
+        if (transactionLabelService.getTransactionLabelById(id).isPresent()) {
+            transactionLabel.setTransactionLabelId(id);
             transactionLabelService.updateTransactionLabel(transactionLabel);
             LOGGER.info("Transaction Label updated successfully");
             return new ResponseEntity<>("Transaction Label updated", HttpStatus.OK);
