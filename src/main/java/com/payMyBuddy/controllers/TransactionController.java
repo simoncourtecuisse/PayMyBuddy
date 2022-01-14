@@ -4,6 +4,8 @@ import com.payMyBuddy.models.Transaction;
 import com.payMyBuddy.models.TransactionLabel;
 import com.payMyBuddy.services.TransactionLabelService;
 import com.payMyBuddy.services.TransactionService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,27 +22,38 @@ public class TransactionController {
     @Autowired
     private TransactionLabelService transactionLabelService;
 
+    Logger LOGGER = LogManager.getLogger(Transaction.class);
+
     @PostMapping(value = "/transaction")
     public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction) {
-        transactionService.createTransaction(transaction);
-        return new ResponseEntity<>("Transaction Created", HttpStatus.CREATED);
+        if (transactionService.getTransactionById(transaction.getTransactionId()).isEmpty()) {
+            transactionService.createTransaction(transaction);
+            LOGGER.info("Transaction created successfully");
+            return new ResponseEntity<>("Transaction Created", HttpStatus.CREATED);
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping(value = "/transaction")
     public ResponseEntity<?> getTransactionById(@RequestParam("transactionId")Long id) {
         Optional<Transaction> transaction = transactionService.getTransactionById(id);
         if (transaction.isEmpty()) {
+            LOGGER.error("Can't find the transaction");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+        LOGGER.info("Success find transaction");
         return new ResponseEntity<>("Transaction found", HttpStatus.OK);
     }
 
-    @PutMapping(value = "/transaction")
-    public ResponseEntity<?> updateTransaction(@RequestBody Transaction transaction) {
-        if (transactionService.getTransactionById(transaction.getTransactionId()).isPresent()) {
+    @PutMapping(value = "/transaction/{transactionId}")
+    public ResponseEntity<?> updateTransaction(@PathVariable("transactionId") Long id, @RequestBody Transaction transaction) {
+        if (transactionService.getTransactionById(id).isPresent()) {
+            transaction.setTransactionId(id);
             transactionService.updateTransaction(transaction);
+            LOGGER.info("Transaction updated successfully");
             return new ResponseEntity<>("Transaction updated", HttpStatus.OK);
         }
+        LOGGER.error("Failed to update transaction because the transaction was not found");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
@@ -49,8 +62,10 @@ public class TransactionController {
         if (transactionService.getTransactionById(id).isPresent()) {
             Transaction transaction = transactionService.getTransactionById(id).get();
             transactionService.deleteTransaction(transaction);
+            LOGGER.info("Transaction deleted successfully");
             return new ResponseEntity<>("Successful Operation", HttpStatus.OK);
         }
+        LOGGER.error("Failed to delete transaction because of a BAD REQUEST");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
