@@ -45,13 +45,13 @@ public class Transaction {
     @JoinColumn(name = "transaction_label_id")
     TransactionLabel transactionLabelId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
     @JoinColumn(name = "creditor_id")
-    User userId;
+    Long userIdCreditor;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
     @JoinColumn(name = "debtor_id")
-    User userIdDebtor;
+    Long userIdDebtor;
 
     public Transaction() {
 
@@ -104,19 +104,20 @@ public class Transaction {
         this.transactionLabelId = transactionLabels;
     }
 
-    public User getUserId() {
-        return userId;
+    public Long getUserIdCreditor() {
+        return userIdCreditor;
     }
 
-    public void setUserId(User userId) {
-        this.userId = userId;
+    public void setUserIdCreditor(Long userIdCreditor) {
+        this.userIdCreditor = userIdCreditor;
     }
 
-    public User getUserIdDebtor() {
+    public Long getUserIdDebtor() {
         return userIdDebtor;
     }
 
-    public void setUserIdDebtor(User userId) {
-        this.userId = userIdDebtor;
+    public void setUserIdDebtor(Long userIdDebtor) {
+        this.userIdDebtor = userIdDebtor;
     }
+
 }

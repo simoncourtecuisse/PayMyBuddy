@@ -1,7 +1,6 @@
 package com.payMyBuddy.controllers;
 
 import com.payMyBuddy.models.Transaction;
-import com.payMyBuddy.models.TransactionLabel;
 import com.payMyBuddy.services.TransactionLabelService;
 import com.payMyBuddy.services.TransactionService;
 import org.apache.logging.log4j.LogManager;
@@ -16,13 +15,11 @@ import java.util.Optional;
 @RestController
 public class TransactionController {
 
+    Logger LOGGER = LogManager.getLogger(Transaction.class);
     @Autowired
     private TransactionService transactionService;
-
     @Autowired
     private TransactionLabelService transactionLabelService;
-
-    Logger LOGGER = LogManager.getLogger(Transaction.class);
 
     @PostMapping(value = "/transaction")
     public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction) {
@@ -35,7 +32,7 @@ public class TransactionController {
     }
 
     @GetMapping(value = "/transaction")
-    public ResponseEntity<?> getTransactionById(@RequestParam("transactionId")Long id) {
+    public ResponseEntity<?> getTransactionById(@RequestParam("transactionId") Long id) {
         Optional<Transaction> transaction = transactionService.getTransactionById(id);
         if (transaction.isEmpty()) {
             LOGGER.error("Can't find the transaction");
@@ -68,6 +65,17 @@ public class TransactionController {
         LOGGER.error("Failed to delete transaction because of a BAD REQUEST");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+
+    @PostMapping(value = "/transactionPayment")
+    private ResponseEntity<?> makeTransaction(@RequestBody Transaction transaction) {
+        if (transactionService.payment(transaction)) {
+            LOGGER.info("Transaction success");
+            return new ResponseEntity<>("Successful Transaction", HttpStatus.OK);
+        }
+        LOGGER.error("Failed to delete transaction because of a BAD REQUEST");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
 
 //    @PutMapping(value = "/addTransactionLabel")
 //    public ResponseEntity<?> addTransactionLabel(@RequestParam int transactionId, @RequestParam int transactionLabelId) {
