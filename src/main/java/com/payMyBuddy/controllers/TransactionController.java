@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @RestController
@@ -23,12 +24,14 @@ public class TransactionController {
 
     @PostMapping(value = "/transaction")
     public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction) {
-        if (transactionService.getTransactionById(transaction.getTransactionId()).isEmpty()) {
-            transactionService.createTransaction(transaction);
-            LOGGER.info("Transaction created successfully");
-            return new ResponseEntity<>("Transaction Created", HttpStatus.CREATED);
-        }
-        return ResponseEntity.badRequest().build();
+        transactionService.createTransaction(transaction);
+        return new ResponseEntity<>("Transaction Created", HttpStatus.CREATED);
+//        if (transactionService.getTransactionById(transaction.getTransactionId()).isEmpty()) {
+//            transactionService.createTransaction(transaction);
+//            LOGGER.info("Transaction created successfully");
+//            return new ResponseEntity<>("Transaction Created", HttpStatus.CREATED);
+//        }
+//        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping(value = "/transaction")
@@ -66,13 +69,13 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PostMapping(value = "/transactionPayment")
+    @PostMapping(value = "/transaction/payment")
     private ResponseEntity<?> makeTransaction(@RequestBody Transaction transaction) {
         if (transactionService.payment(transaction)) {
             LOGGER.info("Transaction success");
             return new ResponseEntity<>("Successful Transaction", HttpStatus.OK);
         }
-        LOGGER.error("Failed to delete transaction because of a BAD REQUEST");
+        LOGGER.error("Failed to make the payment because of a BAD REQUEST");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 

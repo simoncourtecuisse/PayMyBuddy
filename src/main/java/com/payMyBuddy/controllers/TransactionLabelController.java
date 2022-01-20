@@ -26,12 +26,14 @@ public class TransactionLabelController {
 
     @PostMapping(value = "/transaction_label")
     public ResponseEntity<?> createTransactionLabel(@RequestBody TransactionLabel transactionLabel) {
-        if (transactionLabelService.getTransactionLabelById(transactionLabel.getTransactionLabelId()).isEmpty()) {
-            transactionLabelService.createTransactionLabel(transactionLabel);
-            LOGGER.info("Transaction Label created successfully");
-            return new ResponseEntity<>("Transaction Label Created", HttpStatus.CREATED);
-        }
-        return ResponseEntity.badRequest().build();
+        transactionLabelService.createTransactionLabel(transactionLabel);
+        return new ResponseEntity<>("Transaction Label Created", HttpStatus.CREATED);
+//        if (transactionLabelService.getTransactionLabelById(transactionLabel.getTransactionLabelId()).isEmpty()) {
+//            transactionLabelService.createTransactionLabel(transactionLabel);
+//            LOGGER.info("Transaction Label created successfully");
+//            return new ResponseEntity<>("Transaction Label Created", HttpStatus.CREATED);
+//        }
+//        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping(value = "/transaction_label")

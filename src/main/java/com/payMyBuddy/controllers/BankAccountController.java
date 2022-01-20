@@ -21,12 +21,14 @@ public class BankAccountController {
 
     @PostMapping(value = "/bankAccount")
     public ResponseEntity<?> createBankAccount(@RequestBody BankAccount bankAccount) {
-        if (bankAccountService.getBankAccountById(bankAccount.getBankAccountId()).isPresent()) {
-            bankAccountService.addBankAccount(bankAccount);
-            LOGGER.info("Bank Account created successfully");
-            return new ResponseEntity<>("Bank Account Created", HttpStatus.CREATED);
-        }
-        return ResponseEntity.badRequest().build();
+        bankAccountService.addBankAccount(bankAccount);
+        return new ResponseEntity<>("Bank Account Created", HttpStatus.CREATED);
+//        if (bankAccountService.getBankAccountById(bankAccount.getBankAccountId()).isPresent()) {
+//            bankAccountService.addBankAccount(bankAccount);
+//            LOGGER.info("Bank Account created successfully");
+//            return new ResponseEntity<>("Bank Account Created", HttpStatus.CREATED);
+//        }
+//        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping(value = "/bankAccount")
