@@ -10,11 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -58,7 +54,7 @@ public class TransactionService {
     }
 
     public boolean authorizedPayment(User debtor, User creditor, BigDecimal total) {
-        return debtor.getBalance().compareTo(total) > 0 && debtor.getFriendList().contains(creditor);
+        return debtor.getWalletBalance().compareTo(total) > 0 && debtor.getFriendList().contains(creditor);
     }
 
     public boolean payment(Transaction transaction) {
@@ -74,8 +70,8 @@ public class TransactionService {
         User creditor = userRepository.findById(transaction.getUserIdCreditor()).get();
 
         if (authorizedPayment(debtor, creditor, total)) {
-            debtor.setBalance(debtor.getBalance().subtract(total));
-            creditor.setBalance(creditor.getBalance().add(total));
+            debtor.setWalletBalance(debtor.getWalletBalance().subtract(total));
+            creditor.setWalletBalance(creditor.getWalletBalance().add(total));
             Transaction transactionAuthorized = new Transaction();
             transactionAuthorized.setTransactionId(transaction.getTransactionId());
             transactionAuthorized.setUserIdDebtor(debtor.getUserId());

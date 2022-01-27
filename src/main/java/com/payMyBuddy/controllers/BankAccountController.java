@@ -1,6 +1,7 @@
 package com.payMyBuddy.controllers;
 
 import com.payMyBuddy.models.BankAccount;
+import com.payMyBuddy.models.BankTransaction;
 import com.payMyBuddy.models.User;
 import com.payMyBuddy.services.BankAccountService;
 import com.payMyBuddy.services.UserService;
@@ -11,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -73,16 +73,17 @@ public class BankAccountController {
     }
 
     @PostMapping(value = "bankAccountTransaction/{userId}")
-    public ResponseEntity<?> processBankTransaction(@PathVariable("userId") Long id, @RequestBody BankAccount bankAccount) {
+    public ResponseEntity<?> processBankTransaction(@PathVariable("userId") Long id, @RequestBody BankTransaction bankTransaction) {
         if (userService.getUserById(id).isEmpty()) {
             LOGGER.error("User not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         User user = userService.getUserById(id).get();
-        BankAccount bankAccountTransaction = bankAccountService.createBankAccountTransaction(user, bankAccount.getIban(), bankAccount.getBalance());
+        BankAccount bankAccount = bankTransaction.getBankAccountId();
+        BankTransaction bankAccountTransaction = bankAccountService.createBankAccountTransaction(user, bankAccount, bankTransaction.getAmount());
         if (bankAccountService.processBankTransaction(bankAccountTransaction)) {
-            bankAccountService.updateBankAccount(bankAccountTransaction);
+            bankAccountService.saveBankTransaction(bankAccountTransaction);
             LOGGER.info("Transaction to bank account successfully processed");
             return new ResponseEntity<>("New bank account transaction made", HttpStatus.OK);
         } else {

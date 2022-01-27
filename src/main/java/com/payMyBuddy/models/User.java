@@ -37,8 +37,8 @@ public class User {
     private String email;
     @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "balance", nullable = false, precision = 6, scale = 2)
-    private BigDecimal balance;
+    @Column(name = "wallet_balance", nullable = false, precision = 6, scale = 2)
+    private BigDecimal walletBalance;
 
 
 
@@ -56,6 +56,10 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "debtor_id")
     List<Transaction> debtorList = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "user_id")
+    List<BankTransaction> bankTransactionsList = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
 //    List<Transaction> creditorList = new ArrayList<>();
@@ -86,12 +90,12 @@ public class User {
 
     public User() {}
 
-    public User(String firstName, String lastName, String email, String password, BigDecimal balance, List<User> friendList) {
+    public User(String firstName, String lastName, String email, String password, BigDecimal walletBalance, List<User> friendList) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.balance = balance;
+        this.walletBalance = walletBalance;
         this.friendList = friendList;
     }
 
@@ -135,12 +139,12 @@ public class User {
         this.password = password;
     }
 
-    public BigDecimal getBalance() {
-        return balance;
+    public BigDecimal getWalletBalance() {
+        return walletBalance;
     }
 
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
+    public void setWalletBalance(BigDecimal walletBalance) {
+        this.walletBalance = walletBalance;
     }
 
     public List<User> getFriendList() {
@@ -175,4 +179,19 @@ public class User {
         this.creditorList = creditorList;
     }
 
+    public List<BankAccount> getBankAccountId() {
+        return bankAccountId;
+    }
+
+    public void setBankAccountId(List<BankAccount> bankAccountId) {
+        this.bankAccountId = bankAccountId;
+    }
+
+    public List<BankTransaction> getBankTransactionsList() {
+        return bankTransactionsList;
+    }
+
+    public void setBankTransactionsList(List<BankTransaction> bankTransactionsList) {
+        this.bankTransactionsList = bankTransactionsList;
+    }
 }

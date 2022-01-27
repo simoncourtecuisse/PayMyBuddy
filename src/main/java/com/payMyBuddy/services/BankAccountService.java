@@ -1,14 +1,18 @@
 package com.payMyBuddy.services;
 
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.payMyBuddy.models.BankAccount;
+import com.payMyBuddy.models.BankTransaction;
 import com.payMyBuddy.models.User;
 import com.payMyBuddy.repositories.BankAccountRepository;
+import com.payMyBuddy.repositories.BankTransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -19,34 +23,66 @@ public class BankAccountService {
     private BankAccountRepository bankAccountRepository;
 
     @Autowired
+    private BankTransactionRepository bankTransactionRepository;
+
+    @Autowired
     private UserService userService;
 
-    public BankAccount createBankAccountTransaction(User userId, int iban, BigDecimal amount) {
-        BankAccount bankAccountTransaction = new BankAccount();
+    public BankTransaction createBankAccountTransaction(User userId, BankAccount bankAccountId, double amount) {
+        BankTransaction bankAccountTransaction = new BankTransaction();
         bankAccountTransaction.setUserId(userId);
-        bankAccountTransaction.setIban(iban);
-        bankAccountTransaction.setBalance(amount);
+        bankAccountTransaction.setBankAccountId(bankAccountId);
+        bankAccountTransaction.setAmount(amount);
         return bankAccountTransaction;
     }
 
-    public boolean processBankTransaction(BankAccount bankTransaction) {
-        if (bankTransaction.getBalance().signum() <= 0) {
+    public BankTransaction saveBankTransaction(BankTransaction bankAccountTransaction) {
+        return bankTransactionRepository.save(bankAccountTransaction);
+    }
+
+    public boolean processBankTransaction(BankTransaction bankTransaction) {
+        var amount = bankTransaction.getAmount();
+        double com = 0.05;
+        var fare = amount * com;
+        var total = amount + fare;
+
+
+        if (amount == 0) {
             return false;
         }
 
         User user = bankTransaction.getUserId();
-        BigDecimal absBalance = new BigDecimal(String.valueOf(bankTransaction.getBalance().abs()));
+        BankAccount bankAccount = bankTransaction.getBankAccountId();
+        double absTotal = Math.abs(total);
 
-        if (bankTransaction.getBalance().compareTo(BigDecimal.ZERO) > 0) {
-            user.setBalance(user.getBalance().add(absBalance));
-        } else if (bankTransaction.getBalance().compareTo(BigDecimal.ZERO) < 0 && absBalance.compareTo(user.getBalance()) <= 0) {
-            user.setBalance(user.getBalance().subtract(absBalance));
+        if (amount > 0) {
+            user.setWalletBalance(user.getWalletBalance().add(BigDecimal.valueOf(absTotal)));
+        } else if (amount < 0 && BigDecimal.valueOf(absTotal).compareTo(user.getWalletBalance()) <= 0) {
+            user.setWalletBalance(user.getWalletBalance().subtract(BigDecimal.valueOf(absTotal)));
         } else {
             return false;
         }
         userService.updateUser(user);
         return true;
     }
+//    public boolean processBankTransaction(BankTransaction bankTransaction) {
+//        if (bankTransaction.getBalance().signum() <= 0) {
+//            return false;
+//        }
+//
+//        User user = bankTransaction.getUserId();
+//        BigDecimal absBalance = new BigDecimal(String.valueOf(bankTransaction.getBalance().abs()));
+//
+//        if (bankTransaction.getBalance().compareTo(BigDecimal.ZERO) > 0) {
+//            user.setWalletBalance(user.getWalletBalance().add(absBalance));
+//        } else if (bankTransaction.getBalance().compareTo(BigDecimal.ZERO) < 0 && absBalance.compareTo(user.getWalletBalance()) <= 0) {
+//            user.setWalletBalance(user.getWalletBalance().subtract(absBalance));
+//        } else {
+//            return false;
+//        }
+//        userService.updateUser(user);
+//        return true;
+//    }
 
     public Iterable<BankAccount> getAllBankAccounts() {
         return bankAccountRepository.findAll();

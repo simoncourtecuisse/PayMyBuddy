@@ -1,5 +1,5 @@
 USE paymybuddy;
-INSERT INTO user (user_id, first_name, last_name, email, password, balance)
+INSERT INTO user (user_id, first_name, last_name, email, password, wallet_balance)
 VALUES (1, 'Simon', 'Courtecuisse', 'simon.courtecuisse@example.com', 'sdsksnfosmfnsmdf', 1234),
        (2, 'Simon', 'Soulie', 'simon.soulie@example.com', 'fdsdsdqgf', 4567),
        (3, 'Marion', 'Aillerie', 'marion.aillerie@example.com', 'pooiuyezesd', 7891),

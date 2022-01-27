@@ -7,13 +7,14 @@ firstname VARCHAR(255) NOT NULL,
 lastname VARCHAR(255) NOT NULL,
 email VARCHAR(255) NOT NULL UNIQUE,
 password VARCHAR(255) NOT NULL,
-balance DECIMAL(6,2) NOT NULL
+wallet_balance DECIMAL(6,2) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS bank_account (
 id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 user_id BIGINT NOT NULL,
-iban INTEGER NOT NULL
+iban INTEGER NOT NULL,
+balance DECIMAL(10,2) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS transaction (
@@ -21,7 +22,7 @@ id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 transaction_label_id BIGINT NOT NULL,
 creditor_id BIGINT NOT NULL,
 debtor_id BIGINT NOT NULL,
-amount DECIMAL(6,2) NOT NULL,
+amount DECIMAL(10,2) NOT NULL,
 commission DECIMAL(6,2) NOT NULL,
 date DATE NOT NULL
 );
@@ -35,6 +36,15 @@ CREATE TABLE IF NOT EXISTS contact (
 user_id BIGINT NOT NULL,
 friend_user_id BIGINT NOT NULL,
 PRIMARY KEY (user_id, friend_user_id)
+);
+
+CREATE TABLE IF NOT EXISTS bank_transaction (
+id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+user_id BIGINT NOT NULL,
+bank_account_id BIGINT NOT NULL,
+amount DECIMAL(6,2) NOT NULL,
+date DATE NOT NULL,
+commission DECIMAL(6,2) NOT NULL
 );
 
 ALTER TABLE contact
@@ -64,5 +74,15 @@ ON UPDATE NO ACTION;
 
 ALTER TABLE transaction
 ADD CONSTRAINT transaction_label_fk FOREIGN KEY (transaction_label_id) REFERENCES transaction_label (id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION;
+
+ALTER TABLE bank_transaction
+ADD CONSTRAINT user_bank_transaction_fk FOREIGN KEY (user_id) REFERENCES user (id)
+ON DELETE CASCADE
+ON UPDATE NO ACTION;
+
+ALTER TABLE bank_transaction
+ADD CONSTRAINT bank_account_bank_transaction_fk FOREIGN KEY (bank_account_id) REFERENCES bank_account (id)
 ON DELETE CASCADE
 ON UPDATE NO ACTION;

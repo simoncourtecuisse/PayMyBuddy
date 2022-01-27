@@ -4,6 +4,8 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "Bank Account")
 @DynamicUpdate
@@ -32,6 +34,10 @@ public class BankAccount {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User userId;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "bank_account_id")
+    List<BankTransaction> bankTransactionsList = new ArrayList<>();
 
     public BankAccount(){}
 
