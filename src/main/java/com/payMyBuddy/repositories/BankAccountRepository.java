@@ -12,5 +12,5 @@ import java.util.Optional;
 @Repository
 public interface BankAccountRepository extends JpaRepository<BankAccount, Long> {
     Optional<BankAccount> findByIban(int iban);
-    //List<BankAccount> findAllByUserBankAccount(User userBankAccount);
+   // List<BankAccount> findAllByUserBankAccount(User user);
 }

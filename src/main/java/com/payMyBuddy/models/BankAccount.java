@@ -3,6 +3,7 @@ package com.payMyBuddy.models;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity(name = "Bank Account")
 @DynamicUpdate
@@ -25,14 +26,18 @@ public class BankAccount {
     @Column(name = "iban", nullable = false)
     private int iban;
 
+    @Column(name = "balance", nullable = false, precision = 10, scale = 2)
+    private BigDecimal balance;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User userId;
 
     public BankAccount(){}
 
-    public BankAccount(int iban) {
+    public BankAccount(int iban, BigDecimal balance) {
         this.iban = iban;
+        this.balance = balance;
     }
 
     public Long getBankAccountId() {
@@ -51,6 +56,14 @@ public class BankAccount {
         this.iban = iban;
     }
 
+    public BigDecimal getBalance() {
+        return balance;
+    }
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
+    }
+
     public User getUserId() {
         return userId;
     }
@@ -58,4 +71,5 @@ public class BankAccount {
     public void setUserId(User userId) {
         this.userId = userId;
     }
+
 }

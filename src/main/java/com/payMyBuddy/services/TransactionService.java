@@ -14,6 +14,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -37,6 +38,10 @@ public class TransactionService {
     public void createTransaction(Transaction transaction) {
         transactionRepository.save(transaction);
     }
+
+//    public List<Transaction> getAllTransactionsByUserId(User user) {
+//        return transactionRepository.findAllTransactionsByUser(user, user);
+//    }
 
     public void updateTransaction(Transaction transaction) {
         Optional<Transaction> maj = transactionRepository.findById(transaction.getTransactionId());
@@ -72,11 +77,12 @@ public class TransactionService {
             debtor.setBalance(debtor.getBalance().subtract(total));
             creditor.setBalance(creditor.getBalance().add(total));
             Transaction transactionAuthorized = new Transaction();
+            transactionAuthorized.setTransactionId(transaction.getTransactionId());
             transactionAuthorized.setUserIdDebtor(debtor.getUserId());
             transactionAuthorized.setUserIdCreditor(creditor.getUserId());
             transactionAuthorized.setAmount(amount);
             transactionAuthorized.setDate(LocalDate.now());
-            transactionAuthorized.setTransactionLabels(transactionAuthorized.getTransactionLabels());
+            transactionAuthorized.setTransactionLabels(transaction.getTransactionLabels());
             transactionRepository.save(transactionAuthorized);
             userRepository.save(debtor);
             userRepository.save(creditor);

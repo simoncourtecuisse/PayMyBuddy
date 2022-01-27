@@ -1,7 +1,9 @@
 package com.payMyBuddy.controllers;
 
 import com.payMyBuddy.models.BankAccount;
+import com.payMyBuddy.models.User;
 import com.payMyBuddy.services.BankAccountService;
+import com.payMyBuddy.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -16,6 +19,9 @@ public class BankAccountController {
 
     @Autowired
     private BankAccountService bankAccountService;
+
+    @Autowired
+    private UserService userService;
 
     Logger LOGGER = LogManager.getLogger(BankAccount.class);
 
@@ -64,6 +70,25 @@ public class BankAccountController {
         }
         LOGGER.error("Failed to delete bank account because of a BAD REQUEST");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @PostMapping(value = "bankAccountTransaction/{userId}")
+    public ResponseEntity<?> processBankTransaction(@PathVariable("userId") Long id, @RequestBody BankAccount bankAccount) {
+        if (userService.getUserById(id).isEmpty()) {
+            LOGGER.error("User not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        User user = userService.getUserById(id).get();
+        BankAccount bankAccountTransaction = bankAccountService.createBankAccountTransaction(user, bankAccount.getIban(), bankAccount.getBalance());
+        if (bankAccountService.processBankTransaction(bankAccountTransaction)) {
+            bankAccountService.updateBankAccount(bankAccountTransaction);
+            LOGGER.info("Transaction to bank account successfully processed");
+            return new ResponseEntity<>("New bank account transaction made", HttpStatus.OK);
+        } else {
+            LOGGER.error("Failed to proceed bank account transaction");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
 }

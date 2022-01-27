@@ -14,6 +14,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,7 +36,7 @@ class BankAccountControllerTest {
     @Test
     void testCreateBankAccount() throws Exception {
         // Setup
-        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(1));
+        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(1, new BigDecimal("0.00") ));
         when(mockBankAccountService.getBankAccountById(1L)).thenReturn(bankAccount);
 
         // Run the test
@@ -55,7 +56,7 @@ class BankAccountControllerTest {
     @Test
     void testGetBankAccount() throws Exception {
         // Setup
-        when(mockBankAccountService.getBankAccountById(1L)).thenReturn(Optional.of(new BankAccount(0)));
+        when(mockBankAccountService.getBankAccountById(1L)).thenReturn(Optional.of(new BankAccount(1, new BigDecimal("0.00"))));
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(get("/bankAccount")
@@ -86,7 +87,7 @@ class BankAccountControllerTest {
     @Test
     void testUpdateBankAccount() throws Exception {
         // Setup
-        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(1423));
+        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(1423, new BigDecimal("0.00")));
         when(mockBankAccountService.getBankAccountById(1L)).thenReturn(bankAccount);
 
         // Run the test
@@ -106,7 +107,7 @@ class BankAccountControllerTest {
     @Test
     void testUpdateBankAccount_ReturnBadRequest() throws Exception {
         // Setup
-        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(1423));
+        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(1423, new BigDecimal("0.00")));
         when(mockBankAccountService.getBankAccountById(1L)).thenReturn(Optional.empty());
 
         // Run the test
@@ -121,7 +122,7 @@ class BankAccountControllerTest {
     @Test
     void testDeleteBankAccount() throws Exception {
         // Setup
-        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(1423));
+        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(1423, new BigDecimal("0.00")));
         when(mockBankAccountService.getBankAccountById(1L)).thenReturn(bankAccount);
 
         // Run the test

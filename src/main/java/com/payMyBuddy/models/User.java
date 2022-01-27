@@ -40,6 +40,8 @@ public class User {
     @Column(name = "balance", nullable = false, precision = 6, scale = 2)
     private BigDecimal balance;
 
+
+
 //    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<BankAccount> bankAccountId = new ArrayList<>();
 

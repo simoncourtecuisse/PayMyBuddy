@@ -1,8 +1,10 @@
 package com.payMyBuddy.controllers;
 
 import com.payMyBuddy.models.Transaction;
+import com.payMyBuddy.models.User;
 import com.payMyBuddy.services.TransactionLabelService;
 import com.payMyBuddy.services.TransactionService;
+import com.payMyBuddy.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ public class TransactionController {
     private TransactionService transactionService;
     @Autowired
     private TransactionLabelService transactionLabelService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping(value = "/transaction")
     public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction) {
@@ -36,6 +40,10 @@ public class TransactionController {
 
     @GetMapping(value = "/transaction")
     public ResponseEntity<?> getTransactionById(@RequestParam("transactionId") Long id) {
+//    public ResponseEntity<?> getTransactionById(@RequestParam("userId") Long id) {
+//        transactionService.getAllTransactionsByUserId(id);
+//        return new ResponseEntity<>("Transaction found", HttpStatus.OK);
+
         Optional<Transaction> transaction = transactionService.getTransactionById(id);
         if (transaction.isEmpty()) {
             LOGGER.error("Can't find the transaction");
