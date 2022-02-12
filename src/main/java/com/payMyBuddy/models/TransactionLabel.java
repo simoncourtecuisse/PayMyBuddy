@@ -31,7 +31,7 @@ public class TransactionLabel {
 //    private List<Transaction> transaction;
 
     @OneToMany(
-            mappedBy = "transactionLabelId",
+            mappedBy = "transactionLabel",
             cascade = CascadeType.ALL)
     List<Transaction> transaction = new ArrayList<>();
 

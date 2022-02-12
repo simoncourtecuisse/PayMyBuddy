@@ -32,7 +32,7 @@ public class Transaction {
     @Column(name = "amount", nullable = false, precision = 6, scale = 2)
     private BigDecimal amount;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "date")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
@@ -43,7 +43,7 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "transaction_label_id")
-    TransactionLabel transactionLabelId;
+    TransactionLabel transactionLabel;
 
 //    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
 //    @JoinColumn(name = "creditor_id")
@@ -69,7 +69,7 @@ public class Transaction {
         this.amount = amount;
         this.date = date;
         this.commission = commission;
-        this.transactionLabelId = transactionLabelId;
+        this.transactionLabel = transactionLabelId;
     }
 
     public Long getTransactionId() {
@@ -105,11 +105,11 @@ public class Transaction {
     }
 
     public TransactionLabel getTransactionLabels() {
-        return transactionLabelId;
+        return transactionLabel;
     }
 
     public void setTransactionLabels(TransactionLabel transactionLabels) {
-        this.transactionLabelId = transactionLabels;
+        this.transactionLabel = transactionLabels;
     }
 
     public Long getUserIdCreditor() {

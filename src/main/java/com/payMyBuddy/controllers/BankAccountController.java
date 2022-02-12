@@ -80,7 +80,7 @@ public class BankAccountController {
         }
 
         User user = userService.getUserById(id).get();
-        BankAccount bankAccount = bankTransaction.getBankAccountId();
+        BankAccount bankAccount = bankTransaction.getBankAccount();
         BankTransaction bankAccountTransaction = bankAccountService.createBankAccountTransaction(user, bankAccount, bankTransaction.getAmount());
         if (bankAccountService.processBankTransaction(bankAccountTransaction)) {
             bankAccountService.saveBankTransaction(bankAccountTransaction);

@@ -1,6 +1,5 @@
 package com.payMyBuddy.services;
 
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.payMyBuddy.models.BankAccount;
 import com.payMyBuddy.models.BankTransaction;
 import com.payMyBuddy.models.User;
@@ -30,9 +29,11 @@ public class BankAccountService {
 
     public BankTransaction createBankAccountTransaction(User userId, BankAccount bankAccountId, double amount) {
         BankTransaction bankAccountTransaction = new BankTransaction();
-        bankAccountTransaction.setUserId(userId);
-        bankAccountTransaction.setBankAccountId(bankAccountId);
+        bankAccountTransaction.setUser(userId);
+        bankAccountTransaction.setBankAccount(bankAccountId);
         bankAccountTransaction.setAmount(amount);
+        bankAccountTransaction.setDate(LocalDate.now());
+
         return bankAccountTransaction;
     }
 
@@ -51,8 +52,8 @@ public class BankAccountService {
             return false;
         }
 
-        User user = bankTransaction.getUserId();
-        BankAccount bankAccount = bankTransaction.getBankAccountId();
+        User user = bankTransaction.getUser();
+        BankAccount bankAccount = bankTransaction.getBankAccount();
         double absTotal = Math.abs(total);
 
         if (amount > 0) {

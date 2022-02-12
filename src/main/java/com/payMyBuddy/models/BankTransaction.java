@@ -32,36 +32,30 @@ public class BankTransaction {
     @Column(name = "amount", nullable = false, precision = 6, scale = 2)
     private double amount;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "date")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy")
     private LocalDate date;
 
-    @Column(name = "commission", nullable = false, precision = 6, scale = 2)
+    @Column(name = "commission", precision = 6, scale = 2)
     private BigDecimal commission;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User userId;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "bank_account_id")
-    private BankAccount bankAccountId;
+    private BankAccount bankAccount;
 
     public BankTransaction(){
 
     }
 
-//    public BankTransaction(double amount) {
-//        this.amount = amount;
-//        this.date = new InstantDAte
-//    }
-
-
-    public BankTransaction(double amount, LocalDate date) {
+    public BankTransaction(double amount) {
         this.amount = amount;
-        this.date = date;
+        this.date = LocalDate.now();
     }
 
     public Long getBankTransactionId() {
@@ -96,19 +90,19 @@ public class BankTransaction {
         this.commission = commission;
     }
 
-    public User getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(User userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public BankAccount getBankAccountId() {
-        return bankAccountId;
+    public BankAccount getBankAccount() {
+        return bankAccount;
     }
 
-    public void setBankAccountId(BankAccount bankAccountId) {
-        this.bankAccountId = bankAccountId;
+    public void setBankAccount(BankAccount bankAccount) {
+        this.bankAccount = bankAccount;
     }
 }

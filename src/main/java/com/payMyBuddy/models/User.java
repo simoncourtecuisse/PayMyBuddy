@@ -37,13 +37,11 @@ public class User {
     private String email;
     @Column(name = "password", nullable = false)
     private String password;
-    @Column(name = "wallet_balance", nullable = false, precision = 6, scale = 2)
+    @Column(name = "wallet_balance", precision = 6, scale = 2)
     private BigDecimal walletBalance;
 
-
-
     @OneToMany(
-            mappedBy = "userId",
+            mappedBy = "user",
             cascade = CascadeType.ALL)
     List<BankAccount> bankAccountList = new ArrayList<>();
 
@@ -60,7 +58,7 @@ public class User {
 //    List<Transaction> debtorList = new ArrayList<>();
 
     @OneToMany(
-            mappedBy = "userId",
+            mappedBy = "user",
             cascade = CascadeType.ALL)
     List<BankTransaction> bankTransactionsList = new ArrayList<>();
 

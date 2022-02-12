@@ -33,10 +33,10 @@ public class BankAccount {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User userId;
+    private User user;
 
     @OneToMany(
-            mappedBy = "bankAccountId",
+            mappedBy = "bankAccount",
             cascade = CascadeType.ALL)
     List<BankTransaction> bankTransactionsList = new ArrayList<>();
 
@@ -71,12 +71,12 @@ public class BankAccount {
         this.balance = balance;
     }
 
-    public User getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(User userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }
