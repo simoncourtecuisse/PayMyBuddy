@@ -31,12 +31,13 @@ public class BankAccount {
     @Column(name = "balance", nullable = false, precision = 10, scale = 2)
     private BigDecimal balance;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User userId;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "bank_account_id")
+    @OneToMany(
+            mappedBy = "bankAccountId",
+            cascade = CascadeType.ALL)
     List<BankTransaction> bankTransactionsList = new ArrayList<>();
 
     public BankAccount(){}

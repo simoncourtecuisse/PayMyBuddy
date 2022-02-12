@@ -41,15 +41,23 @@ public class Transaction {
     @Column(name = "commission", nullable = false, precision = 6, scale = 2)
     private BigDecimal commission;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "transaction_label_id")
     TransactionLabel transactionLabelId;
 
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
+//    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
+//    @JoinColumn(name = "creditor_id")
+//    Long userIdCreditor;
+//
+//    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
+//    @JoinColumn(name = "debtor_id")
+//    Long userIdDebtor;
+
+    @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "creditor_id")
     Long userIdCreditor;
 
-    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
+    @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "debtor_id")
     Long userIdDebtor;
 

@@ -64,12 +64,12 @@ public class UserService {
     }
 
     public void addBankAccount(User user, BankAccount bankAccount) {
-        user.getUserBankAccount().add(bankAccount);
+        user.getBankAccountList().add(bankAccount);
         userRepository.save(user);
     }
 
     public void removeBankAccount(User user, BankAccount bankAccount) {
-        user.getUserBankAccount().remove(bankAccount);
+        user.getBankAccountList().remove(bankAccount);
         userRepository.save(user);
     }
 

@@ -42,23 +42,26 @@ public class User {
 
 
 
-//    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<BankAccount> bankAccountId = new ArrayList<>();
+    @OneToMany(
+            mappedBy = "userId",
+            cascade = CascadeType.ALL)
+    List<BankAccount> bankAccountList = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "user_id")
-    List<BankAccount> bankAccountId = new ArrayList<>();
+//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "user_id")
+//    List<BankAccount> bankAccountId = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "creditor_id")
-    List<Transaction> creditorList = new ArrayList<>();
+//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "creditor_id")
+//    List<Transaction> creditorList = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "debtor_id")
-    List<Transaction> debtorList = new ArrayList<>();
+//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+//    @JoinColumn(name = "debtor_id")
+//    List<Transaction> debtorList = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "user_id")
+    @OneToMany(
+            mappedBy = "userId",
+            cascade = CascadeType.ALL)
     List<BankTransaction> bankTransactionsList = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -67,21 +70,16 @@ public class User {
 //    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
 //    List<Transaction> debtorList = new ArrayList<>();
 
-//    @OneToMany(
-//            mappedBy = "userBankAccount",
-//            cascade = CascadeType.ALL)
-//    List<BankAccount> bankAccountList = new ArrayList<>();
-//
-//    @OneToMany(
-//            mappedBy = "creditorId",
-//            cascade = CascadeType.ALL)
-//    List<Transaction> creditorList = new ArrayList<>();
-//
-//    @OneToMany(
-//            mappedBy = "debtorId",
-//            cascade = CascadeType.ALL)
-//    List<Transaction> debtorList = new ArrayList<>();
-//
+    @OneToMany(
+            mappedBy = "userIdCreditor",
+            cascade = CascadeType.ALL)
+    List<Transaction> creditorList = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "userIdDebtor",
+            cascade = CascadeType.ALL)
+    List<Transaction> debtorList = new ArrayList<>();
+
 
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(name = "contact", joinColumns =
@@ -155,12 +153,20 @@ public class User {
         this.friendList = friendList;
     }
 
-    public List<BankAccount> getUserBankAccount() {
-        return bankAccountId;
+//    public List<BankAccount> getUserBankAccount() {
+//        return bankAccountId;
+//    }
+//
+//    public void setUserBankAccount(List<BankAccount> bankAccountId) {
+//        this.bankAccountId = bankAccountId;
+//    }
+
+    public List<BankAccount> getBankAccountList() {
+        return bankAccountList;
     }
 
-    public void setUserBankAccount(List<BankAccount> bankAccountId) {
-        this.bankAccountId = bankAccountId;
+    public void setBankAccountList(List<BankAccount> bankAccountList) {
+        this.bankAccountList = bankAccountList;
     }
 
     public List<Transaction> getDebtorList() {
@@ -179,13 +185,13 @@ public class User {
         this.creditorList = creditorList;
     }
 
-    public List<BankAccount> getBankAccountId() {
-        return bankAccountId;
-    }
-
-    public void setBankAccountId(List<BankAccount> bankAccountId) {
-        this.bankAccountId = bankAccountId;
-    }
+//    public List<BankAccount> getBankAccountId() {
+//        return bankAccountId;
+//    }
+//
+//    public void setBankAccountId(List<BankAccount> bankAccountId) {
+//        this.bankAccountId = bankAccountId;
+//    }
 
     public List<BankTransaction> getBankTransactionsList() {
         return bankTransactionsList;

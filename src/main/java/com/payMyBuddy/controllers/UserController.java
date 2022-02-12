@@ -135,7 +135,7 @@ public class UserController {
         }
         User user = userService.getUserById(userId).get();
         BankAccount bankAccount = bankAccountService.getBankAccountById(bankAccountId).get();
-        if (!user.getUserBankAccount().contains(bankAccount)) {
+        if (!user.getBankAccountList().contains(bankAccount)) {
             userService.addBankAccount(user, bankAccount);
             LOGGER.info("Add bank account success");
             return new ResponseEntity<>("Bank Account Added", HttpStatus.CREATED);
@@ -152,7 +152,7 @@ public class UserController {
         }
         User user = userService.getUserById(userId).get();
         BankAccount bankAccount = bankAccountService.getBankAccountById(bankAccountId).get();
-        if (user.getUserBankAccount().contains(bankAccount)) {
+        if (user.getBankAccountList().contains(bankAccount)) {
             LOGGER.info("Remove bank account success");
             userService.removeBankAccount(user, bankAccount);
             return new ResponseEntity<>("Bank Account Removed", HttpStatus.OK);

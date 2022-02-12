@@ -30,9 +30,10 @@ public class TransactionLabel {
 //    @OneToMany(mappedBy = "transactionLabelId")
 //    private List<Transaction> transaction;
 
-    @OneToMany(/*mappedBy = "transactionLabelId",*/ cascade = CascadeType.ALL)
-    @JoinColumn(name = "transaction_label_id")
-    private List<Transaction> transaction;
+    @OneToMany(
+            mappedBy = "transactionLabelId",
+            cascade = CascadeType.ALL)
+    List<Transaction> transaction = new ArrayList<>();
 
     public TransactionLabel(){}
 

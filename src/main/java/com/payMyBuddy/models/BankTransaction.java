@@ -41,11 +41,11 @@ public class BankTransaction {
     @Column(name = "commission", nullable = false, precision = 6, scale = 2)
     private BigDecimal commission;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User userId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "bank_account_id")
     private BankAccount bankAccountId;
 
@@ -53,8 +53,15 @@ public class BankTransaction {
 
     }
 
-    public BankTransaction(double amount) {
+//    public BankTransaction(double amount) {
+//        this.amount = amount;
+//        this.date = new InstantDAte
+//    }
+
+
+    public BankTransaction(double amount, LocalDate date) {
         this.amount = amount;
+        this.date = date;
     }
 
     public Long getBankTransactionId() {
