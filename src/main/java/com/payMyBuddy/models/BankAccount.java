@@ -28,8 +28,8 @@ public class BankAccount {
     @Column(name = "iban", nullable = false)
     private int iban;
 
-    @Column(name = "balance", nullable = false, precision = 10, scale = 2)
-    private BigDecimal balance;
+//    @Column(name = "balance", nullable = false, precision = 10, scale = 2)
+//    private BigDecimal balance;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -42,9 +42,8 @@ public class BankAccount {
 
     public BankAccount(){}
 
-    public BankAccount(int iban, BigDecimal balance) {
+    public BankAccount(int iban) {
         this.iban = iban;
-        this.balance = balance;
     }
 
     public Long getBankAccountId() {
@@ -63,13 +62,6 @@ public class BankAccount {
         this.iban = iban;
     }
 
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
 
     public User getUser() {
         return user;

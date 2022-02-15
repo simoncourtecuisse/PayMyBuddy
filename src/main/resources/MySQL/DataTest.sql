@@ -1,21 +1,22 @@
 USE paymybuddy;
+
 INSERT INTO user (user_id, first_name, last_name, email, password, wallet_balance)
 VALUES (1, 'Simon', 'Courtecuisse', 'simon.courtecuisse@example.com', 'sdsksnfosmfnsmdf', 1234),
        (2, 'Simon', 'Soulie', 'simon.soulie@example.com', 'fdsdsdqgf', 4567),
        (3, 'Marion', 'Aillerie', 'marion.aillerie@example.com', 'pooiuyezesd', 7891),
        (4, 'Igor', 'Courtecuisse', 'igor.courtecuisse@example.com', 'azsqdqfbfdf', 9595);
-
+       
 INSERT INTO contact(user_id, friend_user_id)
 VALUES (1, 2),
        (1, 3),
        (2, 3),
        (4, 1);
 
-INSERT INTO bank_account (bank_account_id, user_id, iban, balance)
-VALUES (1, 1, '232625', 5321),
-       (2, 2, '685137', 9456),
-       (3, 3, '809572', 3216),
-       (4, 4, '158338', 21050);
+INSERT INTO bank_account (bank_account_id, user_id, iban)
+VALUES (1, 1, '232625'),
+       (2, 2, '685137'),
+       (3, 3, '809572'),
+       (4, 4, '158338');
 
 INSERT INTO transaction_label (transaction_label_id, description)
 VALUES (1, 'restaurant bill'),
@@ -33,3 +34,14 @@ VALUES (1, 2, 1, 2, 300.00, 0.5, '2019-01-01'),
        (5, 3, 1, 4, 12.50, 0.3, '2019-04-18'),
        (6, 4, 3, 2, 25.00, 0.5, '2019-05-08');
 
+UPDATE user_sequence
+SET next_val = '5';
+
+UPDATE bank_account_sequence
+SET next_val = '5';
+
+UPDATE transaction_label_sequence
+SET next_val = '7';
+
+UPDATE transaction_sequence
+SET next_val = '7';

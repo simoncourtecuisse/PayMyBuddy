@@ -57,7 +57,7 @@ public class BankAccountService {
         }
 
         User user = bankTransaction.getUser();
-        BankAccount bankAccount = bankTransaction.getBankAccount();
+        //BankAccount bankAccount = bankTransaction.getBankAccount();
         double absTotal = Math.abs(com);
 
         if (amount > 0) {
@@ -70,24 +70,6 @@ public class BankAccountService {
         userService.updateUser(user);
         return true;
     }
-//    public boolean processBankTransaction(BankTransaction bankTransaction) {
-//        if (bankTransaction.getBalance().signum() <= 0) {
-//            return false;
-//        }
-//
-//        User user = bankTransaction.getUserId();
-//        BigDecimal absBalance = new BigDecimal(String.valueOf(bankTransaction.getBalance().abs()));
-//
-//        if (bankTransaction.getBalance().compareTo(BigDecimal.ZERO) > 0) {
-//            user.setWalletBalance(user.getWalletBalance().add(absBalance));
-//        } else if (bankTransaction.getBalance().compareTo(BigDecimal.ZERO) < 0 && absBalance.compareTo(user.getWalletBalance()) <= 0) {
-//            user.setWalletBalance(user.getWalletBalance().subtract(absBalance));
-//        } else {
-//            return false;
-//        }
-//        userService.updateUser(user);
-//        return true;
-//    }
 
     public Iterable<BankAccount> getAllBankAccounts() {
         return bankAccountRepository.findAll();

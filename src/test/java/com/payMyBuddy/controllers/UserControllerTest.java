@@ -263,7 +263,7 @@ class UserControllerTest {
         final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
-        when(mockBankAccountService.getBankAccountById(0L)).thenReturn(Optional.of(new BankAccount(0, new BigDecimal("0.00"))));
+        when(mockBankAccountService.getBankAccountById(0L)).thenReturn(Optional.of(new BankAccount(0)));
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(put("/user/addBankAccount")
@@ -283,7 +283,7 @@ class UserControllerTest {
         // Setup
         when(mockUserService.getUserById(0L)).thenReturn(Optional.empty());
 
-        when(mockBankAccountService.getBankAccountById(0L)).thenReturn(Optional.of(new BankAccount(0, new BigDecimal("0.00"))));
+        when(mockBankAccountService.getBankAccountById(0L)).thenReturn(Optional.of(new BankAccount(0)));
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(put("/user/addBankAccount")
@@ -304,7 +304,7 @@ class UserControllerTest {
         final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
-        when(mockBankAccountService.getBankAccountById(0L)).thenReturn(Optional.of(new BankAccount(0, new BigDecimal("0.00"))));
+        when(mockBankAccountService.getBankAccountById(0L)).thenReturn(Optional.of(new BankAccount(0)));
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(delete("/user/removeBankAccount")

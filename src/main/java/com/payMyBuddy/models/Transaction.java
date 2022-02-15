@@ -56,6 +56,7 @@ public class Transaction {
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "creditor_id")
     Long userIdCreditor;
+    //User userIdCreditor;
 
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "debtor_id")
