@@ -29,10 +29,16 @@ public class BankAccountService {
 
     public BankTransaction createBankAccountTransaction(User userId, BankAccount bankAccountId, double amount) {
         BankTransaction bankAccountTransaction = new BankTransaction();
+        var amount1 = amount;
+        double rate = 0.05;
+        var fare = amount1 * rate;
+        var com = amount1 + fare;
+
         bankAccountTransaction.setUser(userId);
         bankAccountTransaction.setBankAccount(bankAccountId);
         bankAccountTransaction.setAmount(amount);
         bankAccountTransaction.setDate(LocalDate.now());
+        bankAccountTransaction.setCommission(com);
 
         return bankAccountTransaction;
     }
@@ -43,9 +49,7 @@ public class BankAccountService {
 
     public boolean processBankTransaction(BankTransaction bankTransaction) {
         var amount = bankTransaction.getAmount();
-        double com = 0.05;
-        var fare = amount * com;
-        var total = amount + fare;
+        var com = bankTransaction.getCommission();
 
 
         if (amount == 0) {
@@ -54,7 +58,7 @@ public class BankAccountService {
 
         User user = bankTransaction.getUser();
         BankAccount bankAccount = bankTransaction.getBankAccount();
-        double absTotal = Math.abs(total);
+        double absTotal = Math.abs(com);
 
         if (amount > 0) {
             user.setWalletBalance(user.getWalletBalance().add(BigDecimal.valueOf(absTotal)));

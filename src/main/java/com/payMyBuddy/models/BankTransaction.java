@@ -39,7 +39,7 @@ public class BankTransaction {
     private LocalDate date;
 
     @Column(name = "commission", precision = 6, scale = 2)
-    private BigDecimal commission;
+    private double commission;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -82,11 +82,11 @@ public class BankTransaction {
         this.date = date;
     }
 
-    public BigDecimal getCommission() {
+    public double getCommission() {
         return commission;
     }
 
-    public void setCommission(BigDecimal commission) {
+    public void setCommission(double commission) {
         this.commission = commission;
     }
 
