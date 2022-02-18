@@ -51,7 +51,6 @@ public class BankAccountService {
         var amount = bankTransaction.getAmount();
         var com = bankTransaction.getCommission();
 
-
         if (amount == 0) {
             return false;
         }

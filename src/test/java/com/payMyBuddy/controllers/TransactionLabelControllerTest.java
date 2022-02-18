@@ -43,7 +43,7 @@ class TransactionLabelControllerTest {
     void testCreateTransactionLabel() throws Exception {
         // Setup
         // Run the test
-        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(new BigDecimal("0.00"), LocalDate.of(2020, 1, 1), new BigDecimal("0.00"), null))));
+        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, null))));
         when(mockTransactionLabelService.getTransactionLabelById(1L)).thenReturn(transactionLabel);
 
         // Run the test
@@ -64,7 +64,7 @@ class TransactionLabelControllerTest {
     void testGetTransactionLabel() throws Exception {
         // Setup
         // Configure TransactionLabelService.getTransactionLabelById(...).
-        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(new BigDecimal("0.00"), LocalDate.of(2020, 1, 1), new BigDecimal("0.00"), null))));
+        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, null))));
         when(mockTransactionLabelService.getTransactionLabelById(1L)).thenReturn(transactionLabel);
 
         // Run the test
@@ -97,7 +97,7 @@ class TransactionLabelControllerTest {
     void testUpdateTransactionLabel() throws Exception {
         // Setup
         // Configure TransactionLabelService.getTransactionLabelById(...).
-        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(new BigDecimal("0.00"), LocalDate.of(2020, 1, 1), new BigDecimal("0.00"), null))));
+        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, null))));
         when(mockTransactionLabelService.getTransactionLabelById(1L)).thenReturn(transactionLabel);
 
         // Run the test
@@ -117,7 +117,7 @@ class TransactionLabelControllerTest {
     @Test
     void testUpdateTransactionLabel_ReturnBadRequest() throws Exception {
         // Setup
-        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(new BigDecimal("0.00"), LocalDate.of(2020, 1, 1), new BigDecimal("0.00"), null))));
+        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, null))));
         when(mockTransactionLabelService.getTransactionLabelById(1L)).thenReturn(Optional.empty());
 
         // Run the test
@@ -133,7 +133,7 @@ class TransactionLabelControllerTest {
     void testDeleteTransactionLabel() throws Exception {
         // Setup
         // Configure TransactionLabelService.getTransactionLabelById(...).
-        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(new BigDecimal("0.00"), LocalDate.of(2020, 1, 1), new BigDecimal("0.00"), null))));
+        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, null))));
         when(mockTransactionLabelService.getTransactionLabelById(1L)).thenReturn(transactionLabel);
 
         // Run the test
@@ -150,7 +150,7 @@ class TransactionLabelControllerTest {
     @Test
     void testDeleteTransactionLabel_ReturnBadRequest() throws Exception {
         // Setup
-        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(new BigDecimal("0.00"), LocalDate.of(2020, 1, 1), new BigDecimal("0.00"), null))));
+        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, null))));
         when(mockTransactionLabelService.getTransactionLabelById(1L)).thenReturn(Optional.empty());
 
         // Run the test
@@ -166,11 +166,11 @@ class TransactionLabelControllerTest {
     void testAddTransactionLabel() throws Exception {
         // Setup
         // Configure TransactionLabelService.getTransactionLabelById(...).
-        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(new BigDecimal("0.00"), LocalDate.of(2020, 1, 1), new BigDecimal("0.00"), null))));
+        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, null))));
         when(mockTransactionLabelService.getTransactionLabelById(1L)).thenReturn(transactionLabel);
 
         // Configure TransactionService.getTransactionById(...).
-        final Optional<Transaction> transaction = Optional.of(new Transaction(new BigDecimal("0.00"), LocalDate.of(2020, 1, 1), new BigDecimal("0.00"), new TransactionLabel("description", List.of())));
+        final Optional<Transaction> transaction = Optional.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, new TransactionLabel("description", List.of())));
         when(mockTransactionService.getTransactionById(1L)).thenReturn(transaction);
 
         // Run the test
@@ -192,7 +192,7 @@ class TransactionLabelControllerTest {
         when(mockTransactionLabelService.getTransactionLabelById(1L)).thenReturn(Optional.empty());
 
         // Configure TransactionService.getTransactionById(...).
-        final Optional<Transaction> transaction = Optional.of(new Transaction(new BigDecimal("0.00"), LocalDate.of(2020, 1, 1), new BigDecimal("0.00"), new TransactionLabel("description", List.of())));
+        final Optional<Transaction> transaction = Optional.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, new TransactionLabel("description", List.of())));
         when(mockTransactionService.getTransactionById(1L)).thenReturn(transaction);
 
         // Run the test
@@ -211,10 +211,10 @@ class TransactionLabelControllerTest {
     void testAddTransactionLabel_ReturnBadRequest() throws Exception {
         // Setup
         // Configure TransactionLabelService.getTransactionLabelById(...).
-        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(new BigDecimal("0.00"), LocalDate.of(2020, 1, 1), new BigDecimal("0.00"), null))));
+        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, null))));
         when(mockTransactionLabelService.getTransactionLabelById(1L)).thenReturn(transactionLabel);
 
-        final Optional<Transaction> transaction = Optional.of(new Transaction(new BigDecimal("0.00"), LocalDate.of(2020, 1, 1), new BigDecimal("0.00"), new TransactionLabel("description", List.of())));
+        final Optional<Transaction> transaction = Optional.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, new TransactionLabel("description", List.of())));
         when(mockTransactionService.getTransactionById(1L)).thenReturn(transaction);
 
 
@@ -231,11 +231,11 @@ class TransactionLabelControllerTest {
     void testRemoveTransactionLabel() throws Exception {
         // Setup
         // Configure TransactionLabelService.getTransactionLabelById(...).
-        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(new BigDecimal("0.00"), LocalDate.of(2020, 1, 1), new BigDecimal("0.00"), null))));
+        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, null))));
         when(mockTransactionLabelService.getTransactionLabelById(0L)).thenReturn(transactionLabel);
 
         // Configure TransactionService.getTransactionById(...).
-        final Optional<Transaction> transaction = Optional.of(new Transaction(new BigDecimal("0.00"), LocalDate.of(2020, 1, 1), new BigDecimal("0.00"), new TransactionLabel("description", List.of())));
+        final Optional<Transaction> transaction = Optional.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, new TransactionLabel("description", List.of())));
         when(mockTransactionService.getTransactionById(0L)).thenReturn(transaction);
 
         // Run the test
@@ -257,7 +257,7 @@ class TransactionLabelControllerTest {
         when(mockTransactionLabelService.getTransactionLabelById(0L)).thenReturn(Optional.empty());
 
         // Configure TransactionService.getTransactionById(...).
-        final Optional<Transaction> transaction = Optional.of(new Transaction(new BigDecimal("0.00"), LocalDate.of(2020, 1, 1), new BigDecimal("0.00"), new TransactionLabel("description", List.of())));
+        final Optional<Transaction> transaction = Optional.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, new TransactionLabel("description", List.of())));
         when(mockTransactionService.getTransactionById(0L)).thenReturn(transaction);
 
         // Run the test
@@ -276,7 +276,7 @@ class TransactionLabelControllerTest {
     void testRemoveTransactionLabel_ReturnBadRequest() throws Exception {
         // Setup
         // Configure TransactionLabelService.getTransactionLabelById(...).
-        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(new BigDecimal("0.00"), LocalDate.of(2020, 1, 1), new BigDecimal("0.00"), null))));
+        final Optional<TransactionLabel> transactionLabel = Optional.of(new TransactionLabel("description", List.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, null))));
         when(mockTransactionLabelService.getTransactionLabelById(1L)).thenReturn(transactionLabel);
 
         when(mockTransactionService.getTransactionById(1L)).thenReturn(Optional.empty());

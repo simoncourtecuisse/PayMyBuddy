@@ -1,6 +1,7 @@
 package com.payMyBuddy.controllers;
 
 import com.payMyBuddy.models.Transaction;
+import com.payMyBuddy.models.TransactionLabel;
 import com.payMyBuddy.models.User;
 import com.payMyBuddy.services.TransactionLabelService;
 import com.payMyBuddy.services.TransactionService;
@@ -77,15 +78,45 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PostMapping(value = "/transaction/payment")
-    private ResponseEntity<?> makeTransaction(@RequestBody Transaction transaction) {
-        if (transactionService.payment(transaction)) {
+    @PostMapping(value = "/transaction/payment/{userIdDebtor}/{userIdCreditor}")
+    private ResponseEntity<?> makeTransaction(@PathVariable("userIdDebtor") Long debtorId, @PathVariable("userIdCreditor") Long creditorId, @RequestBody Transaction transaction) {
+        if (userService.getUserById(debtorId).isEmpty() || userService.getUserById(creditorId).isEmpty()) {
+            LOGGER.error("User not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        User debtor = userService.getUserById(debtorId).get();
+        User creditor = userService.getUserById(creditorId).get();
+        TransactionLabel label = transaction.getTransactionLabels();
+        Transaction paymentTransaction = transactionService.createTransaction(debtor, creditor, transaction.getAmount(), label);
+
+        if (!debtor.getFriendList().contains(creditor)) {
+            LOGGER.error("Creditor is not in debtor's Friend list");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        if (debtor.getWalletBalance().compareTo(BigDecimal.valueOf(paymentTransaction.getCommission())) < 0) {
+            LOGGER.error("Not enough found in wallet");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        if (transactionService.processUserTransaction(paymentTransaction)) {
+            transactionService.saveTransaction(paymentTransaction);
             LOGGER.info("Transaction success");
             return new ResponseEntity<>("Successful Transaction", HttpStatus.OK);
         }
         LOGGER.error("Failed to make the payment because of a BAD REQUEST");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+//   @PostMapping(value = "/transaction/payment")
+//    private ResponseEntity<?> makeTransaction(@RequestBody Transaction transaction) {
+//        if (transactionService.payment(transaction)) {
+//            LOGGER.info("Transaction success");
+//            return new ResponseEntity<>("Successful Transaction", HttpStatus.OK);
+//        }
+//        LOGGER.error("Failed to make the payment because of a BAD REQUEST");
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//    }
 
 
 //    @PutMapping(value = "/addTransactionLabel")

@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @RestController
@@ -82,6 +83,12 @@ public class BankAccountController {
         User user = userService.getUserById(id).get();
         BankAccount bankAccount = bankTransaction.getBankAccount();
         BankTransaction bankAccountTransaction = bankAccountService.createBankAccountTransaction(user, bankAccount, bankTransaction.getAmount());
+
+        if (user.getWalletBalance().compareTo(BigDecimal.valueOf(bankAccountTransaction.getCommission())) < 0) {
+            LOGGER.error("Not enough found in wallet");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         if (bankAccountService.processBankTransaction(bankAccountTransaction)) {
             bankAccountService.saveBankTransaction(bankAccountTransaction);
             LOGGER.info("Transaction to bank account successfully processed");

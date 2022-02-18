@@ -30,7 +30,7 @@ public class Transaction {
     private Long transactionId;
 
     @Column(name = "amount", nullable = false, precision = 6, scale = 2)
-    private BigDecimal amount;
+    private double amount;
 
     @Column(name = "date")
     @JsonDeserialize(using = LocalDateDeserializer.class)
@@ -39,7 +39,7 @@ public class Transaction {
     private LocalDate date;
 
     @Column(name = "commission", nullable = false, precision = 6, scale = 2)
-    private BigDecimal commission;
+    private double commission;
 
     @ManyToOne
     @JoinColumn(name = "transaction_label_id")
@@ -53,20 +53,20 @@ public class Transaction {
 //    @JoinColumn(name = "debtor_id")
 //    Long userIdDebtor;
 
-    @ManyToOne(targetEntity = User.class)
+    @ManyToOne
     @JoinColumn(name = "creditor_id")
-    Long userIdCreditor;
-    //User userIdCreditor;
+    //Long userIdCreditor;
+    User userIdCreditor;
 
-    @ManyToOne(targetEntity = User.class)
+    @ManyToOne
     @JoinColumn(name = "debtor_id")
-    Long userIdDebtor;
+    User userIdDebtor;
 
     public Transaction() {
 
     }
 
-    public Transaction(BigDecimal amount, LocalDate date, BigDecimal commission, TransactionLabel transactionLabelId) {
+    public Transaction(double amount, LocalDate date, double commission, TransactionLabel transactionLabelId) {
         this.amount = amount;
         this.date = date;
         this.commission = commission;
@@ -81,11 +81,11 @@ public class Transaction {
         this.transactionId = transactionId;
     }
 
-    public BigDecimal getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
@@ -97,11 +97,11 @@ public class Transaction {
         this.date = date;
     }
 
-    public BigDecimal getCommission() {
+    public double getCommission() {
         return commission;
     }
 
-    public void setCommission(BigDecimal commission) {
+    public void setCommission(double commission) {
         this.commission = commission;
     }
 
@@ -113,19 +113,19 @@ public class Transaction {
         this.transactionLabel = transactionLabels;
     }
 
-    public Long getUserIdCreditor() {
+    public User getUserIdCreditor() {
         return userIdCreditor;
     }
 
-    public void setUserIdCreditor(Long userIdCreditor) {
+    public void setUserIdCreditor(User userIdCreditor) {
         this.userIdCreditor = userIdCreditor;
     }
 
-    public Long getUserIdDebtor() {
+    public User getUserIdDebtor() {
         return userIdDebtor;
     }
 
-    public void setUserIdDebtor(Long userIdDebtor) {
+    public void setUserIdDebtor(User userIdDebtor) {
         this.userIdDebtor = userIdDebtor;
     }
 
