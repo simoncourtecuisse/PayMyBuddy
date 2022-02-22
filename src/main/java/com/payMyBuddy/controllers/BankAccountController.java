@@ -84,7 +84,7 @@ public class BankAccountController {
         BankAccount bankAccount = bankTransaction.getBankAccount();
         BankTransaction bankAccountTransaction = bankAccountService.createBankAccountTransaction(user, bankAccount, bankTransaction.getAmount());
 
-        if (user.getWalletBalance().compareTo(BigDecimal.valueOf(bankAccountTransaction.getCommission())) < 0) {
+        if (bankAccountTransaction.getCommission() < 0 && user.getWalletBalance().compareTo(BigDecimal.valueOf(bankAccountTransaction.getCommission())) < 0) {
             LOGGER.error("Not enough found in wallet");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }

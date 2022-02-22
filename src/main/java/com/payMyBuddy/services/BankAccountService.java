@@ -5,6 +5,8 @@ import com.payMyBuddy.models.BankTransaction;
 import com.payMyBuddy.models.User;
 import com.payMyBuddy.repositories.BankAccountRepository;
 import com.payMyBuddy.repositories.BankTransactionRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -26,6 +28,8 @@ public class BankAccountService {
 
     @Autowired
     private UserService userService;
+
+    Logger LOGGER = LogManager.getLogger(BankAccount.class);
 
     public BankTransaction createBankAccountTransaction(User userId, BankAccount bankAccountId, double amount) {
         BankTransaction bankAccountTransaction = new BankTransaction();
@@ -63,7 +67,10 @@ public class BankAccountService {
             user.setWalletBalance(user.getWalletBalance().add(BigDecimal.valueOf(absTotal)));
         } else if (amount < 0 && BigDecimal.valueOf(absTotal).compareTo(user.getWalletBalance()) <= 0) {
             user.setWalletBalance(user.getWalletBalance().subtract(BigDecimal.valueOf(absTotal)));
-        } else {
+        }
+//        else if (amount < 0 && BigDecimal.valueOf(absTotal).compareTo(user.getWalletBalance()) > 0) {
+//            LOGGER.error("Not enough found in wallet");        }
+        else {
             return false;
         }
         userService.updateUser(user);
