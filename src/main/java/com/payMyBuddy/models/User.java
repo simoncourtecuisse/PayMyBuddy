@@ -45,9 +45,10 @@ public class User {
             cascade = CascadeType.ALL)
     List<BankAccount> bankAccountList = new ArrayList<>();
 
-//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "user_id")
-//    List<BankAccount> bankAccountId = new ArrayList<>();
+//    @OneToMany(
+//            mappedBy = "user",
+//            cascade = CascadeType.ALL)
+//    List<BankAccount> bankAccountList = new ArrayList<>();
 
 //    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 //    @JoinColumn(name = "creditor_id")

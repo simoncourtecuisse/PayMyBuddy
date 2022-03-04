@@ -5,8 +5,6 @@ import com.payMyBuddy.models.BankTransaction;
 import com.payMyBuddy.models.User;
 import com.payMyBuddy.repositories.BankAccountRepository;
 import com.payMyBuddy.repositories.BankTransactionRepository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -29,7 +27,6 @@ public class BankAccountService {
     @Autowired
     private UserService userService;
 
-    Logger LOGGER = LogManager.getLogger(BankAccount.class);
 
     public BankTransaction createBankAccountTransaction(User userId, BankAccount bankAccountId, double amount) {
         BankTransaction bankAccountTransaction = new BankTransaction();
@@ -51,31 +48,58 @@ public class BankAccountService {
         return bankTransactionRepository.save(bankAccountTransaction);
     }
 
-    public boolean processBankTransaction(BankTransaction bankTransaction) {
+    public boolean bankToWallet(BankTransaction bankTransaction) {
         var amount = bankTransaction.getAmount();
         var com = bankTransaction.getCommission();
 
-        if (amount == 0) {
-            return false;
-        }
-
         User user = bankTransaction.getUser();
-        //BankAccount bankAccount = bankTransaction.getBankAccount();
-        double absTotal = Math.abs(com);
 
         if (amount > 0) {
-            user.setWalletBalance(user.getWalletBalance().add(BigDecimal.valueOf(absTotal)));
-        } else if (amount < 0 && BigDecimal.valueOf(absTotal).compareTo(user.getWalletBalance()) <= 0) {
-            user.setWalletBalance(user.getWalletBalance().subtract(BigDecimal.valueOf(absTotal)));
-        }
-//        else if (amount < 0 && BigDecimal.valueOf(absTotal).compareTo(user.getWalletBalance()) > 0) {
-//            LOGGER.error("Not enough found in wallet");        }
-        else {
+            user.setWalletBalance(user.getWalletBalance().add(BigDecimal.valueOf(amount)));
+        } else {
             return false;
         }
         userService.updateUser(user);
         return true;
     }
+
+    public boolean bankDeposit(BankTransaction bankTransaction) {
+        var amount = bankTransaction.getAmount();
+        var com = bankTransaction.getCommission();
+
+        User user = bankTransaction.getUser();
+
+        if (amount > 0) {
+            user.setWalletBalance(user.getWalletBalance().subtract(BigDecimal.valueOf(com)));
+        } else {
+            return false;
+        }
+        userService.updateUser(user);
+        return true;
+    }
+
+//    public boolean processBankTransaction(BankTransaction bankTransaction) {
+//        var amount = bankTransaction.getAmount();
+//        var com = bankTransaction.getCommission();
+//
+//        if (amount == 0) {
+//            return false;
+//        }
+//
+//        User user = bankTransaction.getUser();
+//        //BankAccount bankAccount = bankTransaction.getBankAccount();
+//        double absTotal = Math.abs(com);
+//
+//        if (amount > 0) {
+//            user.setWalletBalance(user.getWalletBalance().add(BigDecimal.valueOf(absTotal)));
+//        } else if (amount < 0 && BigDecimal.valueOf(absTotal).compareTo(user.getWalletBalance()) <= 0) {
+//            user.setWalletBalance(user.getWalletBalance().subtract(BigDecimal.valueOf(absTotal)));
+//        } else {
+//            return false;
+//        }
+//        userService.updateUser(user);
+//        return true;
+//    }
 
     public Iterable<BankAccount> getAllBankAccounts() {
         return bankAccountRepository.findAll();

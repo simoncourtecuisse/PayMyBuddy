@@ -103,6 +103,7 @@ public class UserController {
         User friendUser = userService.getUserById(toUser).get();
         if (!user.getFriendList().contains(friendUser)) {
             userService.addFriend(user, friendUser);
+            userService.addFriend(friendUser,user);
             LOGGER.info("Add friend success");
             return new ResponseEntity<>("Friend Added", HttpStatus.CREATED);
         }

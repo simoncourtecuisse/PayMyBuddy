@@ -111,14 +111,18 @@ public class TransactionService {
         paymentTransaction.setAmount(amount);
         paymentTransaction.setDate(LocalDate.now());
         paymentTransaction.setCommission(com);
-        paymentTransaction.setTransactionLabels(label);
+        paymentTransaction.setTransactionLabel(label);
 //        paymentTransaction.setTransactionLabels();
         return paymentTransaction;
     }
 
-    public Transaction saveTransaction(Transaction paymentTransaction) {
-        return transactionRepository.save(paymentTransaction);
+    public void saveTransaction(Transaction paymentTransaction) {
+        transactionRepository.save(paymentTransaction);
     }
+
+//    public Transaction saveTransaction(Transaction paymentTransaction) {
+//        return transactionRepository.save(paymentTransaction);
+//    }
 
     public boolean processUserTransaction(Transaction transaction) {
         var amount = transaction.getAmount();

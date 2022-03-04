@@ -78,8 +78,8 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PostMapping(value = "/transaction/payment/{userIdDebtor}/{userIdCreditor}/{transactionLabel}")
-    private ResponseEntity<?> makeTransaction(@PathVariable("userIdDebtor") Long debtorId, @PathVariable("userIdCreditor") Long creditorId, @PathVariable("transactionLabel") Long transactionLabelId,  @RequestBody Transaction transaction) {
+    @PostMapping(value = "/transaction/payment/{userIdDebtor}/{userIdCreditor}")
+    private ResponseEntity<?> makeTransaction(@PathVariable("userIdDebtor") Long debtorId, @PathVariable("userIdCreditor") Long creditorId,  @RequestBody Transaction transaction) {
         if (userService.getUserById(debtorId).isEmpty() || userService.getUserById(creditorId).isEmpty()) {
             LOGGER.error("User not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -87,8 +87,8 @@ public class TransactionController {
 
         User debtor = userService.getUserById(debtorId).get();
         User creditor = userService.getUserById(creditorId).get();
-        TransactionLabel label = transactionLabelService.getTransactionLabelById(transactionLabelId).get();
-//        TransactionLabel label = transaction.getTransactionLabels(transactionLabelId);
+//        TransactionLabel label = transactionLabelService.getTransactionLabelById(transactionLabelId).get();
+        TransactionLabel label = transaction.getTransactionLabel();
         Transaction paymentTransaction = transactionService.createTransaction(debtor, creditor, transaction.getAmount(), label);
 
         if (!debtor.getFriendList().contains(creditor)) {

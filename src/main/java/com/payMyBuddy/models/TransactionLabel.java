@@ -33,13 +33,12 @@ public class TransactionLabel {
     @OneToMany(
             mappedBy = "transactionLabel",
             cascade = CascadeType.ALL)
-    List<Transaction> transaction = new ArrayList<>();
+    List<Transaction> transactionList = new ArrayList<>();
 
     public TransactionLabel(){}
 
-    public TransactionLabel(String description, List<Transaction> transaction) {
+    public TransactionLabel(String description) {
         this.description = description;
-        this.transaction = transaction;
     }
 
     public Long getTransactionLabelId() {
@@ -58,11 +57,11 @@ public class TransactionLabel {
         this.description = description;
     }
 
-    public List<Transaction> getTransactions() {
-        return transaction;
+    public List<Transaction> getTransactionList() {
+        return transactionList;
     }
 
-    public void setTransaction(List<Transaction> transaction) {
-        this.transaction = transaction;
+    public void setTransactionList(List<Transaction> transactionList) {
+        this.transactionList = transactionList;
     }
 }

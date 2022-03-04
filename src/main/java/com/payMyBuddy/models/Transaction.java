@@ -43,7 +43,7 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "transaction_label_id")
-    TransactionLabel transactionLabel;
+    private TransactionLabel transactionLabel;
 
 //    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
 //    @JoinColumn(name = "creditor_id")
@@ -105,12 +105,12 @@ public class Transaction {
         this.commission = commission;
     }
 
-    public TransactionLabel getTransactionLabels() {
+    public TransactionLabel getTransactionLabel() {
         return transactionLabel;
     }
 
-    public void setTransactionLabels(TransactionLabel transactionLabels) {
-        this.transactionLabel = transactionLabels;
+    public void setTransactionLabel(TransactionLabel transactionLabel) {
+        this.transactionLabel = transactionLabel;
     }
 
     public User getUserIdCreditor() {

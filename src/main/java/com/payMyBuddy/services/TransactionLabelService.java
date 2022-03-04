@@ -44,12 +44,12 @@ public class TransactionLabelService {
     }
 
     public void addTransactionLabel(TransactionLabel transactionLabel, Transaction transaction) {
-        transactionLabel.getTransactions().add(transaction);
+        transactionLabel.getTransactionList().add(transaction);
         transactionLabelRepository.save(transactionLabel);
     }
 
     public void removeTransactionLabel(TransactionLabel transactionLabel, Transaction transaction) {
-        transactionLabel.getTransactions().remove(transaction);
+        transactionLabel.getTransactionList().remove(transaction);
         transactionLabelRepository.save(transactionLabel);
     }
 }

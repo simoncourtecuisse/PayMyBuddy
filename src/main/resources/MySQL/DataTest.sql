@@ -1,16 +1,20 @@
 USE paymybuddy;
 
 INSERT INTO user (user_id, first_name, last_name, email, password, wallet_balance)
-VALUES (1, 'Simon', 'Courtecuisse', 'simon.courtecuisse@example.com', 'sdsksnfosmfnsmdf', 1234),
-       (2, 'Simon', 'Soulie', 'simon.soulie@example.com', 'fdsdsdqgf', 4567),
-       (3, 'Marion', 'Aillerie', 'marion.aillerie@example.com', 'pooiuyezesd', 7891),
-       (4, 'Igor', 'Courtecuisse', 'igor.courtecuisse@example.com', 'azsqdqfbfdf', 9595);
+VALUES (1, 'Simon', 'Courtecuisse', 'simon.courtecuisse@example.com', 'sdsksnfosmfnsmdf', 34),
+       (2, 'Simon', 'Soulie', 'simon.soulie@example.com', 'fdsdsdqgf', 67),
+       (3, 'Marion', 'Aillerie', 'marion.aillerie@example.com', 'pooiuyezesd', 91),
+       (4, 'Igor', 'Courtecuisse', 'igor.courtecuisse@example.com', 'azsqdqfbfdf', 95);
        
 INSERT INTO contact(user_id, friend_user_id)
 VALUES (1, 2),
+       (2, 1),
        (1, 3),
+       (3, 1),
        (2, 3),
-       (4, 1);
+       (3, 2),
+       (4, 1),
+       (1, 4);
 
 INSERT INTO bank_account (bank_account_id, user_id, iban)
 VALUES (1, 1, '232625'),

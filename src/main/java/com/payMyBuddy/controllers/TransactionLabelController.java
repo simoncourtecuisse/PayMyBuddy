@@ -79,7 +79,7 @@ public class TransactionLabelController {
         }
         TransactionLabel transactionLabel = transactionLabelService.getTransactionLabelById(transactionLabelId).get();
         Transaction transaction = transactionService.getTransactionById(transactionId).get();
-        if (!transactionLabel.getTransactions().contains(transaction)) {
+        if (!transactionLabel.getTransactionList().contains(transaction)) {
             transactionLabelService.addTransactionLabel(transactionLabel, transaction);
             LOGGER.info("Add transaction label success");
             return new ResponseEntity<>("Transaction Added", HttpStatus.CREATED);
@@ -96,7 +96,7 @@ public class TransactionLabelController {
         }
         TransactionLabel transactionLabel = transactionLabelService.getTransactionLabelById(transactionLabelId).get();
         Transaction transaction = transactionService.getTransactionById(transactionId).get();
-        if (transactionLabel.getTransactions().contains(transaction)) {
+        if (transactionLabel.getTransactionList().contains(transaction)) {
             transactionLabelService.removeTransactionLabel(transactionLabel, transaction);
             LOGGER.info("Remove transaction label success");
             return new ResponseEntity<>("Transaction Removed", HttpStatus.OK);

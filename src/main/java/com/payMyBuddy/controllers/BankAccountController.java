@@ -73,13 +73,39 @@ public class BankAccountController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PostMapping(value = "bankAccountTransaction/{userId}")
-    public ResponseEntity<?> processBankTransaction(@PathVariable("userId") Long id, @RequestBody BankTransaction bankTransaction) {
+    @PostMapping(value = "bankToWallet/{userId}")
+    public ResponseEntity<?> bankToWallet(@PathVariable("userId") Long id, @RequestBody BankTransaction bankTransaction) {
         if (userService.getUserById(id).isEmpty()) {
             LOGGER.error("User not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
+        User user = userService.getUserById(id).get();
+        BankAccount bankAccount = bankTransaction.getBankAccount();
+
+        BankTransaction bankAccountTransaction = bankAccountService.createBankAccountTransaction(user, bankAccount, bankTransaction.getAmount());
+
+        if (bankAccountTransaction.getCommission() < 0 && user.getWalletBalance().compareTo(BigDecimal.valueOf(bankAccountTransaction.getCommission())) < 0) {
+            LOGGER.error("Not enough found in wallet");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        if (bankAccountService.bankToWallet(bankAccountTransaction)) {
+            bankAccountService.saveBankTransaction(bankAccountTransaction);
+            LOGGER.info("Transaction to wallet successfully processed");
+            return new ResponseEntity<>("New bank account transaction made", HttpStatus.OK);
+        } else {
+            LOGGER.error("Failed to proceed bank account transaction");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PostMapping(value = "bankDeposit/{userId}")
+    public ResponseEntity<?> bankDeposit(@PathVariable("userId") Long id, @RequestBody BankTransaction bankTransaction) {
+        if (userService.getUserById(id).isEmpty()) {
+            LOGGER.error("User not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         User user = userService.getUserById(id).get();
         BankAccount bankAccount = bankTransaction.getBankAccount();
         BankTransaction bankAccountTransaction = bankAccountService.createBankAccountTransaction(user, bankAccount, bankTransaction.getAmount());
@@ -89,7 +115,7 @@ public class BankAccountController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        if (bankAccountService.processBankTransaction(bankAccountTransaction)) {
+        if (bankAccountService.bankDeposit(bankAccountTransaction)) {
             bankAccountService.saveBankTransaction(bankAccountTransaction);
             LOGGER.info("Transaction to bank account successfully processed");
             return new ResponseEntity<>("New bank account transaction made", HttpStatus.OK);

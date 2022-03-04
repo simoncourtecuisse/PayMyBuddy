@@ -62,7 +62,6 @@ public class BankAccount {
         this.iban = iban;
     }
 
-
     public User getUser() {
         return user;
     }
@@ -72,3 +71,4 @@ public class BankAccount {
     }
 
 }
+
