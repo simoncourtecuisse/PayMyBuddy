@@ -48,7 +48,7 @@ public class UserController {
 //    }
 
     @PostMapping(value = "/user")
-    public ResponseEntity<?> createUser(@RequestBody User user) {
+        public ResponseEntity<?> createUser(@RequestBody User user) {
         if (userService.getUserByEmail(user.getEmail()).isEmpty()) {
             userService.createUser(user);
             LOGGER.info("User {} created successfully", user.getEmail());

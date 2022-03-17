@@ -3,6 +3,7 @@ package com.payMyBuddy.controllers;
 import com.google.gson.JsonObject;
 import com.payMyBuddy.models.BankAccount;
 import com.payMyBuddy.services.BankAccountService;
+import com.payMyBuddy.services.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ class BankAccountControllerTest {
 
     @MockBean
     private BankAccountService mockBankAccountService;
+
+    @MockBean
+    private UserService mockUserService;
 
     @Test
     void testCreateBankAccount() throws Exception {
