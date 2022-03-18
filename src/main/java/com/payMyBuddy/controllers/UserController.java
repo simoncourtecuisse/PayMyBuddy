@@ -19,6 +19,7 @@ import javax.annotation.security.RolesAllowed;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
@@ -32,22 +33,7 @@ public class UserController {
 
     Logger LOGGER = LogManager.getLogger(UserController.class);
 
-//    @PostMapping(value = "/user")
-//    public ResponseEntity<?> createUser(@RequestBody User user) {
-//        if (userService.getUserByEmail(user.getEmail()).isPresent()) {
-//            LOGGER.error("Email already exist");
-//            return ResponseEntity.badRequest().build();
-//        }
-//        else if (userService.getUserByEmail(user.getEmail()).isEmpty()) {
-//            LOGGER.error("Email is required");
-//            return ResponseEntity.badRequest().build();
-//        }
-//        userService.createUser(user);
-//        LOGGER.info("User created successfully");
-//        return new ResponseEntity<>("User Created", HttpStatus.CREATED);
-//    }
-
-    @PostMapping(value = "/user")
+    @PostMapping
     public ResponseEntity<?> createUser(@RequestBody User user) {
         if (userService.getUserByEmail(user.getEmail()).isEmpty()) {
             userService.createUser(user);
@@ -58,7 +44,7 @@ public class UserController {
     }
 
     @RolesAllowed("ADMIN")
-    @GetMapping(value = "/user")
+    @GetMapping
     public ResponseEntity<?> getUserByEmail(@RequestParam("email") String email) {
         Optional<User> user = userService.getUserByEmail(email);
         if (user.isEmpty()) {
@@ -69,7 +55,7 @@ public class UserController {
         return new ResponseEntity<>("User found", HttpStatus.OK);
     }
 
-    @PutMapping("/user/{userId}")
+    @PutMapping("/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable("userId") Long id, @RequestBody User user) {
         if (userService.getUserById(id).isPresent()) {
             user.setUserId(id);
@@ -81,7 +67,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping("/user/{userId}")
+    @DeleteMapping("/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable("userId") Long id) {
         if (userService.getUserById(id).isPresent()) {
             User user = userService.getUserById(id).get();
@@ -93,7 +79,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PutMapping(value = "/user/addFriend")
+    @PutMapping("/addFriend")
     public ResponseEntity<?> addFriend(@RequestParam Long fromUser, @RequestParam Long toUser) {
         if (userService.getUserById(fromUser).isEmpty() || userService.getUserById(toUser).isEmpty()) {
             LOGGER.error("User doesn't exist in DB");
@@ -111,7 +97,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping(value = "/user/removeFriend")
+    @DeleteMapping("/removeFriend")
     public ResponseEntity<?> removeFriend(@RequestParam Long fromUser, @RequestParam Long toUser) {
         if (userService.getUserById(fromUser).isEmpty() || userService.getUserById(toUser).isEmpty()) {
             LOGGER.error("User doesn't exist in DB");
@@ -128,7 +114,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PutMapping(value = "/user/addBankAccount")
+    @PutMapping("/addBankAccount")
     public ResponseEntity<?> addBankAccount(@RequestParam Long userId, @RequestParam Long bankAccountId) {
         if (userService.getUserById(userId).isEmpty() || bankAccountService.getBankAccountById(bankAccountId).isEmpty()) {
             LOGGER.error("User doesn't exist in DB");
@@ -145,7 +131,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping(value = "/user/removeBankAccount")
+    @DeleteMapping("/removeBankAccount")
     public ResponseEntity<?> removeBankAccount(@RequestParam Long userId, @RequestParam Long bankAccountId) {
         if (userService.getUserById(userId).isEmpty() || bankAccountService.getBankAccountById(bankAccountId).isEmpty()) {
             LOGGER.error("User doesn't exist in DB");
@@ -162,7 +148,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PutMapping(value = "/user/addCreditorToTransaction")
+    @PutMapping("/addCreditorToTransaction")
     public ResponseEntity<?> addCreditorToTransaction(@RequestParam Long creditorId, @RequestParam Long transactionId) {
         if (userService.getUserById(creditorId).isEmpty() || transactionService.getTransactionById(transactionId).isEmpty()) {
             LOGGER.error("User doesn't exist in DB");
@@ -179,7 +165,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping(value = "/user/removeCreditorToTransaction")
+    @DeleteMapping("/removeCreditorToTransaction")
     public ResponseEntity<?> removeCreditorToTransaction(@RequestParam Long creditorId, @RequestParam Long transactionId) {
         if (userService.getUserById(creditorId).isEmpty() || transactionService.getTransactionById(transactionId).isEmpty()) {
             LOGGER.error("User doesn't exist in DB");
@@ -196,7 +182,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PutMapping(value = "/user/addDebtorToTransaction")
+    @PutMapping("/addDebtorToTransaction")
     public ResponseEntity<?> addDebtorToTransaction(@RequestParam Long debtorId, @RequestParam Long transactionId) {
         if (userService.getUserById(debtorId).isEmpty() || transactionService.getTransactionById(transactionId).isEmpty()) {
             LOGGER.error("User doesn't exist in DB");
@@ -213,7 +199,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping(value = "/user/removeDebtorToTransaction")
+    @DeleteMapping("/removeDebtorToTransaction")
     public ResponseEntity<?> removeDebtorToTransaction(@RequestParam Long debtorId, @RequestParam Long transactionId) {
         if (userService.getUserById(debtorId).isEmpty() || transactionService.getTransactionById(transactionId).isEmpty()) {
             LOGGER.error("User doesn't exist in DB");

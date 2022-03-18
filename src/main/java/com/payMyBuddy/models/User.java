@@ -199,4 +199,16 @@ public class User {
     public void setBankTransactionsList(List<BankTransaction> bankTransactionsList) {
         this.bankTransactionsList = bankTransactionsList;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", walletBalance=" + walletBalance +
+                '}';
+    }
 }

@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/transaction")
 public class TransactionController {
 
     Logger LOGGER = LogManager.getLogger(Transaction.class);
@@ -27,7 +28,7 @@ public class TransactionController {
     @Autowired
     private UserService userService;
 
-    @PostMapping(value = "/transaction")
+    @PostMapping
     public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction) {
         transactionService.createTransaction(transaction);
         return new ResponseEntity<>("Transaction Created", HttpStatus.CREATED);
@@ -39,7 +40,7 @@ public class TransactionController {
 //        return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping(value = "/transaction")
+    @GetMapping
     public ResponseEntity<?> getTransactionById(@RequestParam("transactionId") Long id) {
 //    public ResponseEntity<?> getTransactionById(@RequestParam("userId") Long id) {
 //        transactionService.getAllTransactionsByUserId(id);
@@ -54,7 +55,7 @@ public class TransactionController {
         return new ResponseEntity<>("Transaction found", HttpStatus.OK);
     }
 
-    @PutMapping(value = "/transaction/{transactionId}")
+    @PutMapping("/{transactionId}")
     public ResponseEntity<?> updateTransaction(@PathVariable("transactionId") Long id, @RequestBody Transaction transaction) {
         if (transactionService.getTransactionById(id).isPresent()) {
             transaction.setTransactionId(id);
@@ -66,7 +67,7 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping("/transaction/{transactionId}")
+    @DeleteMapping("/{transactionId}")
     public ResponseEntity<?> deleteTransaction(@PathVariable("transactionId") Long id) {
         if (transactionService.getTransactionById(id).isPresent()) {
             Transaction transaction = transactionService.getTransactionById(id).get();
@@ -78,7 +79,7 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PostMapping(value = "/transaction/payment/{userIdDebtor}/{userIdCreditor}")
+    @PostMapping("/payment/{userIdDebtor}/{userIdCreditor}")
     private ResponseEntity<?> makeTransaction(@PathVariable("userIdDebtor") Long debtorId, @PathVariable("userIdCreditor") Long creditorId,  @RequestBody Transaction transaction) {
         if (userService.getUserById(debtorId).isEmpty() || userService.getUserById(creditorId).isEmpty()) {
             LOGGER.error("User not found");

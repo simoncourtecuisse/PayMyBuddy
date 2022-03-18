@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/bankAccount")
 public class BankAccountController {
 
     @Autowired
@@ -26,7 +27,7 @@ public class BankAccountController {
 
     Logger LOGGER = LogManager.getLogger(BankAccount.class);
 
-    @PostMapping(value = "/bankAccount")
+    @PostMapping
     public ResponseEntity<?> createBankAccount(@RequestBody BankAccount bankAccount) {
         bankAccountService.addBankAccount(bankAccount);
         return new ResponseEntity<>("Bank Account Created", HttpStatus.CREATED);
@@ -38,7 +39,7 @@ public class BankAccountController {
 //        return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping(value = "/bankAccount")
+    @GetMapping
     public ResponseEntity<?> getBankAccount(@RequestParam(value = "bankAccountId") Long id) {
         Optional<BankAccount> bankAccount = bankAccountService.getBankAccountById(id);
         if (bankAccount.isEmpty()) {
@@ -49,7 +50,7 @@ public class BankAccountController {
         return new ResponseEntity<>("Bank Account found", HttpStatus.OK);
     }
 
-    @PutMapping(value = "/bankAccount/{bankAccountId}")
+    @PutMapping("/{bankAccountId}")
     public ResponseEntity<?> updateBankAccount(@PathVariable("bankAccountId") Long id, @RequestBody BankAccount bankAccount) {
         if (bankAccountService.getBankAccountById(id).isPresent()) {
             bankAccount.setBankAccountId(id);
@@ -61,7 +62,7 @@ public class BankAccountController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping("/bankAccount/{bankAccountId}")
+    @DeleteMapping("/{bankAccountId}")
     public ResponseEntity<?> deleteBankAccount(@PathVariable("bankAccountId") Long id) {
         if (bankAccountService.getBankAccountById(id).isPresent()) {
             BankAccount bankAccount = bankAccountService.getBankAccountById(id).get();
@@ -73,7 +74,7 @@ public class BankAccountController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PostMapping(value = "bankToWallet/{userId}")
+    @PostMapping("bankToWallet/{userId}")
     public ResponseEntity<?> bankToWallet(@PathVariable("userId") Long id, @RequestBody BankTransaction bankTransaction) {
         if (userService.getUserById(id).isEmpty()) {
             LOGGER.error("User not found");
@@ -100,7 +101,7 @@ public class BankAccountController {
         }
     }
 
-    @PostMapping(value = "bankDeposit/{userId}")
+    @PostMapping("bankDeposit/{userId}")
     public ResponseEntity<?> bankDeposit(@PathVariable("userId") Long id, @RequestBody BankTransaction bankTransaction) {
         if (userService.getUserById(id).isEmpty()) {
             LOGGER.error("User not found");

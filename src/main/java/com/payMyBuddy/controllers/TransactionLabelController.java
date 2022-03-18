@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/transaction_label")
 public class TransactionLabelController {
 
     @Autowired
@@ -24,7 +25,7 @@ public class TransactionLabelController {
 
     Logger LOGGER = LogManager.getLogger(TransactionLabel.class);
 
-    @PostMapping(value = "/transaction_label")
+    @PostMapping
     public ResponseEntity<?> createTransactionLabel(@RequestBody TransactionLabel transactionLabel) {
         transactionLabelService.createTransactionLabel(transactionLabel);
         return new ResponseEntity<>("Transaction Label Created", HttpStatus.CREATED);
@@ -36,7 +37,7 @@ public class TransactionLabelController {
 //        return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping(value = "/transaction_label")
+    @GetMapping
     public ResponseEntity<?> getTransactionLabel(@RequestParam("transactionLabelId")Long id) {
         Optional<TransactionLabel> transactionLabel = transactionLabelService.getTransactionLabelById(id);
         if (transactionLabel.isEmpty()) {
@@ -47,7 +48,7 @@ public class TransactionLabelController {
         return new ResponseEntity<>("Transaction Label found", HttpStatus.OK);
     }
 
-    @PutMapping(value = "/transaction_label{transactionLabelId}")
+    @PutMapping("/{transactionLabelId}")
     public ResponseEntity<?> updateTransactionLabel(@PathVariable("transactionLabelId") Long id, @RequestBody TransactionLabel transactionLabel) {
         if (transactionLabelService.getTransactionLabelById(id).isPresent()) {
             transactionLabel.setTransactionLabelId(id);
@@ -59,7 +60,7 @@ public class TransactionLabelController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping("/transaction_label/{transactionLabelId}")
+    @DeleteMapping("/{transactionLabelId}")
     public ResponseEntity<?> deleteTransactionLabel(@PathVariable("transactionLabelId") Long id) {
         if (transactionLabelService.getTransactionLabelById(id).isPresent()) {
             TransactionLabel transactionLabel = transactionLabelService.getTransactionLabelById(id).get();
@@ -71,7 +72,7 @@ public class TransactionLabelController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PutMapping(value = "/addTransactionLabel")
+    @PutMapping("/addTransactionLabel")
     public ResponseEntity<?> addTransactionLabel(@RequestParam Long transactionLabelId, @RequestParam Long transactionId) {
         if (transactionLabelService.getTransactionLabelById(transactionLabelId).isEmpty() || transactionService.getTransactionById(transactionId).isEmpty()) {
             LOGGER.error("Transaction Label doesn't exist in DB");
@@ -88,7 +89,7 @@ public class TransactionLabelController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping(value = "/removeTransactionLabel")
+    @DeleteMapping("/removeTransactionLabel")
     public ResponseEntity<?> removeTransactionLabel(@RequestParam Long transactionLabelId, @RequestParam Long transactionId) {
         if (transactionLabelService.getTransactionLabelById(transactionLabelId).isEmpty() || transactionService.getTransactionById(transactionId).isEmpty()) {
             LOGGER.error("Transaction Label doesn't exist in DB");
