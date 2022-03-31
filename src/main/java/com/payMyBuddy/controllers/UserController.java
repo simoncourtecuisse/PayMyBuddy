@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.security.RolesAllowed;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -38,7 +39,7 @@ public class UserController {
         if (userService.getUserByEmail(user.getEmail()).isEmpty()) {
             userService.createUser(user);
             LOGGER.info("User {} created successfully", user.getEmail());
-            return new ResponseEntity<>("User Created", HttpStatus.CREATED);
+            return new ResponseEntity<>("User Created", HttpStatus.OK);
         }
         return ResponseEntity.badRequest().build();
     }
@@ -215,4 +216,28 @@ public class UserController {
         LOGGER.error("Remove debtor to transaction failed because of a bad request");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+
+    @PostMapping("/authenticate")
+    public ResponseEntity<?> authenticate(@RequestBody User user) {
+        if(userService.getUserByEmail(user.getEmail()).isPresent()) {
+            User authenticatedUser = userService.getUserByEmail(user.getEmail()).get();
+            LOGGER.info("Authentication success");
+            return new ResponseEntity<>(authenticatedUser, HttpStatus.OK);
+       } else {
+            LOGGER.error("Authentication failed");
+
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+       }
+    }
+//    @PostMapping("/authenticate")
+//    public ResponseEntity<?> authenticate(@RequestParam String email, @RequestParam String password, @RequestBody User user) {
+//        if(userService.getUserByEmail(email).isPresent() && user.getEmail().equals(email) && user.getPassword().equals(password)) {
+//            LOGGER.info("Authentication success");
+//            return new ResponseEntity<>("Authentication is successful", HttpStatus.OK);
+//        } else {
+//            LOGGER.error("Authentication failed");
+//
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//    }
 }

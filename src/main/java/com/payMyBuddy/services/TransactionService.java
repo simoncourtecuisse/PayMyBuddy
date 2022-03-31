@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -39,9 +40,9 @@ public class TransactionService {
         transactionRepository.save(transaction);
     }
 
-//    public List<Transaction> getAllTransactionsByUserId(User user) {
-//        return transactionRepository.findAllTransactionsByUser(user, user);
-//    }
+    public List<Transaction> getAllTransactionsByUserId(User user) {
+        return transactionRepository.findAllTransactionsByUserDebtorOrCreditor(user, user);
+    }
 
     public void updateTransaction(Transaction transaction) {
         Optional<Transaction> maj = transactionRepository.findById(transaction.getTransactionId());
