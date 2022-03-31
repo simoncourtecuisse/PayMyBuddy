@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -44,7 +45,7 @@ public class UserController {
         return ResponseEntity.badRequest().build();
     }
 
-    @RolesAllowed("ADMIN")
+//    @RolesAllowed("ADMIN")
     @GetMapping
     public ResponseEntity<?> getUserByEmail(@RequestParam("email") String email) {
         Optional<User> user = userService.getUserByEmail(email);
@@ -229,6 +230,18 @@ public class UserController {
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
        }
     }
+
+    @GetMapping(value = "/transactions")
+    private ResponseEntity<?> getAllTransactionsByUser(@RequestBody User user) {
+        List<Transaction> userTransactions = transactionService.getAllTransactionsByUser(user);
+        if (userTransactions.isEmpty()) {
+            LOGGER.error("Can't find transactions for this user");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        LOGGER.info("Success find user's Transactions ");
+        return new ResponseEntity<>("User found", HttpStatus.OK);
+    }
+
 //    @PostMapping("/authenticate")
 //    public ResponseEntity<?> authenticate(@RequestParam String email, @RequestParam String password, @RequestBody User user) {
 //        if(userService.getUserByEmail(email).isPresent() && user.getEmail().equals(email) && user.getPassword().equals(password)) {
