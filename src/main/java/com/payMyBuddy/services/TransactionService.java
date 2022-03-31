@@ -40,7 +40,7 @@ public class TransactionService {
         transactionRepository.save(transaction);
     }
 
-    public List<Transaction> getAllTransactionsByUserId(User user) {
+    public List<Transaction> getAllTransactionsByUser(User user) {
         return transactionRepository.findAllTransactionsByUserDebtorOrCreditor(user, user);
     }
 
