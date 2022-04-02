@@ -1,6 +1,7 @@
 package com.payMyBuddy.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -43,6 +44,7 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "transaction_label_id")
+    @JsonIgnore
     private TransactionLabel transactionLabel;
 
 //    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
@@ -55,11 +57,13 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "creditor_id")
+    @JsonIgnore
     //Long userIdCreditor;
     User userIdCreditor;
 
     @ManyToOne
     @JoinColumn(name = "debtor_id")
+    @JsonIgnore
     User userIdDebtor;
 
     public Transaction() {

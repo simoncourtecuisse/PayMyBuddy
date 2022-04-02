@@ -1,5 +1,6 @@
 package com.payMyBuddy.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -83,6 +84,7 @@ public class User {
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(name = "contact", joinColumns =
     @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_user_id"))
+    @JsonIgnore
     private List<User> friendList;
 
     public User() {}

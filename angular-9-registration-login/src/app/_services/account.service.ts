@@ -46,6 +46,10 @@ export class AccountService {
         return this.http.post(`${environment.apiUrl}/user`, user);
     }
 
+    // getAllTransactions() {
+    //     return this.http.get<User[]>(`${environment.apiUrl}/transactions`);
+    // }
+
     getAll() {
         return this.http.get<User[]>(`${environment.apiUrl}/users`);
     }

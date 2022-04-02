@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,6 +57,19 @@ public class UserController {
         LOGGER.info("Success find user by email");
         return new ResponseEntity<>("User found", HttpStatus.OK);
     }
+
+    @GetMapping("/users")
+    public ResponseEntity<?> getAll() {
+        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    }
+
+//    @GetMapping("/users")
+//    public ResponseEntity<?> getAllUsers(User user) {
+//        List<User> allUsers = new ArrayList<>();
+//        if (user == null)
+//            userService.getAllUsers().forEach(allUsers::add);
+//        return new ResponseEntity<>(allUsers, HttpStatus.OK);
+//    }
 
     @PutMapping("/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable("userId") Long id, @RequestBody User user) {
@@ -231,16 +245,16 @@ public class UserController {
        }
     }
 
-    @GetMapping(value = "/transactions")
-    private ResponseEntity<?> getAllTransactionsByUser(@RequestBody User user) {
-        List<Transaction> userTransactions = transactionService.getAllTransactionsByUser(user);
-        if (userTransactions.isEmpty()) {
-            LOGGER.error("Can't find transactions for this user");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        LOGGER.info("Success find user's Transactions ");
-        return new ResponseEntity<>("User found", HttpStatus.OK);
-    }
+//    @GetMapping(value = "/transactions")
+//    private ResponseEntity<?> getAllTransactionsByUser(@RequestBody User user) {
+//        List<Transaction> userTransactions = transactionService.getAllTransactionsByUser(user);
+//        if (userTransactions.isEmpty()) {
+//            LOGGER.error("Can't find transactions for this user");
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//        LOGGER.info("Success find user's Transactions ");
+//        return new ResponseEntity<>("User found", HttpStatus.OK);
+//    }
 
 //    @PostMapping("/authenticate")
 //    public ResponseEntity<?> authenticate(@RequestParam String email, @RequestParam String password, @RequestBody User user) {
