@@ -63,6 +63,14 @@ public class UserController {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
+    @GetMapping("/contacts/{userId}")
+    public ResponseEntity<?> getAllFriendsByUser(@PathVariable("userId") Long id) {
+        if (userService.getUserById(id).isPresent()) {
+        User user = userService.getUserById(id).get();
+        return new ResponseEntity<>(userService.getAllFriends(user),HttpStatus.OK);
+    }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
 //    @GetMapping("/users")
 //    public ResponseEntity<?> getAllUsers(User user) {
 //        List<User> allUsers = new ArrayList<>();

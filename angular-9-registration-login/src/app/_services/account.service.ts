@@ -6,11 +6,13 @@ import { map } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
 import { User } from '@app/_models';
+import { Transfer } from '@app/_models/transfer';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
     private userSubject: BehaviorSubject<User>;
     public user: Observable<User>;
+    public transfer: Observable<Transfer>;
 
     constructor(
         private router: Router,
@@ -51,7 +53,7 @@ export class AccountService {
     // }
 
     getAll() {
-        return this.http.get<User[]>(`${environment.apiUrl}/users`);
+        return this.http.get<User[]>(`${environment.apiUrl}/user/users`);
     }
 
         // get by email
@@ -90,5 +92,16 @@ export class AccountService {
                 }
                 return x;
             }));
+    }
+
+        // all friends of a user
+    getAllFriendsByUserId(id: string) {
+        return this.http.get<User[]>(`${environment.apiUrl}/user/contacts/${id}`);
+    }
+    
+    // all transactions of a user
+    getAllTransfersByUserId(id: string) {
+
+        return this.http.get<Transfer[]>(`${environment.apiUrl}/transaction/transfers/${id}`);
     }
 }

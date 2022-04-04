@@ -56,6 +56,15 @@ public class TransactionController {
         return new ResponseEntity<>("Transaction found", HttpStatus.OK);
     }
 
+    @GetMapping("/transfers/{userId}")
+    public ResponseEntity<?> getAllTransactionsByUser(@PathVariable("userId") Long id) {
+        if (userService.getUserById(id).isPresent()) {
+            User user = userService.getUserById(id).get();
+            return new ResponseEntity<>(transactionService.getAllTransactionsByUser(user), HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
     @PutMapping("/{transactionId}")
     public ResponseEntity<?> updateTransaction(@PathVariable("transactionId") Long id, @RequestBody Transaction transaction) {
         if (transactionService.getTransactionById(id).isPresent()) {

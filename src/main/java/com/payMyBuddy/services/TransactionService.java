@@ -40,9 +40,9 @@ public class TransactionService {
         transactionRepository.save(transaction);
     }
 
-//    public List<Transaction> getAllTransactionsByUser(User user) {
-//        return transactionRepository.findAllTransactionsByUserDebtorOrCreditor(user, user);
-//    }
+    public List<Transaction> getAllTransactionsByUser(User user) {
+        return transactionRepository.findAllTransactionsByUserIdDebtorOrUserIdCreditor(user, user);
+    }
 
     public void updateTransaction(Transaction transaction) {
         Optional<Transaction> maj = transactionRepository.findById(transaction.getTransactionId());

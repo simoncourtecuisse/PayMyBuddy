@@ -11,5 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-   // List<Transaction> findAllTransactionsByUserDebtorOrCreditor(User userIdDebtor, User userIdCreditor);
+   List<Transaction> findAllTransactionsByUserIdDebtorOrUserIdCreditor(User userIdDebtor, User userIdCreditor);
+   // List<Transaction> findAllTransactionsByUserId(Long id);
 }

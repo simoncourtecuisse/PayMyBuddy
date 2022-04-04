@@ -1,0 +1,28 @@
+<h1>Transfers</h1>
+<a routerLink="add" class="btn btn-sm btn-success mb-2">New Transfer</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 30%">Contact</th>
+            <th style="width: 30%">Description</th>
+            <th style="width: 30%">Amount</th>
+            <th style="width: 30%">Date</th>
+            <th style="width: 10%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let transfer of transfers">
+            <td>{{transfer.firstName}} {{transfer.lastName}}</td>
+            <td>{{transfer.description}}</td>
+            <td>{{transfer.amount}}</td>
+            <td>{{transfer.date}}</td>
+            <td style="white-space: nowrap">
+            </td>
+        </tr>
+        <tr *ngIf="!transfers">
+            <td colspan="4" class="text-center">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+        </tr>
+    </tbody>
+</table>
