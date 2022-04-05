@@ -1,7 +1,7 @@
 USE paymybuddy;
 
 INSERT INTO user (user_id, first_name, last_name, email, password, wallet_balance)
-VALUES (1, 'Simon', 'Courtecuisse', 'simon.courtecuisse@example.com', 'sdsksnfosmfnsmdf', 34),
+VALUES (1, 'Simon', 'Courtecuisse', 'simon.courtecuisse@example.com', '123456', 34),
        (2, 'Simon', 'Soulie', 'simon.soulie@example.com', 'fdsdsdqgf', 67),
        (3, 'Marion', 'Aillerie', 'marion.aillerie@example.com', 'pooiuyezesd', 91),
        (4, 'Igor', 'Courtecuisse', 'igor.courtecuisse@example.com', 'azsqdqfbfdf', 95);
@@ -16,11 +16,11 @@ VALUES (1, 2),
        (4, 1),
        (1, 4);
 
-INSERT INTO bank_account (bank_account_id, user_id, iban)
-VALUES (1, 1, '232625'),
-       (2, 2, '685137'),
-       (3, 3, '809572'),
-       (4, 4, '158338');
+INSERT INTO bank_account (bank_account_id, user_id, iban, bank_name)
+VALUES (1, 1, '232625', 'BNP Paribas'),
+       (2, 2, '685137', 'Société Générale'),
+       (3, 3, '809572', 'Société Générale'),
+       (4, 4, '158338', 'ING Direct');
 
 INSERT INTO transaction_label (transaction_label_id, description)
 VALUES (1, 'restaurant bill'),

@@ -3,25 +3,51 @@ import { first } from 'rxjs/operators';
 
 import { AccountService } from '@app/_services';
 
+// @Component({ templateUrl: 'list-contacts.component.html' })
+// export class ListContactsComponent implements OnInit {
+//     //users = null;
+//     contacts = null;
+
+//     constructor(private accountService: AccountService) {}
+
+//     ngOnInit() {
+
+//         this.accountService.getAllFriendsByUserId()
+//             .pipe(first())
+//             .subscribe(contacts => this.contacts = contacts);
+//     }
+
+//     deleteFriend(id: string) {
+//         const contact = this.contacts.find(x => x.id === id);
+//         contact.isDeleting = true;
+//         this.accountService.deleteFriend(id)
+//             .pipe(first())
+//             .subscribe(() => {
+//                 this.contacts = this.contacts.filter(x => x.id !== id) 
+//             });
+//     }
+// }
+
 @Component({ templateUrl: 'list-contacts.component.html' })
 export class ListContactsComponent implements OnInit {
-    contacts = null;
+    users = null;
 
     constructor(private accountService: AccountService) {}
 
     ngOnInit() {
-        this.accountService.getAll()
+
+        this.accountService.getAllFriendsByUserId()
             .pipe(first())
-            .subscribe(contacts => this.contacts = contacts);
+            .subscribe(users => this.users = users);
     }
 
-    deleteUser(id: string) {
-        const user = this.contacts.find(x => x.id === id);
-        user.isDeleting = true;
-        this.accountService.delete(id)
+    deleteFriend(userFriendId: string) {
+        const userFriend = this.users.find(x => x.userFriendId === userFriendId);
+        userFriend.isDeleting = true;
+        this.accountService.deleteFriend(userFriendId)
             .pipe(first())
             .subscribe(() => {
-                this.contacts = this.contacts.filter(x => x.id !== id) 
+                this.users = this.users.filter(x => x.id !== userFriend) 
             });
     }
 }

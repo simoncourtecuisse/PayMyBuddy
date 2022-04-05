@@ -67,17 +67,19 @@ public class UserController {
     public ResponseEntity<?> getAllFriendsByUser(@PathVariable("userId") Long id) {
         if (userService.getUserById(id).isPresent()) {
         User user = userService.getUserById(id).get();
-        return new ResponseEntity<>(userService.getAllFriends(user),HttpStatus.OK);
+        return new ResponseEntity<>(user.getFriendList(),HttpStatus.OK);
     }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
-//    @GetMapping("/users")
-//    public ResponseEntity<?> getAllUsers(User user) {
-//        List<User> allUsers = new ArrayList<>();
-//        if (user == null)
-//            userService.getAllUsers().forEach(allUsers::add);
-//        return new ResponseEntity<>(allUsers, HttpStatus.OK);
-//    }
+
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<?> getAllBankAccountByUser(@PathVariable("userId") Long id) {
+        if (userService.getUserById(id).isPresent()) {
+            User user = userService.getUserById(id).get();
+            return new ResponseEntity<>(user.getBankAccountList(),HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
 
     @PutMapping("/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable("userId") Long id, @RequestBody User user) {
@@ -115,14 +117,15 @@ public class UserController {
             userService.addFriend(user, friendUser);
             userService.addFriend(friendUser,user);
             LOGGER.info("Add friend success");
-            return new ResponseEntity<>("Friend Added", HttpStatus.CREATED);
+            return new ResponseEntity<>(user.getFriendList(), HttpStatus.CREATED);
         }
         LOGGER.error("Add friend failed because of a bad request");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping("/removeFriend")
-    public ResponseEntity<?> removeFriend(@RequestParam Long fromUser, @RequestParam Long toUser) {
+    @DeleteMapping("/contacts/{userId}/removeFriend/{friendUserId}")
+//    public ResponseEntity<?> removeFriend(@RequestParam Long fromUser, @RequestParam Long toUser) {
+    public ResponseEntity<?> removeFriend(@PathVariable("userId") Long fromUser, @PathVariable("friendUserId") Long toUser) {
         if (userService.getUserById(fromUser).isEmpty() || userService.getUserById(toUser).isEmpty()) {
             LOGGER.error("User doesn't exist in DB");
             return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
@@ -131,8 +134,9 @@ public class UserController {
         User friendUser = userService.getUserById(toUser).get();
         if (user.getFriendList().contains(friendUser)) {
             userService.removeFriend(user, friendUser);
+            userService.removeFriend(friendUser, user);
             LOGGER.info("Remove friend success");
-            return new ResponseEntity<>("Friend Removed", HttpStatus.OK);
+            return new ResponseEntity<>(user.getFriendList(), HttpStatus.OK);
         }
         LOGGER.error("Remove friend failed because of a bad request");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

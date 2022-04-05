@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 import { User } from '@app/_models';
 import { Transfer } from '@app/_models/transfer';
+import { BankAccount } from '@app/_models/bankAccount';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -95,13 +96,37 @@ export class AccountService {
     }
 
         // all friends of a user
-    getAllFriendsByUserId(id: string) {
-        return this.http.get<User[]>(`${environment.apiUrl}/user/contacts/${id}`);
+    getAllFriendsByUserId() {
+        const userAsString = localStorage.getItem('user');
+        const user = JSON.parse(userAsString);
+        return this.http.get<User[]>(`${environment.apiUrl}/user/contacts/${user.userId}`);
     }
-    
-    // all transactions of a user
-    getAllTransfersByUserId(id: string) {
 
-        return this.http.get<Transfer[]>(`${environment.apiUrl}/transaction/transfers/${id}`);
+        // remove a friend
+    deleteFriend(id: string) {
+        const userAsString = localStorage.getItem('user');
+        const user = JSON.parse(userAsString);
+        
+        return this.http.delete(`${environment.apiUrl}/user/conctacts/${user.userId}/removeFriend/${user.friendUserId}`)
+        
     }
+
+        // all transactions of a user
+    getAllTransfersByUserId() {
+        const userAsString = localStorage.getItem('user');
+        const user = JSON.parse(userAsString);
+        // return this.http.get<Transfer[]>(`${environment.apiUrl}/transaction/transfers/${id}`);
+        return this.http.get<Transfer[]>(`${environment.apiUrl}/transaction/transfers/${user.userId}`);
+    }
+
+        // all bankAccount of a user
+        getAllBankAccountByUserId() {
+            const userAsString = localStorage.getItem('user');
+            const user = JSON.parse(userAsString);
+            return this.http.get<User[]>(`${environment.apiUrl}/user/profile/${user.userId}`);
+        }
+
+        deleteBankAccount(id: string) {
+            return this.http.delete(`${environment.apiUrl}/user/profile/bankAccount/${id}`);
+        }        
 }

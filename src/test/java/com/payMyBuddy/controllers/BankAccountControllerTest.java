@@ -36,7 +36,7 @@ class BankAccountControllerTest {
     @Test
     void testCreateBankAccount() throws Exception {
         // Setup
-        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(1));
+        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(1, "bankName"));
         when(mockBankAccountService.getBankAccountById(1L)).thenReturn(bankAccount);
 
         // Run the test
@@ -56,7 +56,7 @@ class BankAccountControllerTest {
     @Test
     void testGetBankAccount() throws Exception {
         // Setup
-        when(mockBankAccountService.getBankAccountById(1L)).thenReturn(Optional.of(new BankAccount(1)));
+        when(mockBankAccountService.getBankAccountById(1L)).thenReturn(Optional.of(new BankAccount(1, "bankName")));
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(get("/bankAccount")
@@ -87,7 +87,7 @@ class BankAccountControllerTest {
     @Test
     void testUpdateBankAccount() throws Exception {
         // Setup
-        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(1423));
+        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(1423, "bankName"));
         when(mockBankAccountService.getBankAccountById(1L)).thenReturn(bankAccount);
 
         // Run the test
@@ -107,7 +107,7 @@ class BankAccountControllerTest {
     @Test
     void testUpdateBankAccount_ReturnBadRequest() throws Exception {
         // Setup
-        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(1423));
+        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(1423, "bankName"));
         when(mockBankAccountService.getBankAccountById(1L)).thenReturn(Optional.empty());
 
         // Run the test
@@ -122,7 +122,7 @@ class BankAccountControllerTest {
     @Test
     void testDeleteBankAccount() throws Exception {
         // Setup
-        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(1423));
+        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(1423, "bankName"));
         when(mockBankAccountService.getBankAccountById(1L)).thenReturn(bankAccount);
 
         // Run the test

@@ -30,6 +30,9 @@ public class BankAccount {
     @Column(name = "iban", nullable = false)
     private int iban;
 
+    @Column(name = "bankName", nullable = false)
+    private String bankName;
+
 //    @Column(name = "balance", nullable = false, precision = 10, scale = 2)
 //    private BigDecimal balance;
 
@@ -45,8 +48,9 @@ public class BankAccount {
 
     public BankAccount(){}
 
-    public BankAccount(int iban) {
+    public BankAccount(int iban, String bankName) {
         this.iban = iban;
+        this.bankName = bankName;
     }
 
     public Long getBankAccountId() {
@@ -63,6 +67,14 @@ public class BankAccount {
 
     public void setIban(int iban) {
         this.iban = iban;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
     }
 
     public User getUser() {

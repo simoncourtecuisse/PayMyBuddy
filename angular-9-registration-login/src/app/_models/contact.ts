@@ -1,4 +1,4 @@
-export class Friend {
+export class Contact {
     id: string;
     firstName: string;
     lastName: string;

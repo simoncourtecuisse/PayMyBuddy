@@ -64,9 +64,9 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public List<User> getAllFriends(User user) {
-       return userRepository.findAllFriendsByUserId(user.getUserId());
-    }
+//    public List<User> getAllFriends(User user) {
+//       return userRepository.findAllFriendsByUserId(user.getUserId());
+//    }
 
     public void addBankAccount(User user, BankAccount bankAccount) {
         user.getBankAccountList().add(bankAccount);

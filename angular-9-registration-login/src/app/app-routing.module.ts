@@ -5,13 +5,13 @@ import { HomeComponent } from './home';
 import { AuthGuard } from './_helpers';
 
 const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
-const usersModule = () => import('./users/users.module').then(x => x.UsersModule);
+const profileModule = () => import('./users/profile.module').then(x => x.ProfileModule);
 const contactsModule = () => import('./contacts/contacts.module').then(x => x.ContactsModule);
 const transfersModule = () => import('./transfers/transfers.module').then(x => x.TransfersModule);
 
 const routes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
-    { path: 'users', loadChildren: usersModule, canActivate: [AuthGuard] },
+    { path: 'profile', loadChildren: profileModule, canActivate: [AuthGuard] },
     { path: 'contacts', loadChildren: contactsModule, canActivate: [AuthGuard] },
     { path: 'transfers', loadChildren: transfersModule, canActivate: [AuthGuard] },
     { path: 'account', loadChildren: accountModule },

@@ -1,8 +1,11 @@
 export class Transfer {
     id: string;
+    debtor: string;
+    creditorId: string;
     amount: number;
     date: Date;
     commission: number;
-    transactionLabel: string;
-    description: string;
+    transactionLabelId: string;
+    userId: string;
+    // description: string;
 }

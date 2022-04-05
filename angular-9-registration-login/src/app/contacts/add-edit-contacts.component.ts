@@ -34,7 +34,7 @@ export class AddEditContactsComponent implements OnInit {
         this.form = this.formBuilder.group({
             firstName: ['', Validators.required],
             lastName: ['', Validators.required],
-            username: ['', Validators.required],
+            email: ['', Validators.required],
             password: ['', passwordValidators]
         });
 
