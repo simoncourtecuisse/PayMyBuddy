@@ -9,6 +9,7 @@ import { User } from '@app/_models';
 import { Transfer } from '@app/_models/transfer';
 import { BankAccount } from '@app/_models/bankAccount';
 
+
 @Injectable({ providedIn: 'root' })
 export class AccountService {
     private userSubject: BehaviorSubject<User>;
@@ -107,7 +108,7 @@ export class AccountService {
         const userAsString = localStorage.getItem('user');
         const user = JSON.parse(userAsString);
         
-        return this.http.delete(`${environment.apiUrl}/user/conctacts/${user.userId}/removeFriend/${user.friendUserId}`)
+        return this.http.delete(`${environment.apiUrl}/user/conctacts/${user.userId}/removeFriend/${id}`)
         
     }
 

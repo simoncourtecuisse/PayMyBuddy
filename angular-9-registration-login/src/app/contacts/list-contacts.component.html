@@ -10,18 +10,18 @@
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let user of users">
-            <td>{{user.firstName}}</td>
-            <td>{{user.lastName}}</td>
-            <td>{{user.email}}</td>
+        <tr *ngFor="let contact of contacts">
+            <td>{{contact.firstName}}</td>
+            <td>{{contact.lastName}}</td>
+            <td>{{contact.email}}</td>
             <td style="white-space: nowrap">
-                <button (click)="deleteFriend(user.userFriendId)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="user.isDeleting">
-                    <span *ngIf="user.isDeleting" class="spinner-border spinner-border-sm"></span>
-                    <span *ngIf="!user.isDeleting">Delete</span>
+                <button (click)="deleteFriend(contact.id)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="contact.isDeleting">
+                    <span *ngIf="contact.isDeleting" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!contact.isDeleting">Delete</span>
                 </button>
             </td>
         </tr>
-        <tr *ngIf="!users">
+        <tr *ngIf="!contacts">
             <td colspan="4" class="text-center">
                 <span class="spinner-border spinner-border-lg align-center"></span>
             </td>
