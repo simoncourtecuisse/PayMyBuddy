@@ -32,10 +32,8 @@ export class AddEditComponent implements OnInit {
         }
 
         this.form = this.formBuilder.group({
-            firstName: ['', Validators.required],
-            lastName: ['', Validators.required],
-            email: ['', Validators.required],
-            password: ['', passwordValidators]
+            bankName: ['', Validators.required],
+            iban: ['', Validators.required]        
         });
 
         if (!this.isAddMode) {
@@ -65,10 +63,24 @@ export class AddEditComponent implements OnInit {
 
         this.loading = true;
         if (this.isAddMode) {
-            this.createUser();
+            this.addBankAccount();
         } else {
             this.updateUser();
         }
+    }
+
+    private addBankAccount() {
+        this.accountService.addBankAccount(this.form.value)
+            .pipe(first())
+            .subscribe(
+                data => {
+                    this.alertService.success('Bank Account added successfully', { keepAfterRouteChange: true });
+                    this.router.navigate(['.', { relativeTo: this.route }]);
+                },
+                error => {
+                    this.alertService.error(error);
+                    this.loading = false;
+                });
     }
 
     private createUser() {

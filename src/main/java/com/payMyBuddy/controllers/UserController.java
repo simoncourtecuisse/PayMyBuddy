@@ -4,6 +4,7 @@ package com.payMyBuddy.controllers;
 import com.payMyBuddy.models.BankAccount;
 import com.payMyBuddy.models.Transaction;
 import com.payMyBuddy.models.User;
+import com.payMyBuddy.repositories.BankAccountRepository;
 import com.payMyBuddy.services.BankAccountService;
 import com.payMyBuddy.services.TransactionService;
 import com.payMyBuddy.services.UserService;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -33,6 +34,9 @@ public class UserController {
 
     @Autowired
     private TransactionService transactionService;
+
+    @Autowired
+    private BankAccountRepository bankAccountRepository;
 
     Logger LOGGER = LogManager.getLogger(UserController.class);
 
@@ -105,8 +109,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PutMapping("/addFriend")
-    public ResponseEntity<?> addFriend(@RequestParam Long fromUser, @RequestParam Long toUser) {
+    @PutMapping("/contacts/{userId}/addFriend/{friendUserId}")
+    public ResponseEntity<?> addFriend(@PathVariable("userId") Long fromUser, @PathVariable("friendUserId") Long toUser) {
         if (userService.getUserById(fromUser).isEmpty() || userService.getUserById(toUser).isEmpty()) {
             LOGGER.error("User doesn't exist in DB");
             return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
@@ -142,25 +146,30 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PutMapping("/addBankAccount")
-    public ResponseEntity<?> addBankAccount(@RequestParam Long userId, @RequestParam Long bankAccountId) {
-        if (userService.getUserById(userId).isEmpty() || bankAccountService.getBankAccountById(bankAccountId).isEmpty()) {
+    @PutMapping("/profile/{userId}/addBankAccount")
+    public ResponseEntity<?> addBankAccount(@PathVariable("userId") Long userId, @RequestBody BankAccount bankAccount) {
+        if (userService.getUserById(userId).isEmpty()) {
             LOGGER.error("User doesn't exist in DB");
             return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
         }
         User user = userService.getUserById(userId).get();
-        BankAccount bankAccount = bankAccountService.getBankAccountById(bankAccountId).get();
+        //BankAccount bankAccount = bankAccountService.getBankAccountById(bankAccountId).get();
         if (!user.getBankAccountList().contains(bankAccount)) {
             userService.addBankAccount(user, bankAccount);
+            bankAccount.setUser(user);
+
+            System.out.println(bankAccount);
+//            bankAccountRepository.save(bankAccount);
+//            bankAccount.setUser(user);
             LOGGER.info("Add bank account success");
-            return new ResponseEntity<>("Bank Account Added", HttpStatus.CREATED);
+            return new ResponseEntity<>(user.getBankAccountList(), HttpStatus.CREATED);
         }
         LOGGER.error("Add bank account failed because of a bad request");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping("/removeBankAccount")
-    public ResponseEntity<?> removeBankAccount(@RequestParam Long userId, @RequestParam Long bankAccountId) {
+    @DeleteMapping("/profile/{userId}/removeBankAccount/{bankAccountId}")
+    public ResponseEntity<?> removeBankAccount(@PathVariable("userId") Long userId, @PathVariable("bankAccountId") Long bankAccountId) {
         if (userService.getUserById(userId).isEmpty() || bankAccountService.getBankAccountById(bankAccountId).isEmpty()) {
             LOGGER.error("User doesn't exist in DB");
             return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
@@ -168,9 +177,10 @@ public class UserController {
         User user = userService.getUserById(userId).get();
         BankAccount bankAccount = bankAccountService.getBankAccountById(bankAccountId).get();
         if (user.getBankAccountList().contains(bankAccount)) {
-            LOGGER.info("Remove bank account success");
             userService.removeBankAccount(user, bankAccount);
-            return new ResponseEntity<>("Bank Account Removed", HttpStatus.OK);
+            bankAccountService.deleteBankAccount(bankAccount);
+            LOGGER.info("Remove bank account success");
+            return new ResponseEntity<>(user.getBankAccountList(), HttpStatus.OK);
         }
         LOGGER.error("Remove bank account failed because of a bad request");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

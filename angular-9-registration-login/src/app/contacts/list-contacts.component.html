@@ -15,7 +15,7 @@
             <td>{{contact.lastName}}</td>
             <td>{{contact.email}}</td>
             <td style="white-space: nowrap">
-                <button (click)="deleteFriend(contact.id)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="contact.isDeleting">
+                <button (click)="deleteFriend(contact.userId)" class="btn btn-sm btn-danger btn-delete-user" [disabled]="contact.isDeleting">
                     <span *ngIf="contact.isDeleting" class="spinner-border spinner-border-sm"></span>
                     <span *ngIf="!contact.isDeleting">Delete</span>
                 </button>

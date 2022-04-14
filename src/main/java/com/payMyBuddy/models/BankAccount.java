@@ -85,5 +85,15 @@ public class BankAccount {
         this.user = user;
     }
 
+    @Override
+    public String toString() {
+        return "BankAccount{" +
+                "bankAccountId=" + bankAccountId +
+                ", iban=" + iban +
+                ", bankName='" + bankName + '\'' +
+                ", user=" + user +
+                ", bankTransactionsList=" + bankTransactionsList +
+                '}';
+    }
 }
 

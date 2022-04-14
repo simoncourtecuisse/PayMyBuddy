@@ -103,6 +103,11 @@ export class AccountService {
         return this.http.get<User[]>(`${environment.apiUrl}/user/contacts/${user.userId}`);
     }
 
+    // add a friend
+    addFriend(user: User) {
+        return this.http.put(`${environment.apiUrl}/user/contacts/addFriend`, user);
+    }
+
         // remove a friend
     deleteFriend(id: string) {
         const userAsString = localStorage.getItem('user');
@@ -127,7 +132,18 @@ export class AccountService {
             return this.http.get<User[]>(`${environment.apiUrl}/user/profile/${user.userId}`);
         }
 
+
+        // add a bank account
+        addBankAccount(bankAccount: BankAccount) {
+            const userAsString = localStorage.getItem('user');
+            const user = JSON.parse(userAsString);
+            return this.http.put(`${environment.apiUrl}/user/profile/${user.userId}/addBankAccount`, bankAccount);
+        }
+
+        // delete a bank account
         deleteBankAccount(id: string) {
-            return this.http.delete(`${environment.apiUrl}/user/profile/bankAccount/${id}`);
+            const userAsString = localStorage.getItem('user');
+            const user = JSON.parse(userAsString);
+            return this.http.delete(`${environment.apiUrl}/user/profile/${user.userId}/addBankAccount/${id}`);
         }        
 }

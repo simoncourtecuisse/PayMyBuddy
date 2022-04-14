@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/transaction")
 public class TransactionController {
@@ -89,8 +89,8 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PostMapping("/payment/{userIdDebtor}/{userIdCreditor}")
-    private ResponseEntity<?> makeTransaction(@PathVariable("userIdDebtor") Long debtorId, @PathVariable("userIdCreditor") Long creditorId,  @RequestBody Transaction transaction) {
+    @PostMapping("/transfers/{userId}/payment/{userIdCreditor}")
+    private ResponseEntity<?> makeTransaction(@PathVariable("userId") Long debtorId, @PathVariable("userIdCreditor") Long creditorId,  @RequestBody Transaction transaction) {
         if (userService.getUserById(debtorId).isEmpty() || userService.getUserById(creditorId).isEmpty()) {
             LOGGER.error("User not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

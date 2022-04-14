@@ -1,6 +1,6 @@
 export class Transfer {
     id: string;
-    debtor: string;
+    debtorId: string;
     creditorId: string;
     amount: number;
     date: Date;

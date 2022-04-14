@@ -18,13 +18,16 @@ export class ListContactsComponent implements OnInit {
     }
 
     deleteFriend(id: string) {
-        const contact = this.contacts.find(x => x.id === id);
+        console.log(id);
+        const contact = this.contacts.find(x => x.userId === id);
         contact.isDeleting = true;
-        this.accountService.deleteFriend(id)
+        console.log(this.contacts);
+        this.accountService.deleteFriend(contact.userId)
             .pipe(first())
             .subscribe(() => {
-                this.contacts = this.contacts.filter(x => x.id !== id) 
+                this.contacts = this.contacts.filter(x => x.userId !== id) 
             });
+        
     }
 }
 
