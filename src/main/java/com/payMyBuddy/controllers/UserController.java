@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-//@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -127,6 +127,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @CrossOrigin(origins = "*")
     @DeleteMapping("/contacts/{userId}/removeFriend/{friendUserId}")
 //    public ResponseEntity<?> removeFriend(@RequestParam Long fromUser, @RequestParam Long toUser) {
     public ResponseEntity<?> removeFriend(@PathVariable("userId") Long fromUser, @PathVariable("friendUserId") Long toUser) {
@@ -155,8 +156,9 @@ public class UserController {
         User user = userService.getUserById(userId).get();
         //BankAccount bankAccount = bankAccountService.getBankAccountById(bankAccountId).get();
         if (!user.getBankAccountList().contains(bankAccount)) {
-            userService.addBankAccount(user, bankAccount);
             bankAccount.setUser(user);
+            userService.addBankAccount(user, bankAccount);
+
 
             System.out.println(bankAccount);
 //            bankAccountRepository.save(bankAccount);

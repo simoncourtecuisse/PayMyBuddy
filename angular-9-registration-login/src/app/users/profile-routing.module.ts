@@ -11,9 +11,11 @@ const routes: Routes = [
         children: [
             { path: '', component: ListComponent },
             { path: 'add', component: AddEditComponent },
-            { path: 'edit/:id', component: AddEditComponent }
+            { path: 'credit/:id', component: AddEditComponent },
+            { path: 'withdraw/:id', component: AddEditComponent }
         ]
-    }
+    },
+    
 ];
 
 @NgModule({

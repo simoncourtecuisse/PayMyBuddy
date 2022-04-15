@@ -1,14 +1,18 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 
+import { User } from '@app/_models';
 import { AccountService } from '@app/_services';
 
 @Component({ templateUrl: 'list.component.html' })
 export class ListComponent implements OnInit {
     users = null;
+    user: User;
     bankAccounts = null;
 
-    constructor(private accountService: AccountService) {}
+    constructor(private accountService: AccountService) {
+        this.user = this.accountService.userValue;
+    }
 
     ngOnInit() {
         this.accountService.getAllBankAccountByUserId()

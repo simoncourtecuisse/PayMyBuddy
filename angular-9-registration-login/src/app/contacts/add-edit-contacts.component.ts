@@ -65,14 +65,14 @@ export class AddEditContactsComponent implements OnInit {
 
         this.loading = true;
         if (this.isAddMode) {
-            this.createUser();
+            this.addFriend();
         } else {
             this.updateUser();
         }
     }
 
-    private createUser() {
-        this.accountService.register(this.form.value)
+    private addFriend() {
+        this.accountService.addFriend(this.form.value)
             .pipe(first())
             .subscribe(
                 data => {

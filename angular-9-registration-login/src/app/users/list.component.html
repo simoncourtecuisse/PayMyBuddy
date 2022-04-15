@@ -1,4 +1,13 @@
-﻿<a routerLink="add" class="btn btn-sm btn-success mb-2">Add Bank Account</a>
+﻿<div class="text-center mt-4">
+    <h1>Profile</h1>
+    <h4>Your Wallet :</h4>
+    <h2>${{user.walletBalance}}</h2>
+    <a routerLink="credit/{{user.id}}" class="btn btn-sm btn-success mb-2">Credit your account</a>
+    <td style="white-space: nowrap"></td>
+    <a routerLink="withdraw/{{user.id}}" class="btn btn-sm btn-success mb-2">Withdraw money</a>
+</div>
+<h4>Bank Accounts</h4>
+<a routerLink="add" class="btn btn-sm btn-success mb-2">Add Bank Account</a>
 <table class="table table-striped">
     <thead>
         <tr>
