@@ -22,7 +22,7 @@
             <td>{{bankAccount.iban}}</td>
             <td style="white-space: nowrap">
                 <!-- <a routerLink="edit/{{user.id}}" class="btn btn-sm btn-primary mr-1">Edit</a> -->
-                <button (click)="deleteBankAccount(bankAccount.userId)" class="btn btn-sm btn-danger btn-delete-bankAccount" [disabled]="bankAccount.isDeleting">
+                <button (click)="deleteBankAccount(bankAccount.bankAccountId)" class="btn btn-sm btn-danger btn-delete-bankAccount" [disabled]="bankAccount.isDeleting">
                     <span *ngIf="bankAccount.isDeleting" class="spinner-border spinner-border-sm"></span>
                     <span *ngIf="!bankAccount.isDeleting">Delete</span>
                 </button>

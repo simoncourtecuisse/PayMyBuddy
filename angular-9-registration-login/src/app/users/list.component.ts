@@ -20,15 +20,15 @@ export class ListComponent implements OnInit {
             .subscribe(bankAccounts => this.bankAccounts = bankAccounts);
     }
 
-    deleteBankAccount(bankAccountId: string) {
-        console.log(bankAccountId);
-        const bankAccount = this.bankAccounts.find(x => x.userId === bankAccountId);
+    deleteBankAccount(id: string) {
+        console.log(id);
+        const bankAccount = this.bankAccounts.find(x => x.bankAccountId === id);
         bankAccount.isDeleting = true;
         console.log(this.bankAccounts);
-        this.accountService.deleteBankAccount(bankAccountId)
+        this.accountService.deleteBankAccount(id)
             .pipe(first())
             .subscribe(() => {
-                this.bankAccounts = this.bankAccounts.filter(x => x.userId !== bankAccountId) 
+                this.bankAccounts = this.bankAccounts.filter(x => x.bankAccountId !== id) 
             });
     }
 }
