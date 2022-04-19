@@ -109,11 +109,11 @@ export class AccountService {
     }
 
         // remove a friend
-    deleteFriend(id: string) {
+    deleteFriend(friendUserId: string) {
         const userAsString = localStorage.getItem('user');
         const user = JSON.parse(userAsString);
         
-        return this.http.delete(`${environment.apiUrl}/user/conctacts/${user.userId}/removeFriend/${id}`)
+        return this.http.delete(`${environment.apiUrl}/user/contacts/${user.userId}/removeFriend/${friendUserId}`)
         
     }
 
@@ -141,9 +141,11 @@ export class AccountService {
         }
 
         // delete a bank account
-        deleteBankAccount(id: string) {
+        deleteBankAccount(bankAccountId: string) {
             const userAsString = localStorage.getItem('user');
             const user = JSON.parse(userAsString);
-            return this.http.delete(`${environment.apiUrl}/user/profile/${user.userId}/addBankAccount/${id}`);
+            // const bAccAsString = localStorage.getItem('bankAccount');
+            // const bAcc = JSON.parse(bAccAsString);
+            return this.http.delete(`${environment.apiUrl}/user/profile/${user.userId}/removeBankAccount/${bankAccountId}`);
         }        
 }

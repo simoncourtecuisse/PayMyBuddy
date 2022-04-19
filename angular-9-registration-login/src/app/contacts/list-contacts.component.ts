@@ -17,15 +17,16 @@ export class ListContactsComponent implements OnInit {
             .subscribe(contacts => this.contacts = contacts);
     }
 
-    deleteFriend(id: string) {
-        console.log(id);
-        const contact = this.contacts.find(x => x.userId === id);
+    deleteFriend(friendUserId: string) {
+        console.log(friendUserId);
+        const contact = this.contacts.find(x => x.userId === friendUserId);
         contact.isDeleting = true;
         console.log(this.contacts);
-        this.accountService.deleteFriend(contact.userId)
+        console.log(contact.userId);
+        this.accountService.deleteFriend(friendUserId)
             .pipe(first())
             .subscribe(() => {
-                this.contacts = this.contacts.filter(x => x.userId !== id) 
+                this.contacts = this.contacts.filter(x => x.userId !== friendUserId) 
             });
         
     }

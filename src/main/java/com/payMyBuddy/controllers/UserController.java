@@ -138,9 +138,11 @@ public class UserController {
         User user = userService.getUserById(fromUser).get();
         User friendUser = userService.getUserById(toUser).get();
         if (user.getFriendList().contains(friendUser)) {
+//            user.setFriendList(List.of(user));
             userService.removeFriend(user, friendUser);
             userService.removeFriend(friendUser, user);
             LOGGER.info("Remove friend success");
+            System.out.println(user.getFriendList());
             return new ResponseEntity<>(user.getFriendList(), HttpStatus.OK);
         }
         LOGGER.error("Remove friend failed because of a bad request");
