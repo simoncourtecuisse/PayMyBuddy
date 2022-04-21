@@ -105,7 +105,9 @@ export class AccountService {
 
     // add a friend
     addFriend(user: User) {
-        return this.http.put(`${environment.apiUrl}/user/contacts/addFriend`, user);
+        const userAsString = localStorage.getItem('user');
+        const user1 = JSON.parse(userAsString);
+        return this.http.put(`${environment.apiUrl}/user/contacts/${user1.userId}/addFriend`, user);
     }
 
         // remove a friend

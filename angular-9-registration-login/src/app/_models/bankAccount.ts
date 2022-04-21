@@ -1,5 +1,5 @@
 export class BankAccount {
-    bankAccountId: string;
+    id: string;
     iban: string;
     bankName: string;
     userId: string
