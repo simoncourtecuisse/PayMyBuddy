@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { TransfersRoutingModule } from './transfers-routing.module';
 import { LayoutTransfersComponent } from './layout-transfers.component';
 import { ListTransfersComponent } from './list-transfers.component';
-import { AddEditTransfersComponent } from './add-edit-transfers.component';
+import { AddTransfersComponent } from './add-transfers.component';
 
 @NgModule({
     imports: [
@@ -16,7 +16,7 @@ import { AddEditTransfersComponent } from './add-edit-transfers.component';
     declarations: [
         LayoutTransfersComponent,
         ListTransfersComponent,
-        AddEditTransfersComponent
+        AddTransfersComponent
     ]
 })
 export class TransfersModule { }

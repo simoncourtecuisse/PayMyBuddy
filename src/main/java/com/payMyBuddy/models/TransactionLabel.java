@@ -1,5 +1,6 @@
 package com.payMyBuddy.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -27,9 +28,7 @@ public class TransactionLabel {
     @Column(name = "description", nullable = false, length = 1000)
     private String description;
 
-//    @OneToMany(mappedBy = "transactionLabelId")
-//    private List<Transaction> transaction;
-
+    @JsonIgnoreProperties("transactionLabel")
     @OneToMany(
             mappedBy = "transactionLabel",
             cascade = CascadeType.ALL)

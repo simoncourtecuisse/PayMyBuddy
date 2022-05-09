@@ -6,4 +6,5 @@
     lastName: string;
     walletBalance: string;
     token: string;
+    creditorId: string;
 }

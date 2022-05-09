@@ -1,7 +1,9 @@
 package com.payMyBuddy.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -42,14 +44,16 @@ public class BankTransaction {
     @Column(name = "commission", precision = 6, scale = 2)
     private double commission;
 
+    @JsonIgnoreProperties("bankTransactionsList")
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User user;
 
-    @ManyToOne
+    //@JsonBackReference
+    @JsonIgnoreProperties("bankTransactionsList")
+    @ManyToOne(cascade=CascadeType.MERGE)
     @JoinColumn(name = "bank_account_id")
-    @JsonIgnore
+    //@JsonIgnore
     private BankAccount bankAccount;
 
     public BankTransaction(){
@@ -107,5 +111,17 @@ public class BankTransaction {
 
     public void setBankAccount(BankAccount bankAccount) {
         this.bankAccount = bankAccount;
+    }
+
+    @Override
+    public String toString() {
+        return "BankTransaction{" +
+                "bankTransactionId=" + bankTransactionId +
+                ", amount=" + amount +
+                ", date=" + date +
+                ", commission=" + commission +
+                ", user=" + user +
+                ", bankAccount=" + bankAccount +
+                '}';
     }
 }

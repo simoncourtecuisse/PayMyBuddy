@@ -4,7 +4,8 @@ INSERT INTO user (user_id, first_name, last_name, email, password, wallet_balanc
 VALUES (1, 'Simon', 'Courtecuisse', 'simon.courtecuisse@example.com', '123456', 34),
        (2, 'Simon', 'Soulie', 'simon.soulie@example.com', 'fdsdsdqgf', 67),
        (3, 'Marion', 'Aillerie', 'marion.aillerie@example.com', 'pooiuyezesd', 91),
-       (4, 'Igor', 'Courtecuisse', 'igor.courtecuisse@example.com', 'azsqdqfbfdf', 95);
+       (4, 'Igor', 'Courtecuisse', 'igor.courtecuisse@example.com', 'azsqdqfbfdf', 95),
+       (5, 'Romain', 'Luscan', 'romain.luscan@example.com', 'sdf65+6sdf', 200);
        
 INSERT INTO contact(user_id, friend_user_id)
 VALUES (1, 2),
@@ -37,9 +38,14 @@ VALUES (1, 2, 1, 2, 300.00, 0.5, '2019-01-01'),
        (4, 6, 3, 4, 17.00, 0.2, '2019-03-19'),
        (5, 3, 1, 4, 12.50, 0.3, '2019-04-18'),
        (6, 4, 3, 2, 25.00, 0.5, '2019-05-08');
+       
+INSERT INTO bank_transaction (bank_transaction_id, amount, commission, date, bank_account_id, user_id)
+VALUES (1, 10, 0.5, '2019-01-01', 1, 1),
+       (2, 100, 0.5, '2020-01-01', 1, 1),
+       (3, 200, 0.5, '2021-01-01', 1, 1);
 
 UPDATE user_sequence
-SET next_val = '5';
+SET next_val = '6';
 
 UPDATE bank_account_sequence
 SET next_val = '5';
@@ -49,3 +55,6 @@ SET next_val = '7';
 
 UPDATE transaction_sequence
 SET next_val = '7';
+
+UPDATE bank_transaction_sequence
+SET next_val = '4';

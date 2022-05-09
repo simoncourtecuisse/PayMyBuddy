@@ -20,8 +20,9 @@ import javax.annotation.security.RolesAllowed;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200/", allowedHeaders = "*")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -62,6 +63,25 @@ public class UserController {
         return new ResponseEntity<>("User found", HttpStatus.OK);
     }
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getUserById(@PathVariable("userId") Long id) {
+        if (userService.getUserById(id).isPresent()) {
+            User user = userService.getUserById(id).get();
+            return new ResponseEntity<>(user,HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @GetMapping("/{userId}/walletBalance")
+    public ResponseEntity<?> getWalletBalanceUserById(@PathVariable("userId") Long id) {
+        if (userService.getUserById(id).isPresent()) {
+            User user = userService.getUserById(id).get();
+            System.out.println(user.getWalletBalance());
+            return new ResponseEntity<>(user.getWalletBalance(),HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
     @GetMapping("/users")
     public ResponseEntity<?> getAll() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
@@ -76,11 +96,17 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @GetMapping("/profile/{userId}")
-    public ResponseEntity<?> getAllBankAccountByUser(@PathVariable("userId") Long id) {
+    @GetMapping("/contacts/{userId}/add")
+    public ResponseEntity<?> getAllUsersForContactSearch(@PathVariable("userId") Long id) {
         if (userService.getUserById(id).isPresent()) {
             User user = userService.getUserById(id).get();
-            return new ResponseEntity<>(user.getBankAccountList(),HttpStatus.OK);
+            List<User> forContactSearch = userService.getAllUsers()
+                    .stream()
+                    .filter(i -> !i.equals(user))
+                    .collect(Collectors.toList());
+
+            //return new ResponseEntity<>(userService.getAllUsers(),HttpStatus.OK);
+            return new ResponseEntity<>(forContactSearch,HttpStatus.OK);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
@@ -109,18 +135,41 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PutMapping("/contacts/{userId}/addFriend/{friendUserId}")
-    public ResponseEntity<?> addFriend(@PathVariable("userId") Long fromUser, @PathVariable("friendUserId") Long toUser) {
-        if (userService.getUserById(fromUser).isEmpty() || userService.getUserById(toUser).isEmpty()) {
+//    @PutMapping("/contacts/{userId}/addFriend/{friendUserId}")
+//    public ResponseEntity<?> addFriend(@PathVariable("userId") Long fromUser, @PathVariable("friendUserId") Long toUser) {
+//        if (userService.getUserById(fromUser).isEmpty() || userService.getUserById(toUser).isEmpty()) {
+//            LOGGER.error("User doesn't exist in DB");
+//            return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
+//        }
+//        User user = userService.getUserById(fromUser).get();
+//        User friendUser = userService.getUserById(toUser).get();
+//        if (!user.getFriendList().contains(friendUser)) {
+//            userService.addFriend(user, friendUser);
+//            userService.addFriend(friendUser,user);
+//            LOGGER.info("Add friend success");
+//            return new ResponseEntity<>(user.getFriendList(), HttpStatus.CREATED);
+//        }
+//        LOGGER.error("Add friend failed because of a bad request");
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//    }
+
+    @PutMapping("/contacts/{userId}/addFriend")
+    public ResponseEntity<?> addFriend(@PathVariable("userId") Long fromUser, @RequestBody User friend) {
+        System.out.println(userService.getAllUsers().contains(friend));
+        var uer = userService.getUserById(fromUser);
+        var g = userService.getAllUsers();
+        if (userService.getUserById(fromUser).isEmpty() || userService.getAllUsers()
+                .stream().noneMatch(i -> i.getEmail().equals(friend.getEmail()))) {
             LOGGER.error("User doesn't exist in DB");
             return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
         }
         User user = userService.getUserById(fromUser).get();
-        User friendUser = userService.getUserById(toUser).get();
+        User friendUser = userService.getUserByEmail(friend.getEmail()).get();
         if (!user.getFriendList().contains(friendUser)) {
             userService.addFriend(user, friendUser);
             userService.addFriend(friendUser,user);
             LOGGER.info("Add friend success");
+            System.out.println(user.getFriendList());
             return new ResponseEntity<>(user.getFriendList(), HttpStatus.CREATED);
         }
         LOGGER.error("Add friend failed because of a bad request");
@@ -146,47 +195,6 @@ public class UserController {
             return new ResponseEntity<>(user.getFriendList(), HttpStatus.OK);
         }
         LOGGER.error("Remove friend failed because of a bad request");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    }
-
-    @PutMapping("/profile/{userId}/addBankAccount")
-    public ResponseEntity<?> addBankAccount(@PathVariable("userId") Long userId, @RequestBody BankAccount bankAccount) {
-        if (userService.getUserById(userId).isEmpty()) {
-            LOGGER.error("User doesn't exist in DB");
-            return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
-        }
-        User user = userService.getUserById(userId).get();
-        //BankAccount bankAccount = bankAccountService.getBankAccountById(bankAccountId).get();
-        if (!user.getBankAccountList().contains(bankAccount)) {
-            bankAccount.setUser(user);
-            userService.addBankAccount(user, bankAccount);
-
-
-            System.out.println(bankAccount);
-//            bankAccountRepository.save(bankAccount);
-//            bankAccount.setUser(user);
-            LOGGER.info("Add bank account success");
-            return new ResponseEntity<>(user.getBankAccountList(), HttpStatus.CREATED);
-        }
-        LOGGER.error("Add bank account failed because of a bad request");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    }
-
-    @DeleteMapping("/profile/{userId}/removeBankAccount/{bankAccountId}")
-    public ResponseEntity<?> removeBankAccount(@PathVariable("userId") Long userId, @PathVariable("bankAccountId") Long bankAccountId) {
-        if (userService.getUserById(userId).isEmpty() || bankAccountService.getBankAccountById(bankAccountId).isEmpty()) {
-            LOGGER.error("User doesn't exist in DB");
-            return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
-        }
-        User user = userService.getUserById(userId).get();
-        BankAccount bankAccount = bankAccountService.getBankAccountById(bankAccountId).get();
-        if (user.getBankAccountList().contains(bankAccount)) {
-            userService.removeBankAccount(user, bankAccount);
-            bankAccountService.deleteBankAccount(bankAccount);
-            LOGGER.info("Remove bank account success");
-            return new ResponseEntity<>(user.getBankAccountList(), HttpStatus.OK);
-        }
-        LOGGER.error("Remove bank account failed because of a bad request");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 

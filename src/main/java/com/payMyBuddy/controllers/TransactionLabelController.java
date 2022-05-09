@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/transaction_label")
+@CrossOrigin(origins = "http://localhost:4200/", allowedHeaders = "*")
 public class TransactionLabelController {
 
     @Autowired

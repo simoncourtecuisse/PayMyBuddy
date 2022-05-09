@@ -1,6 +1,7 @@
 package com.payMyBuddy.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.context.annotation.Lazy;
 
@@ -30,20 +31,22 @@ public class BankAccount {
     @Column(name = "iban", nullable = false)
     private int iban;
 
-    @Column(name = "bankName", nullable = false)
+    @Column(name = "bankName")
     private String bankName;
 
 //    @Column(name = "balance", nullable = false, precision = 10, scale = 2)
 //    private BigDecimal balance;
 
+    //@JsonIgnoreProperties("bankAccountList")
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
 
+    @JsonIgnoreProperties("bankAccount")
     @OneToMany(
             mappedBy = "bankAccount",
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.MERGE)
     List<BankTransaction> bankTransactionsList = new ArrayList<>();
 
     public BankAccount(){}
@@ -92,7 +95,7 @@ public class BankAccount {
                 ", iban=" + iban +
                 ", bankName='" + bankName + '\'' +
                 ", user=" + user +
-                ", bankTransactionsList=" + bankTransactionsList +
+                //", bankTransactionsList=" + bankTransactionsList +
                 '}';
     }
 }

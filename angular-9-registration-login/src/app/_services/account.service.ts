@@ -8,6 +8,10 @@ import { environment } from '@environments/environment';
 import { User } from '@app/_models';
 import { Transfer } from '@app/_models/transfer';
 import { BankAccount } from '@app/_models/bankAccount';
+import { BankTransaction } from '@app/_models/bankTransaction';
+import { CreditWalletModel } from '@app/_models/CreditWalletModel';
+import { PaymentModel } from '@app/_models/paymentModel';
+import { TransactionLabel } from '@app/_models/transactionLabel';
 
 
 @Injectable({ providedIn: 'root' })
@@ -64,7 +68,9 @@ export class AccountService {
     }
 
     getById(id: string) {
-        return this.http.get<User>(`${environment.apiUrl}/user/${id}`);
+        const userAsString = localStorage.getItem('user');
+        const user = JSON.parse(userAsString);
+        return this.http.get<User>(`${environment.apiUrl}/user/${user.userId}`);
     }
 
         // update user
@@ -96,6 +102,12 @@ export class AccountService {
             }));
     }
 
+    getWalletBalanceUserById(){
+        const userAsString = localStorage.getItem('user');
+        const user = JSON.parse(userAsString);
+        return this.http.get<User>(`${environment.apiUrl}/user/${user.userId}/walletBalance`);
+    }
+
         // all friends of a user
     getAllFriendsByUserId() {
         const userAsString = localStorage.getItem('user');
@@ -103,11 +115,24 @@ export class AccountService {
         return this.http.get<User[]>(`${environment.apiUrl}/user/contacts/${user.userId}`);
     }
 
-    // add a friend
-    addFriend(user: User) {
+    getAllUsersForContactSearch() {
         const userAsString = localStorage.getItem('user');
-        const user1 = JSON.parse(userAsString);
-        return this.http.put(`${environment.apiUrl}/user/contacts/${user1.userId}/addFriend`, user);
+        const user = JSON.parse(userAsString);
+        return this.http.get<User[]>(`${environment.apiUrl}/user/contacts/${user.userId}/add`);
+    }
+
+    // // add a friend
+    // addFriend(friendUserId: string) {
+    //     const userAsString = localStorage.getItem('user');
+    //     const user1 = JSON.parse(userAsString);
+    //     //return this.http.put(`${environment.apiUrl}/user/contacts/${user1.userId}/addFriend`, user);
+    //     return this.http.put(`${environment.apiUrl}/user/contacts/${user1.userId}/addFriend/${friendUserId}`, {});
+    // }
+
+    addFriend(friendUserId: string, params) {
+        const userAsString = localStorage.getItem('user');
+        const user = JSON.parse(userAsString);
+        return this.http.put(`${environment.apiUrl}/user/contacts/${user.userId}/addFriend`, params);
     }
 
         // remove a friend
@@ -128,26 +153,69 @@ export class AccountService {
     }
 
         // all bankAccount of a user
-        getAllBankAccountByUserId() {
-            const userAsString = localStorage.getItem('user');
-            const user = JSON.parse(userAsString);
-            return this.http.get<User[]>(`${environment.apiUrl}/user/profile/${user.userId}`);
-        }
+    getAllBankAccountByUserId() {
+        const userAsString = localStorage.getItem('user');
+        const user = JSON.parse(userAsString);
+        return this.http.get<User[]>(`${environment.apiUrl}/user/profile/bankAccounts/${user.userId}`);
+    }
 
+    payment(paymentModel: PaymentModel) {
+        const transfer = new Transfer();
+        transfer.user = new User();
+        transfer.transactionLabel = new TransactionLabel();
+        transfer.user.creditorId = paymentModel.creditorId.toString();
+        transfer.transactionLabel.transactionLabelId = paymentModel.transactionLabelId.toString();
+        transfer.amount = paymentModel.amount;
 
-        // add a bank account
-        addBankAccount(bankAccount: BankAccount) {
-            const userAsString = localStorage.getItem('user');
-            const user = JSON.parse(userAsString);
-            return this.http.put(`${environment.apiUrl}/user/profile/${user.userId}/addBankAccount`, bankAccount);
-        }
+        const userAsString = localStorage.getItem('user');
+        const user = JSON.parse(userAsString);
+        return this.http.post(`${environment.apiUrl}/transaction/transfers/${user.userId}/payment`, transfer);
+    }
+
+    creditAccount(creditWalletModel: CreditWalletModel) {
+        const bankTransaction = new BankTransaction();
+        bankTransaction.bankAccount=new BankAccount();
+        bankTransaction.bankAccount.bankAccountId=creditWalletModel.bankAccountId.toString();
+        bankTransaction.amount=creditWalletModel.amount;
+        const userAsString = localStorage.getItem('user');
+        const user = JSON.parse(userAsString);
+
+        console.log(bankTransaction);
+        return this.http.post(`${environment.apiUrl}/user/profile/${user.userId}/credit`, bankTransaction);
+    }
+
+    withdrawAccount(creditWalletModel: CreditWalletModel) {
+        const bankTransaction = new BankTransaction();
+        bankTransaction.bankAccount = new BankAccount();
+        bankTransaction.bankAccount.bankAccountId = creditWalletModel.bankAccountId.toString();
+        bankTransaction.amount = creditWalletModel.amount;
+        const userAsString = localStorage.getItem('user');
+        const user = JSON.parse(userAsString);
+
+        console.log(bankTransaction);
+        return this.http.post(`${environment.apiUrl}/user/profile/${user.userId}/withdraw`, bankTransaction);
+    }
 
         // delete a bank account
-        deleteBankAccount(bankAccountId: string) {
-            const userAsString = localStorage.getItem('user');
-            const user = JSON.parse(userAsString);
-            // const bAccAsString = localStorage.getItem('bankAccount');
-            // const bAcc = JSON.parse(bAccAsString);
-            return this.http.delete(`${environment.apiUrl}/user/profile/${user.userId}/removeBankAccount/${bankAccountId}`);
-        }        
+    deleteBankAccount(bankAccountId: string) {
+        const userAsString = localStorage.getItem('user');
+        const user = JSON.parse(userAsString);
+        // const bAccAsString = localStorage.getItem('bankAccount');
+        // const bAcc = JSON.parse(bAccAsString);
+        return this.http.delete(`${environment.apiUrl}/user/profile/${user.userId}/removeBankAccount/${bankAccountId}`);
+    }       
+    
+        // all bank transactions of a user
+    getAllBankTransactionsByUser() {
+        const userAsString = localStorage.getItem('user');
+        const user = JSON.parse(userAsString);
+        return this.http.get<User[]>(`${environment.apiUrl}/user/profile/${user.userId}`);
+    }
+
+        // add a bank account
+    addBankAccount(bankAccount: BankAccount) {
+        const userAsString = localStorage.getItem('user');
+        const user = JSON.parse(userAsString);
+        return this.http.put(`${environment.apiUrl}/user/profile/${user.userId}/addBankAccount`, bankAccount);
+    }
 }

@@ -1,6 +1,11 @@
-export class BankAccount {
+import { BankAccount } from "./bankAccount";
+
+export class BankTransaction {
     id: string;
-    iban: string;
-    bankName: string;
+    amount: number;
+    date: Date;
+    commission: number;
+    transactionLabelId: string;
     userId: string;
+    bankAccount: BankAccount;
 }

@@ -1,9 +1,10 @@
 <h1>Transfers</h1>
-<a routerLink="add" class="btn btn-sm btn-success mb-2">New Transfer</a>
+<a routerLink="payment" class="btn btn-sm btn-success mb-2">Send Money</a>
 <table class="table table-striped">
     <thead>
         <tr>
-            <th style="width: 30%">Contact</th>
+            <th style="width: 30%">Debtor</th>
+            <th style="width: 30%">Creditor</th>
             <th style="width: 30%">Description</th>
             <th style="width: 30%">Amount</th>
             <th style="width: 30%">Date</th>
@@ -12,8 +13,9 @@
     </thead>
     <tbody>
         <tr *ngFor="let transfer of transfers">
-            <td>{{transfer.commission}}</td>
-            <td>{{transfer.transactionLabelId}}</td>
+            <td>{{transfer.debtor.lastName}} {{transfer.debtor.firstName}}</td>
+            <td>{{transfer.creditor.lastName}} {{transfer.creditor.firstName}}</td>
+            <td>{{transfer.transactionLabel.description}}</td>
             <td>{{transfer.amount}}</td>
             <td>{{transfer.date}}</td>
             <td style="white-space: nowrap">

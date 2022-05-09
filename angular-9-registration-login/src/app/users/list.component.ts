@@ -1,34 +1,63 @@
-﻿import { Component, OnInit } from '@angular/core';
-import { first } from 'rxjs/operators';
+﻿import { Component, NgZone, OnInit, ChangeDetectorRef } from '@angular/core';
+import { first, map } from 'rxjs/operators';
+
 
 import { User } from '@app/_models';
 import { AccountService } from '@app/_services';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({ templateUrl: 'list.component.html' })
 export class ListComponent implements OnInit {
     users = null;
-    user: User;
+    user: any;
     bankAccounts = null;
+    bankTransactions = null;
+    
 
-    constructor(private accountService: AccountService) {
+    constructor(
+        private cdRef: ChangeDetectorRef,
+        private ngZone: NgZone,
+        private accountService: AccountService) {
         this.user = this.accountService.userValue;
+        this.user.walletBalance =  this.accountService.userValue.walletBalance;
     }
+
+    
+    // getUpdateWallet(): void {
+    //     this.accountService.getById(this.user.id).subscribe(user => {
+    //         user = this.user;
+    //         this.user=this.accountService.getById(this.user.id)
+    //         this.cdRef.detectChanges();
+    //     });
+    // }
+    
 
     ngOnInit() {
-        this.accountService.getAllBankAccountByUserId()
+        
+       //this.getUpdateWallet();
+       this.accountService.getWalletBalanceUserById()
+             .pipe(first())
+             .subscribe(users => this.users = this.users); 
+
+        console.log(this.accountService.userValue.walletBalance);
+        // this.ngZone.run(() =>{
+        //     this.accountService.getById(this.user.id)
+        // });
+        this.accountService.getAllBankTransactionsByUser()
             .pipe(first())
-            .subscribe(bankAccounts => this.bankAccounts = bankAccounts);
+            .subscribe(bankTransactions => this.bankTransactions = bankTransactions);
     }
 
-    deleteBankAccount(id: string) {
-        console.log(id);
-        const bankAccount = this.bankAccounts.find(x => x.bankAccountId === id);
-        bankAccount.isDeleting = true;
-        console.log(this.bankAccounts);
-        this.accountService.deleteBankAccount(id)
-            .pipe(first())
-            .subscribe(() => {
-                this.bankAccounts = this.bankAccounts.filter(x => x.bankAccountId !== id) 
-            });
-    }
+    // deleteBankAccount(id: string) {
+    //     console.log(id);
+    //     const bankAccount = this.bankAccounts.find(x => x.bankAccountId === id);
+    //     bankAccount.isDeleting = true;
+    //     console.log(this.bankAccounts);
+    //     this.accountService.deleteBankAccount(id)
+    //         .pipe(first())
+    //         .subscribe(() => {
+    //             this.bankAccounts = this.bankAccounts.filter(x => x.bankAccountId !== id) 
+    //         });
+    // }
 }

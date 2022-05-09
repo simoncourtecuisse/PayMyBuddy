@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200/", allowedHeaders = "*")
 @RestController
 @RequestMapping("/transaction")
 public class TransactionController {
@@ -60,7 +60,8 @@ public class TransactionController {
     public ResponseEntity<?> getAllTransactionsByUser(@PathVariable("userId") Long id) {
         if (userService.getUserById(id).isPresent()) {
             User user = userService.getUserById(id).get();
-            return new ResponseEntity<>(transactionService.getAllTransactionsByUser(user), HttpStatus.OK);
+            var transactions=transactionService.getAllTransactionsByUser(user);
+            return new ResponseEntity<>(transactions, HttpStatus.OK);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
@@ -89,18 +90,21 @@ public class TransactionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PostMapping("/transfers/{userId}/payment/{userIdCreditor}")
-    private ResponseEntity<?> makeTransaction(@PathVariable("userId") Long debtorId, @PathVariable("userIdCreditor") Long creditorId,  @RequestBody Transaction transaction) {
-        if (userService.getUserById(debtorId).isEmpty() || userService.getUserById(creditorId).isEmpty()) {
+    @PostMapping("/transfers/{userId}/payment")
+    private ResponseEntity<?> makeTransaction(@PathVariable("userId") Long id, @RequestBody Transaction transaction) {
+        if (userService.getUserById(id).isEmpty()) {
             LOGGER.error("User not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        User debtor = userService.getUserById(debtorId).get();
-        User creditor = userService.getUserById(creditorId).get();
+        User debtor = userService.getUserById(id).get();
+        User creditorId = transaction.getCreditor();
+        User creditor = userService.getUserById(creditorId.getUserId()).get();
+        System.out.println(creditor);
 //        TransactionLabel label = transactionLabelService.getTransactionLabelById(transactionLabelId).get();
         TransactionLabel label = transaction.getTransactionLabel();
         Transaction paymentTransaction = transactionService.createTransaction(debtor, creditor, transaction.getAmount(), label);
+        System.out.println(paymentTransaction);
 
         if (!debtor.getFriendList().contains(creditor)) {
             LOGGER.error("Creditor is not in debtor's Friend list");
@@ -115,12 +119,44 @@ public class TransactionController {
         if (transactionService.processUserTransaction(paymentTransaction)) {
             transactionService.saveTransaction(paymentTransaction);
             LOGGER.info("Transaction success");
-            return new ResponseEntity<>("Successful Transaction", HttpStatus.OK);
+            var transactions=transactionService.getAllTransactionsByUser(debtor);
+            return new ResponseEntity<>(transactions, HttpStatus.OK);
         }
         LOGGER.error("Failed to make the payment because of a BAD REQUEST");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+//    @PostMapping("/transfers/{userId}/payment/{userIdCreditor}")
+//    private ResponseEntity<?> makeTransaction(@PathVariable("userId") Long debtorId, @PathVariable("userIdCreditor") Long creditorId,  @RequestBody Transaction transaction) {
+//        if (userService.getUserById(debtorId).isEmpty() || userService.getUserById(creditorId).isEmpty()) {
+//            LOGGER.error("User not found");
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
+//
+//        User debtor = userService.getUserById(debtorId).get();
+//        User creditor = userService.getUserById(creditorId).get();
+////        TransactionLabel label = transactionLabelService.getTransactionLabelById(transactionLabelId).get();
+//        TransactionLabel label = transaction.getTransactionLabel();
+//        Transaction paymentTransaction = transactionService.createTransaction(debtor, creditor, transaction.getAmount(), label);
+//
+//        if (!debtor.getFriendList().contains(creditor)) {
+//            LOGGER.error("Creditor is not in debtor's Friend list");
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
+//
+//        if (debtor.getWalletBalance().compareTo(BigDecimal.valueOf(paymentTransaction.getCommission())) < 0) {
+//            LOGGER.error("Not enough found in wallet");
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//
+//        if (transactionService.processUserTransaction(paymentTransaction)) {
+//            transactionService.saveTransaction(paymentTransaction);
+//            LOGGER.info("Transaction success");
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        }
+//        LOGGER.error("Failed to make the payment because of a BAD REQUEST");
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//    }
 //   @PostMapping(value = "/transaction/payment")
 //    private ResponseEntity<?> makeTransaction(@RequestBody Transaction transaction) {
 //        if (transactionService.payment(transaction)) {

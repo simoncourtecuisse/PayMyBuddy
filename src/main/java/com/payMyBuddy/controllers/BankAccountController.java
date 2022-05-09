@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200/", allowedHeaders = "*")
 @RestController
-@RequestMapping("/bankAccount")
+//@RequestMapping("/bankAccount")
 public class BankAccountController {
 
     @Autowired
@@ -75,34 +75,90 @@ public class BankAccountController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PostMapping("bankToWallet/{userId}")
+    @GetMapping("/user/profile/bankAccounts/{userId}")
+    public ResponseEntity<?> getAllBankAccountByUser(@PathVariable("userId") Long id) {
+        if (userService.getUserById(id).isPresent()) {
+            User user = userService.getUserById(id).get();
+            return new ResponseEntity<>(user.getBankAccountList(),HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @PutMapping("user/profile/{userId}/addBankAccount")
+    public ResponseEntity<?> addBankAccount(@PathVariable("userId") Long userId, @RequestBody BankAccount bankAccount) {
+        if (userService.getUserById(userId).isEmpty()) {
+            LOGGER.error("User doesn't exist in DB");
+            return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
+        }
+        User user = userService.getUserById(userId).get();
+        //BankAccount bankAccount = bankAccountService.getBankAccountById(bankAccountId).get();
+        if (!user.getBankAccountList().contains(bankAccount)) {
+            bankAccount.setUser(user);
+            userService.addBankAccount(user, bankAccount);
+
+
+            System.out.println(bankAccount);
+//            bankAccountRepository.save(bankAccount);
+//            bankAccount.setUser(user);
+            LOGGER.info("Add bank account success");
+            return new ResponseEntity<>(user.getBankAccountList(), HttpStatus.CREATED);
+        }
+        LOGGER.error("Add bank account failed because of a bad request");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @DeleteMapping("user/profile/{userId}/removeBankAccount/{bankAccountId}")
+    public ResponseEntity<?> removeBankAccount(@PathVariable("userId") Long userId, @PathVariable("bankAccountId") Long bankAccountId) {
+        if (userService.getUserById(userId).isEmpty() || bankAccountService.getBankAccountById(bankAccountId).isEmpty()) {
+            LOGGER.error("User doesn't exist in DB");
+            return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
+        }
+        User user = userService.getUserById(userId).get();
+        BankAccount bankAccount = bankAccountService.getBankAccountById(bankAccountId).get();
+        if (user.getBankAccountList().contains(bankAccount)) {
+            userService.removeBankAccount(user, bankAccount);
+            bankAccountService.deleteBankAccount(bankAccount);
+            LOGGER.info("Remove bank account success");
+            return new ResponseEntity<>(user.getBankAccountList(), HttpStatus.OK);
+        }
+        LOGGER.error("Remove bank account failed because of a bad request");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @GetMapping("/user/profile/{userId}")
+    public ResponseEntity<?> getAllBankTransactionsByUser(@PathVariable("userId") Long id) {
+        if (userService.getUserById(id).isPresent()) {
+            User user = userService.getUserById(id).get();
+            System.out.println(user.getBankTransactionsList());
+            //var bankTransactions = bankAccountService.getAllBankTransactionsByUser(user);
+            //System.out.println(bankTransactions);
+            //List<BankTransaction> bankTransactionList =
+            return new ResponseEntity<>(user.getBankTransactionsList(),HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @PostMapping("/user/profile/{userId}/credit")
     public ResponseEntity<?> bankToWallet(@PathVariable("userId") Long id, @RequestBody BankTransaction bankTransaction) {
         if (userService.getUserById(id).isEmpty()) {
             LOGGER.error("User not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
         User user = userService.getUserById(id).get();
         BankAccount bankAccount = bankTransaction.getBankAccount();
-
         BankTransaction bankAccountTransaction = bankAccountService.createBankAccountTransaction(user, bankAccount, bankTransaction.getAmount());
-
-        if (bankAccountTransaction.getCommission() < 0 && user.getWalletBalance().compareTo(BigDecimal.valueOf(bankAccountTransaction.getCommission())) < 0) {
-            LOGGER.error("Not enough found in wallet");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
 
         if (bankAccountService.bankToWallet(bankAccountTransaction)) {
             bankAccountService.saveBankTransaction(bankAccountTransaction);
             LOGGER.info("Transaction to wallet successfully processed");
-            return new ResponseEntity<>("New bank account transaction made", HttpStatus.OK);
+            return new ResponseEntity<>(user.getBankTransactionsList(), HttpStatus.OK);
         } else {
             LOGGER.error("Failed to proceed bank account transaction");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
-    @PostMapping("bankDeposit/{userId}")
+    @PostMapping("/user/profile/{userId}/withdraw")
     public ResponseEntity<?> bankDeposit(@PathVariable("userId") Long id, @RequestBody BankTransaction bankTransaction) {
         if (userService.getUserById(id).isEmpty()) {
             LOGGER.error("User not found");
@@ -112,7 +168,9 @@ public class BankAccountController {
         BankAccount bankAccount = bankTransaction.getBankAccount();
         BankTransaction bankAccountTransaction = bankAccountService.createBankAccountTransaction(user, bankAccount, bankTransaction.getAmount());
 
-        if (bankAccountTransaction.getCommission() < 0 && user.getWalletBalance().compareTo(BigDecimal.valueOf(bankAccountTransaction.getCommission())) < 0) {
+        var commission = bankAccountTransaction.getCommission();
+        var userBalance = user.getWalletBalance();
+        if (userBalance.compareTo(BigDecimal.valueOf(commission)) <  0) {
             LOGGER.error("Not enough found in wallet");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -120,7 +178,7 @@ public class BankAccountController {
         if (bankAccountService.bankDeposit(bankAccountTransaction)) {
             bankAccountService.saveBankTransaction(bankAccountTransaction);
             LOGGER.info("Transaction to bank account successfully processed");
-            return new ResponseEntity<>("New bank account transaction made", HttpStatus.OK);
+            return new ResponseEntity<>(user.getBankTransactionsList(), HttpStatus.OK);
         } else {
             LOGGER.error("Failed to proceed bank account transaction");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

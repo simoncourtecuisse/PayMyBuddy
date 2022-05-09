@@ -6,6 +6,10 @@ import { ProfileRoutingModule } from './profile-routing.module';
 import { LayoutComponent } from './layout.component';
 import { ListComponent } from './list.component';
 import { AddEditComponent } from './add-edit.component';
+import { CreditComponent } from './credit.component';
+import { BankAccountComponent } from './bankAccount.component';
+import { WithdrawComponent } from './withdraw.component';
+
 
 
 @NgModule({
@@ -17,7 +21,10 @@ import { AddEditComponent } from './add-edit.component';
     declarations: [
         LayoutComponent,
         ListComponent,
-        AddEditComponent
+        AddEditComponent,
+        CreditComponent,
+        WithdrawComponent,
+        BankAccountComponent
     ]
 })
 export class ProfileModule { }

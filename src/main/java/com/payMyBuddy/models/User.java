@@ -44,6 +44,7 @@ public class User {
     private BigDecimal walletBalance;
 
     @OneToMany(
+            fetch = FetchType.LAZY,
             mappedBy = "user",
             cascade = CascadeType.ALL)
     List<BankAccount> bankAccountList = new ArrayList<>();
@@ -61,28 +62,30 @@ public class User {
 //    @JoinColumn(name = "debtor_id")
 //    List<Transaction> debtorList = new ArrayList<>();
 
+    @JsonIgnoreProperties("user")
     @OneToMany(
             mappedBy = "user",
             cascade = CascadeType.ALL)
     List<BankTransaction> bankTransactionsList = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
-//    List<Transaction> creditorList = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
-//    List<Transaction> debtorList = new ArrayList<>();
-
+    //@JsonIgnoreProperties("userIdDebtor")
+    @JsonIgnore
     @OneToMany(
-            mappedBy = "userIdCreditor",
+            fetch = FetchType.LAZY,
+            mappedBy = "creditor",
             cascade = CascadeType.ALL)
     List<Transaction> creditorList = new ArrayList<>();
 
+    //@JsonIgnoreProperties("userIdDebtor")
+    @JsonIgnore
     @OneToMany(
-            mappedBy = "userIdDebtor",
+            fetch = FetchType.LAZY,
+            mappedBy = "debtor",
             cascade = CascadeType.ALL)
     List<Transaction> debtorList = new ArrayList<>();
 
 
+    //@JsonIgnoreProperties("friendList")
     @ManyToMany (fetch = FetchType.EAGER)
     @JoinTable(name = "contact", joinColumns =
     @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_user_id"))

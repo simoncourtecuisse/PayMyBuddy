@@ -1,7 +1,7 @@
 package com.payMyBuddy.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -9,7 +9,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity(name = "Transaction")
@@ -42,9 +41,10 @@ public class Transaction {
     @Column(name = "commission", nullable = false, precision = 6, scale = 2)
     private double commission;
 
+    @JsonIgnoreProperties("transactionList")
     @ManyToOne
     @JoinColumn(name = "transaction_label_id")
-    @JsonIgnore
+    //@JsonIgnore
     private TransactionLabel transactionLabel;
 
 //    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
@@ -55,16 +55,18 @@ public class Transaction {
 //    @JoinColumn(name = "debtor_id")
 //    Long userIdDebtor;
 
+    @JsonIgnoreProperties("creditorList")
     @ManyToOne
     @JoinColumn(name = "creditor_id")
-    @JsonIgnore
+    //@JsonIgnore
     //Long userIdCreditor;
-    User userIdCreditor;
+    private User creditor;
 
+    @JsonIgnoreProperties("debtorList")
     @ManyToOne
     @JoinColumn(name = "debtor_id")
-    @JsonIgnore
-    User userIdDebtor;
+    //@JsonIgnore
+    private User debtor;
 
     public Transaction() {
 
@@ -117,20 +119,32 @@ public class Transaction {
         this.transactionLabel = transactionLabel;
     }
 
-    public User getUserIdCreditor() {
-        return userIdCreditor;
+    public User getCreditor() {
+        return creditor;
     }
 
-    public void setUserIdCreditor(User userIdCreditor) {
-        this.userIdCreditor = userIdCreditor;
+    public void setCreditor(User creditor) {
+        this.creditor = creditor;
     }
 
-    public User getUserIdDebtor() {
-        return userIdDebtor;
+    public User getDebtor() {
+        return debtor;
     }
 
-    public void setUserIdDebtor(User userIdDebtor) {
-        this.userIdDebtor = userIdDebtor;
+    public void setDebtor(User debtor) {
+        this.debtor = debtor;
     }
 
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "transactionId=" + transactionId +
+                ", amount=" + amount +
+                ", date=" + date +
+                ", commission=" + commission +
+                ", transactionLabel=" + transactionLabel +
+                ", creditor=" + creditor +
+                ", debtor=" + debtor +
+                '}';
+    }
 }

@@ -41,7 +41,7 @@ public class TransactionService {
     }
 
     public List<Transaction> getAllTransactionsByUser(User user) {
-        return transactionRepository.findAllTransactionsByUserIdDebtorOrUserIdCreditor(user, user);
+        return transactionRepository.findAllTransactionsByDebtorOrCreditorOrderByDateDesc(user, user);
     }
 
     public void updateTransaction(Transaction transaction) {
@@ -107,8 +107,8 @@ public class TransactionService {
         var fare = amount1 * rate;
         var com = amount1 + fare;
 
-        paymentTransaction.setUserIdDebtor(debtor);
-        paymentTransaction.setUserIdCreditor(creditor);
+        paymentTransaction.setDebtor(debtor);
+        paymentTransaction.setCreditor(creditor);
         paymentTransaction.setAmount(amount);
         paymentTransaction.setDate(LocalDate.now());
         paymentTransaction.setCommission(com);
@@ -133,8 +133,8 @@ public class TransactionService {
             return false;
         }
 
-        User debtor = userRepository.findById(transaction.getUserIdDebtor().getUserId()).get();
-        User creditor = userRepository.findById(transaction.getUserIdCreditor().getUserId()).get();
+        User debtor = userRepository.findById(transaction.getDebtor().getUserId()).get();
+        User creditor = userRepository.findById(transaction.getCreditor().getUserId()).get();
         double absTotal = Math.abs(com);
 
         if (amount > 0) {
