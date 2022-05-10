@@ -13,7 +13,7 @@ export class ListComponent implements OnInit {
     user: any;
     bankAccounts = null;
     bankTransactions = null;
-    
+
 
     constructor(
         private cdRef: ChangeDetectorRef,
@@ -23,7 +23,7 @@ export class ListComponent implements OnInit {
         this.user.walletBalance =  this.accountService.userValue.walletBalance;
     }
 
-    
+
     // getUpdateWallet(): void {
     //     this.accountService.getById(this.user.id).subscribe(user => {
     //         user = this.user;
@@ -31,14 +31,14 @@ export class ListComponent implements OnInit {
     //         this.cdRef.detectChanges();
     //     });
     // }
-    
+
 
     ngOnInit() {
-        
+
        //this.getUpdateWallet();
-       this.accountService.getWalletBalanceUserById()
-             .pipe(first())
-             .subscribe(users => this.users = this.users); 
+        this.accountService.getWalletBalanceUserById()
+              .pipe(first())
+              .subscribe(users => this.users = this.users);
 
         console.log(this.accountService.userValue.walletBalance);
         // this.ngZone.run(() =>{
@@ -57,7 +57,7 @@ export class ListComponent implements OnInit {
     //     this.accountService.deleteBankAccount(id)
     //         .pipe(first())
     //         .subscribe(() => {
-    //             this.bankAccounts = this.bankAccounts.filter(x => x.bankAccountId !== id) 
+    //             this.bankAccounts = this.bankAccounts.filter(x => x.bankAccountId !== id)
     //         });
     // }
 }
