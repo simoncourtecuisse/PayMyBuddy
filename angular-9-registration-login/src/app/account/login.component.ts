@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '@app/_services';
+import { AuthService } from '@app/_services/auth.service';
+import { TokenStorageService } from '@app/_services/token-storage.service';
 
 @Component({ templateUrl: 'login.component.html' })
 export class LoginComponent implements OnInit {
@@ -11,16 +13,26 @@ export class LoginComponent implements OnInit {
     loading = false;
     submitted = false;
     returnUrl: string;
+    isLoggedIn = false;
+    isLoginFailed = false;
+    errorMessage = '';
+    roles: string[] = [];
 
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
         private accountService: AccountService,
-        private alertService: AlertService
+        private alertService: AlertService,
+        private authService: AuthService,
+        private tokenStorage: TokenStorageService
     ) { }
 
     ngOnInit() {
+        if (this.tokenStorage.getToken()) {
+            this.isLoggedIn = true;
+            this.roles = this.tokenStorage.getUser().roles;
+        }
         this.form = this.formBuilder.group({
             email: ['', Validators.required],
             password: ['', Validators.required]
@@ -45,15 +57,34 @@ export class LoginComponent implements OnInit {
         }
 
         this.loading = true;
-        this.accountService.login(this.f.email.value, this.f.password.value)
-            .pipe(first())
-            .subscribe(
-                data => {
-                    this.router.navigate([this.returnUrl]);
-                },
-                error => {
-                    this.alertService.error(error);
-                    this.loading = false;
-                });
+        //this.authService.login(this.f.email.value, this.f.password.value)
+        // this.authService.login(this.form)
+        //     .pipe(first())
+        //     .subscribe(
+        //         data => {
+        //             this.router.navigate([this.returnUrl]);
+        //         },
+        //         error => {
+        //             this.alertService.error(error);
+        //             this.loading = false;
+        //         });
+
+        this.authService.login(this.form).subscribe(
+            data => {
+                this.tokenStorage.saveToken(data.accessToken);
+                this.tokenStorage.saveUser(data);
+                this.isLoginFailed = false;
+                this.isLoggedIn = true;
+                this.roles = this.tokenStorage.getUser().roles;
+                this.reloadPage();
+              },
+              err => {
+                this.errorMessage = err.error.message;
+                this.isLoginFailed = true;
+              }
+            );
     }
+    reloadPage() {
+        window.location.reload();
+      }
 }

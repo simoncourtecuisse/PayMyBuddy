@@ -17,6 +17,10 @@ VALUES (1, 2),
        (4, 1),
        (1, 4);
 
+INSERT INTO roles(name)
+VALUES ('ROLE_USER'),
+       ('ROLE_ADMIN');
+
 INSERT INTO bank_account (bank_account_id, user_id, iban, bank_name)
 VALUES (1, 1, '232625', 'BNP Paribas'),
        (2, 2, '685137', 'Société Générale'),

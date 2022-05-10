@@ -48,7 +48,7 @@ class UserControllerTest {
     void testCreateUser() throws Exception {
         // Setup
         // Configure UserService.getUserByEmail(...).
-        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserByEmail("email")).thenReturn(user);
 
         // Run the test
@@ -70,7 +70,7 @@ class UserControllerTest {
     @Test
     void testCreateUser_ReturnBadRequest() throws Exception {
         // Setup
-        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserByEmail("email")).thenReturn(user);
 
         // Run the test
@@ -87,7 +87,7 @@ class UserControllerTest {
     void testGetUserByEmail() throws Exception {
         // Setup
         // Configure UserService.getUserByEmail(...).
-        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserByEmail("email")).thenReturn(user);
 
         // Run the test
@@ -105,7 +105,7 @@ class UserControllerTest {
     void testGetUserByEmail_BadRequest() throws Exception {
         // Setup
         // Configure UserService.getUserByEmail(...).
-        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserByEmail("email")).thenReturn(user);
 
         // Run the test
@@ -123,7 +123,7 @@ class UserControllerTest {
     void testUpdateUser() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(1L)).thenReturn(user);
 
         // Run the test
@@ -146,7 +146,7 @@ class UserControllerTest {
     void testUpdateUser_BadRequest() throws Exception {
         // Setup
         // Configure UserService.getUserByEmail(...).
-        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(1L)).thenReturn(Optional.empty());
 
         // Run the test
@@ -168,7 +168,7 @@ class UserControllerTest {
     void testDeleteUser() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(1L)).thenReturn(user);
 
         // Run the test
@@ -186,7 +186,7 @@ class UserControllerTest {
     void testAddFriend() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Run the test
@@ -223,7 +223,7 @@ class UserControllerTest {
     void testRemoveFriend() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Run the test
@@ -260,7 +260,7 @@ class UserControllerTest {
     void testAddBankAccount() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         when(mockBankAccountService.getBankAccountById(0L)).thenReturn(Optional.of(new BankAccount(0, "bankName")));
@@ -301,7 +301,7 @@ class UserControllerTest {
     void testRemoveBankAccount() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         when(mockBankAccountService.getBankAccountById(0L)).thenReturn(Optional.of(new BankAccount(0, "bankName")));
@@ -323,7 +323,7 @@ class UserControllerTest {
     void testAddCreditorToTransaction() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Configure TransactionService.getTransactionById(...).
@@ -347,7 +347,7 @@ class UserControllerTest {
     void testRemoveCreditorToTransaction() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Configure TransactionService.getTransactionById(...).
@@ -371,7 +371,7 @@ class UserControllerTest {
     void testAddDebtorToTransaction() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Configure TransactionService.getTransactionById(...).
@@ -395,7 +395,7 @@ class UserControllerTest {
     void testRemoveDebtorToTransaction() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Configure TransactionService.getTransactionById(...).
