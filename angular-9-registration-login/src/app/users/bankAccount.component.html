@@ -1,0 +1,32 @@
+<div class="text-center mt-4">
+    <h1>Profile</h1>
+</div>
+<h4>Manage Bank Accounts</h4>
+<a routerLink="add" class="btn btn-sm btn-success mb-2">Add Bank Account</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 30%">Bank Name</th>
+            <th style="width: 30%">Iban</th>
+            <th style="width: 10%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let bankAccount of bankAccounts">
+            <td>{{bankAccount.bankName}}</td>
+            <td>{{bankAccount.iban}}</td>
+            <td style="white-space: nowrap">
+                <!-- <a routerLink="edit/{{user.id}}" class="btn btn-sm btn-primary mr-1">Edit</a> -->
+                <button (click)="deleteBankAccount(bankAccount.bankAccountId)" class="btn btn-sm btn-danger btn-delete-bankAccount" [disabled]="bankAccount.isDeleting">
+                    <span *ngIf="bankAccount.isDeleting" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!bankAccount.isDeleting">Delete</span>
+                </button>
+            </td>
+        </tr>
+        <tr *ngIf="!bankAccounts">
+            <td colspan="4" class="text-center">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,72 @@
+<!-- <h1 *ngIf="isCreditMode">Credit Your Wallet</h1>
+ <h1 *ngIf="!isCreditMode">Withdraw Money</h1> 
+
+<form [formGroup]="formBank" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+        <div class="form-group col">
+            <label for="bankAccountId">Bank Name</label>
+            <select formControlName="bankAccountId" class="form-control"  >
+                <option *ngFor="let bankAccount of bankAccounts" [ngValue]="bankAccount.bankName">
+                    {{bankAccount.bankName}}
+                  </option>
+                <div *ngIf="submitted && f.bankAccountId.errors" class="invalid-feedback">
+                <div *ngIf="f.bankAccountId.errors.required">Bank Name is required</div>
+            </div>
+            </select>
+        </div>
+        <div class="form-group col">
+            <label for="amount">Amount</label>
+            <input type="text" formControlName="amount" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.amount.errors }" />
+            <div *ngIf="submitted && f.amount.errors" class="invalid-feedback">
+                <div *ngIf="f.amount.errors.required">Amount is required</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Save
+        </button>
+        <a routerLink="/profile" class="btn btn-link">Cancel</a>
+    </div>
+</form> -->
+
+
+<h1 *ngIf="isCreditMode">Credit Your Wallet</h1>
+
+
+<form [formGroup]="formBank" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+        <div class="form-group col">
+            <label for="bankAccountId">Bank Name</label> 
+            <select name="bankAccountId" (change)="ChangeBankAccount($event)" formControlName="bankAccountId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.bankAccountId.errors }">
+                <option>--Select--</option>
+                <option [value]="bankAccount.bankAccountId" *ngFor="let bankAccount of BankAccountList">
+                    {{bankAccount.bankName}}
+                </option>
+            </select>
+            <div *ngIf="submitted && f.bankAccountId.errors" class="invalid-feedback">
+                <div *ngIf="f.bankAccountId.errors.required">Bank Name is required</div>
+            </div>
+        </div>
+        <div class="form-group col">
+            <label for="amount">Amount</label>
+            <input type="text" formControlName="amount" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.amount.errors }" />
+            <div *ngIf="submitted && f.amount.errors" class="invalid-feedback">
+                <div *ngIf="f.amount.errors.required">Amount is required</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Save
+        </button>
+        <a routerLink="/profile" class="btn btn-link">Cancel</a>
+    </div>
+    
+</form>
+ 
+
