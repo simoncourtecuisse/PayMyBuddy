@@ -126,12 +126,12 @@ public class BankAccountController {
     }
 
     @GetMapping("/user/profile/{userId}")
-    public ResponseEntity<?> getAllBankTransactionsByUserByDateDesc(@PathVariable("userId") Long id) {
+    public ResponseEntity<?> getAllBankTransactionsByUser(@PathVariable("userId") Long id) {
         if (userService.getUserById(id).isPresent()) {
             User user = userService.getUserById(id).get();
             System.out.println(user.getBankTransactionsList());
             var bankTransactions = bankAccountService.getAllBankTransactionsByUser(user);
-            //System.out.println(bankTransactions);
+            System.out.println(bankTransactions);
             //List<BankTransaction> bankTransactionList =
             return new ResponseEntity<>(bankTransactions,HttpStatus.OK);
         }
