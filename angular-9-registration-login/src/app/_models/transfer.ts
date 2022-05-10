@@ -3,7 +3,7 @@ import { User } from "./user";
 
 export class Transfer {
     id: string;
-    user: User;
+    creditor: User;
     amount: number;
     date: Date;
     commission: number;

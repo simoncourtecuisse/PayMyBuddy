@@ -2,7 +2,7 @@
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
 import { User } from '@app/_models';
@@ -105,7 +105,12 @@ export class AccountService {
     getWalletBalanceUserById(){
         const userAsString = localStorage.getItem('user');
         const user = JSON.parse(userAsString);
-        return this.http.get<User>(`${environment.apiUrl}/user/${user.userId}/walletBalance`);
+        return this.http.get<string>(`${environment.apiUrl}/user/${user.userId}/walletBalance`)
+            .pipe(first())
+            .subscribe(walletBalance => {
+                this.userValue.walletBalance = walletBalance
+            });
+
     }
 
         // all friends of a user
@@ -169,6 +174,7 @@ export class AccountService {
 
         const userAsString = localStorage.getItem('user');
         const user = JSON.parse(userAsString);
+        console.log(transfer);
         return this.http.post(`${environment.apiUrl}/transaction/transfers/${user.userId}/payment`, transfer);
     }
 

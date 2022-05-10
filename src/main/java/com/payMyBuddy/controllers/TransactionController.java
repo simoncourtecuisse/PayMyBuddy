@@ -96,7 +96,7 @@ public class TransactionController {
             LOGGER.error("User not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
+        System.out.println(transaction);
         User debtor = userService.getUserById(id).get();
         User creditorId = transaction.getCreditor();
         User creditor = userService.getUserById(creditorId.getUserId()).get();

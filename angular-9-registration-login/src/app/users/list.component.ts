@@ -36,9 +36,7 @@ export class ListComponent implements OnInit {
     ngOnInit() {
 
        //this.getUpdateWallet();
-        this.accountService.getWalletBalanceUserById()
-              .pipe(first())
-              .subscribe(users => this.users = this.users);
+        this.accountService.getWalletBalanceUserById();
 
         console.log(this.accountService.userValue.walletBalance);
         // this.ngZone.run(() =>{
