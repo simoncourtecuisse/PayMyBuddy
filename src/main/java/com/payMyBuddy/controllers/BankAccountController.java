@@ -10,12 +10,14 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200/", allowedHeaders = "*")
+@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 @RestController
 //@RequestMapping("/bankAccount")
 public class BankAccountController {

@@ -7,6 +7,7 @@ import { AddEditComponent } from './add-edit.component';
 import { CreditComponent } from './credit.component';
 import { BankAccountComponent } from './bankAccount.component';
 import { WithdrawComponent } from './withdraw.component';
+import { BoardAdminComponent } from './board-admin.component';
 
 const routes: Routes = [
     {
@@ -16,7 +17,8 @@ const routes: Routes = [
             { path: 'credit', component: CreditComponent },
             { path: 'withdraw', component: WithdrawComponent },
             { path: 'bankAccounts', component: BankAccountComponent },
-            { path: 'bankAccounts/add', component: AddEditComponent }
+            { path: 'bankAccounts/add', component: AddEditComponent },
+            { path: 'admin', component: BoardAdminComponent }
         ]
     },
     

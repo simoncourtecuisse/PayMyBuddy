@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -23,6 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200/", allowedHeaders = "*")
+@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 @RestController
 @RequestMapping("/user")
 public class UserController {

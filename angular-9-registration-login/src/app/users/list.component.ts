@@ -6,6 +6,7 @@ import { User } from '@app/_models';
 import { AccountService } from '@app/_services';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { TokenStorageService } from '@app/_services/token-storage.service';
 
 @Component({ templateUrl: 'list.component.html' })
 export class ListComponent implements OnInit {
@@ -16,6 +17,7 @@ export class ListComponent implements OnInit {
     
 
     constructor(
+        private token: TokenStorageService,
         private cdRef: ChangeDetectorRef,
         private ngZone: NgZone,
         private accountService: AccountService) {
@@ -34,7 +36,9 @@ export class ListComponent implements OnInit {
     
 
     ngOnInit() {
-        
+
+        this.user = this.token.getUser();
+
        //this.getUpdateWallet();
         this.accountService.getWalletBalanceUserById()
               .pipe(first())

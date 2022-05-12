@@ -11,6 +11,8 @@ export class RegisterComponent implements OnInit {
     form: FormGroup;
     loading = false;
     submitted = false;
+    isSuccessful = false;
+    isSignUpFailed = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -49,11 +51,14 @@ export class RegisterComponent implements OnInit {
             .pipe(first())
             .subscribe(
                 data => {
+                    this.isSuccessful = true;
+                    this.isSignUpFailed = false;
                     this.alertService.success('Registration successful', { keepAfterRouteChange: true });
                     this.router.navigate(['../login'], { relativeTo: this.route });
                 },
                 error => {
                     this.alertService.error(error);
+                    this.isSignUpFailed = true;
                     this.loading = false;
                 });
     }
