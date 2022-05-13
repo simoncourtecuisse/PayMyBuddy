@@ -1,9 +1,7 @@
 package com.payMyBuddy.controllers;
 
 import com.payMyBuddy.models.Transaction;
-import com.payMyBuddy.models.TransactionLabel;
 import com.payMyBuddy.models.User;
-import com.payMyBuddy.services.TransactionLabelService;
 import com.payMyBuddy.services.TransactionService;
 import com.payMyBuddy.services.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -24,8 +22,8 @@ public class TransactionController {
     Logger LOGGER = LogManager.getLogger(Transaction.class);
     @Autowired
     private TransactionService transactionService;
-    @Autowired
-    private TransactionLabelService transactionLabelService;
+//    @Autowired
+//    private TransactionLabelService transactionLabelService;
     @Autowired
     private UserService userService;
 
@@ -96,14 +94,13 @@ public class TransactionController {
             LOGGER.error("User not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        System.out.println(transaction);
         User debtor = userService.getUserById(id).get();
         User creditorId = transaction.getCreditor();
         User creditor = userService.getUserById(creditorId.getUserId()).get();
         System.out.println(creditor);
 //        TransactionLabel label = transactionLabelService.getTransactionLabelById(transactionLabelId).get();
-        TransactionLabel label = transaction.getTransactionLabel();
-        Transaction paymentTransaction = transactionService.createTransaction(debtor, creditor, transaction.getAmount(), label);
+//        var description = transaction.getDescription();
+        Transaction paymentTransaction = transactionService.createTransaction(debtor, creditor, transaction.getAmount(), transaction.getDescription());
         System.out.println(paymentTransaction);
 
         if (!debtor.getFriendList().contains(creditor)) {

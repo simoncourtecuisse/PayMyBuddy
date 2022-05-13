@@ -7,4 +7,5 @@
     walletBalance: string;
     token: string;
     creditorId: string;
+    userId: string;
 }

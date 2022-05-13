@@ -7,7 +7,8 @@ export class Transfer {
     amount: number;
     date: Date;
     commission: number;
-    transactionLabelId: string;
+    description: string;
     userId: string;
-    transactionLabel: TransactionLabel;
+    // transactionLabelId: string;
+    // transactionLabel: TransactionLabel;
 }

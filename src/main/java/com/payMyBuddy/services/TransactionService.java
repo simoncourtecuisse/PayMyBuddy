@@ -1,7 +1,6 @@
 package com.payMyBuddy.services;
 
 import com.payMyBuddy.models.Transaction;
-import com.payMyBuddy.models.TransactionLabel;
 import com.payMyBuddy.models.User;
 import com.payMyBuddy.repositories.TransactionRepository;
 import com.payMyBuddy.repositories.UserRepository;
@@ -100,7 +99,7 @@ public class TransactionService {
 //        return false;
 //    }
 
-    public Transaction createTransaction(User debtor, User creditor, double amount, TransactionLabel label) {
+    public Transaction createTransaction(User debtor, User creditor, double amount, String description) {
         Transaction paymentTransaction = new Transaction();
         var amount1 = amount;
         var rate = 0.05;
@@ -112,7 +111,7 @@ public class TransactionService {
         paymentTransaction.setAmount(amount);
         paymentTransaction.setDate(LocalDate.now());
         paymentTransaction.setCommission(com);
-        paymentTransaction.setTransactionLabel(label);
+        paymentTransaction.setDescription(description);
 //        paymentTransaction.setTransactionLabels();
         return paymentTransaction;
     }

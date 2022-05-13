@@ -41,19 +41,15 @@ public class Transaction {
     @Column(name = "commission", nullable = false, precision = 6, scale = 2)
     private double commission;
 
-    @JsonIgnoreProperties("transactionList")
-    @ManyToOne
-    @JoinColumn(name = "transaction_label_id")
-    //@JsonIgnore
-    private TransactionLabel transactionLabel;
+//    @JsonIgnoreProperties("transactionList")
+//    @ManyToOne
+//    @JoinColumn(name = "transaction_label_id")
+//    //@JsonIgnore
+//    private TransactionLabel transactionLabel;
 
-//    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
-//    @JoinColumn(name = "creditor_id")
-//    Long userIdCreditor;
-//
-//    @ManyToOne(cascade = CascadeType.ALL, targetEntity = User.class)
-//    @JoinColumn(name = "debtor_id")
-//    Long userIdDebtor;
+    @Column(name = "description", nullable = false)
+    private String description;
+
 
     @JsonIgnoreProperties("creditorList")
     @ManyToOne
@@ -72,11 +68,11 @@ public class Transaction {
 
     }
 
-    public Transaction(double amount, LocalDate date, double commission, TransactionLabel transactionLabelId) {
+    public Transaction(double amount, LocalDate date, double commission, String description) {
         this.amount = amount;
         this.date = date;
         this.commission = commission;
-        this.transactionLabel = transactionLabelId;
+        this.description = description;
     }
 
     public Long getTransactionId() {
@@ -111,12 +107,20 @@ public class Transaction {
         this.commission = commission;
     }
 
-    public TransactionLabel getTransactionLabel() {
-        return transactionLabel;
+//    public TransactionLabel getTransactionLabel() {
+//        return transactionLabel;
+//    }
+//
+//    public void setTransactionLabel(TransactionLabel transactionLabel) {
+//        this.transactionLabel = transactionLabel;
+//    }
+
+    public String getDescription() {
+        return description;
     }
 
-    public void setTransactionLabel(TransactionLabel transactionLabel) {
-        this.transactionLabel = transactionLabel;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public User getCreditor() {
@@ -142,7 +146,7 @@ public class Transaction {
                 ", amount=" + amount +
                 ", date=" + date +
                 ", commission=" + commission +
-                ", transactionLabel=" + transactionLabel +
+                ", description=" + description +
                 ", creditor=" + creditor +
                 ", debtor=" + debtor +
                 '}';

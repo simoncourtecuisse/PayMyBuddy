@@ -13,6 +13,8 @@ export class AddTransfersComponent implements OnInit {
     loading = false;
     submitted = false;
     TransferList: any;
+    contacts = [];
+    ContactList: any;
     ChangeCreditor(e) {
         console.log(e.target.value)
     }
@@ -26,13 +28,18 @@ export class AddTransfersComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        
+        this.accountService.getAllFriendsByUserId().subscribe((data:any)=>{
+            this.ContactList=data;
+        })
+
         this.id = this.route.snapshot.params['id'];
 
         this.form = this.formBuilder.group({
             // creditorId: [this.TransferList, Validators.required],
-            creditorId: ['', Validators.required],
+            creditorId: [this.ContactList, Validators.required],
             amount: ['', Validators.required],
-            transactionLabelId: ['', Validators.required],
+            description: ['', Validators.required],
         });
     }
 

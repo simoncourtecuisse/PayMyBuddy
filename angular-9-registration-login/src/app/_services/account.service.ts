@@ -166,11 +166,10 @@ export class AccountService {
 
     payment(paymentModel: PaymentModel) {
         const transfer = new Transfer();
-        transfer.user = new User();
-        transfer.transactionLabel = new TransactionLabel();
-        transfer.user.creditorId = paymentModel.creditorId.toString();
-        transfer.transactionLabel.transactionLabelId = paymentModel.transactionLabelId.toString();
+        transfer.creditor = new User();
+        transfer.creditor.userId = paymentModel.creditorId.toString();
         transfer.amount = paymentModel.amount;
+        transfer.description = paymentModel.description;
 
         const userAsString = localStorage.getItem('user');
         const user = JSON.parse(userAsString);

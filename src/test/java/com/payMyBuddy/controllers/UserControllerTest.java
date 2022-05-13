@@ -3,7 +3,6 @@ package com.payMyBuddy.controllers;
 import com.google.gson.JsonObject;
 import com.payMyBuddy.models.BankAccount;
 import com.payMyBuddy.models.Transaction;
-import com.payMyBuddy.models.TransactionLabel;
 import com.payMyBuddy.models.User;
 import com.payMyBuddy.services.BankAccountService;
 import com.payMyBuddy.services.TransactionService;
@@ -327,7 +326,7 @@ class UserControllerTest {
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Configure TransactionService.getTransactionById(...).
-        final Optional<Transaction> transaction = Optional.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, new TransactionLabel("description")));
+        final Optional<Transaction> transaction = Optional.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, "description"));
         when(mockTransactionService.getTransactionById(0L)).thenReturn(transaction);
 
         // Run the test
@@ -351,7 +350,7 @@ class UserControllerTest {
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Configure TransactionService.getTransactionById(...).
-        final Optional<Transaction> transaction = Optional.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, new TransactionLabel("description")));
+        final Optional<Transaction> transaction = Optional.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, "description"));
         when(mockTransactionService.getTransactionById(0L)).thenReturn(transaction);
 
         // Run the test
@@ -375,7 +374,7 @@ class UserControllerTest {
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Configure TransactionService.getTransactionById(...).
-        final Optional<Transaction> transaction = Optional.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, new TransactionLabel("description")));
+        final Optional<Transaction> transaction = Optional.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, "description"));
         when(mockTransactionService.getTransactionById(0L)).thenReturn(transaction);
 
         // Run the test
@@ -399,7 +398,7 @@ class UserControllerTest {
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Configure TransactionService.getTransactionById(...).
-        final Optional<Transaction> transaction = Optional.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, new TransactionLabel("description")));
+        final Optional<Transaction> transaction = Optional.of(new Transaction(0, LocalDate.of(2020, 1, 1), 0, "description"));
         when(mockTransactionService.getTransactionById(0L)).thenReturn(transaction);
 
         // Run the test
