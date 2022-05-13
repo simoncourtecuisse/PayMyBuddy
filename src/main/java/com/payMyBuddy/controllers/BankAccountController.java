@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200/", allowedHeaders = "*")
-@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+//@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 @RestController
 //@RequestMapping("/bankAccount")
 public class BankAccountController {
