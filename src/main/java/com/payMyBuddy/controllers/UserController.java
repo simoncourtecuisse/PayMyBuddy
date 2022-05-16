@@ -67,8 +67,10 @@ public class UserController {
     public ResponseEntity<?> getUserById(@PathVariable("userId") Long id) {
         if (userService.getUserById(id).isPresent()) {
             User user = userService.getUserById(id).get();
+            LOGGER.info("Success find user by id");
             return new ResponseEntity<>(user,HttpStatus.OK);
         }
+        LOGGER.error("Can't find the user based on this id");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
@@ -77,13 +79,16 @@ public class UserController {
         if (userService.getUserById(id).isPresent()) {
             User user = userService.getUserById(id).get();
             System.out.println(user.getWalletBalance());
+            LOGGER.info("Success find user's walletBalance");
             return new ResponseEntity<>(user.getWalletBalance(),HttpStatus.OK);
         }
+        LOGGER.error("Can't find the user based on this id");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @GetMapping("/users")
     public ResponseEntity<?> getAll() {
+        LOGGER.info("Success find all users");
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
@@ -91,8 +96,10 @@ public class UserController {
     public ResponseEntity<?> getAllFriendsByUser(@PathVariable("userId") Long id) {
         if (userService.getUserById(id).isPresent()) {
         User user = userService.getUserById(id).get();
+            LOGGER.info("Success find user's friend");
         return new ResponseEntity<>(user.getFriendList(),HttpStatus.OK);
     }
+        LOGGER.error("Can't find the user based on this id");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
@@ -106,8 +113,10 @@ public class UserController {
                     .collect(Collectors.toList());
 
             //return new ResponseEntity<>(userService.getAllUsers(),HttpStatus.OK);
+            LOGGER.info("Friend successfully added");
             return new ResponseEntity<>(forContactSearch,HttpStatus.OK);
         }
+        LOGGER.error("Can't find the user based on this id");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
