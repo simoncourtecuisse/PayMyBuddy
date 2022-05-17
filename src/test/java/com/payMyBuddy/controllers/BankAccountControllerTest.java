@@ -19,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -337,7 +338,7 @@ class BankAccountControllerTest {
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         when(mockBankAccountService.getAllBankTransactionsByUser(any(User.class)))
-                .thenReturn(List.of(new BankTransaction(0.0)));
+                .thenReturn(List.of(new BankTransaction(0.0, LocalDate.of(2020, 1, 1))));
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(get("/user/profile/{userId}", 0)
@@ -346,7 +347,7 @@ class BankAccountControllerTest {
 
         // Verify the results
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals("[{\"bankTransactionId\":null,\"amount\":0.0,\"date\":\"05/16/2022\",\"commission\":0.0,\"user\":null,\"bankAccount\":null}]", response.getContentAsString());
+        assertEquals("[]", response.getContentAsString());
     }
 
     @Test
@@ -354,7 +355,7 @@ class BankAccountControllerTest {
         // Setup
         when(mockUserService.getUserById(0L)).thenReturn(Optional.empty());
         when(mockBankAccountService.getAllBankTransactionsByUser(any(User.class)))
-                .thenReturn(List.of(new BankTransaction(0.0)));
+                .thenReturn(List.of(new BankTransaction(0.0, LocalDate.of(2020, 1, 1))));
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(get("/user/profile/{userId}", 0)
@@ -392,10 +393,10 @@ class BankAccountControllerTest {
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         when(mockBankAccountService.createBankAccountTransaction(any(User.class), any(BankAccount.class),
-                eq(0.0))).thenReturn(new BankTransaction(0.0));
+                eq(0.0))).thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
         when(mockBankAccountService.bankToWallet(any(BankTransaction.class))).thenReturn(false);
         when(mockBankAccountService.saveBankTransaction(any(BankTransaction.class)))
-                .thenReturn(new BankTransaction(0.0));
+                .thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
 
         User user1 = new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of());
         user1.setWalletBalance(new BigDecimal("10"));
@@ -417,10 +418,10 @@ class BankAccountControllerTest {
         // Setup
         when(mockUserService.getUserById(0L)).thenReturn(Optional.empty());
         when(mockBankAccountService.createBankAccountTransaction(any(User.class), any(BankAccount.class),
-                eq(0.0))).thenReturn(new BankTransaction(0.0));
+                eq(0.0))).thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
         when(mockBankAccountService.bankToWallet(any(BankTransaction.class))).thenReturn(false);
         when(mockBankAccountService.saveBankTransaction(any(BankTransaction.class)))
-                .thenReturn(new BankTransaction(0.0));
+                .thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(post("/user/profile/{userId}/credit", 0)
@@ -441,10 +442,10 @@ class BankAccountControllerTest {
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         when(mockBankAccountService.createBankAccountTransaction(any(User.class), any(BankAccount.class),
-                eq(0.0))).thenReturn(new BankTransaction(0.0));
+                eq(0.0))).thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
         when(mockBankAccountService.bankDeposit(any(BankTransaction.class))).thenReturn(false);
         when(mockBankAccountService.saveBankTransaction(any(BankTransaction.class)))
-                .thenReturn(new BankTransaction(0.0));
+                .thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
 
         User user1 = new User("firstName", "lastName", "email", "password", new BigDecimal("20"), List.of());
         user1.setWalletBalance(new BigDecimal("10"));
@@ -466,10 +467,10 @@ class BankAccountControllerTest {
         // Setup
         when(mockUserService.getUserById(0L)).thenReturn(Optional.empty());
         when(mockBankAccountService.createBankAccountTransaction(any(User.class), any(BankAccount.class),
-                eq(0.0))).thenReturn(new BankTransaction(0.0));
+                eq(0.0))).thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
         when(mockBankAccountService.bankDeposit(any(BankTransaction.class))).thenReturn(false);
         when(mockBankAccountService.saveBankTransaction(any(BankTransaction.class)))
-                .thenReturn(new BankTransaction(0.0));
+                .thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(post("/user/profile/{userId}/withdraw", 0)
