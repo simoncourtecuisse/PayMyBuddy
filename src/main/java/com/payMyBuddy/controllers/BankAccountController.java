@@ -130,10 +130,10 @@ public class BankAccountController {
         if (userService.getUserById(id).isPresent()) {
             User user = userService.getUserById(id).get();
             System.out.println(user.getBankTransactionsList());
-            var bankTransactions = bankAccountService.getAllBankTransactionsByUser(user);
-            System.out.println(bankTransactions);
+            //var bankTransactions = bankAccountService.getAllBankTransactionsByUser(user);
+            //System.out.println(bankTransactions);
             //List<BankTransaction> bankTransactionList =
-            return new ResponseEntity<>(bankTransactions,HttpStatus.OK);
+            return new ResponseEntity<>(user.getBankTransactionsList(),HttpStatus.OK);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }

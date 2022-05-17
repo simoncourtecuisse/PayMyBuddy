@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface BankTransactionRepository extends JpaRepository<BankTransaction, Long> {
-    List<BankTransaction> findAllBankTransactionsByUserOrderByDateDesc(User user);
+    List<BankTransaction> findAllBankTransactionsByUser(User user);
 }

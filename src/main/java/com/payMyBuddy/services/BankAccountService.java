@@ -133,6 +133,6 @@ public class BankAccountService {
     }
 
     public List<BankTransaction> getAllBankTransactionsByUser(User user) {
-        return bankTransactionRepository.findAllBankTransactionsByUserOrderByDateDesc(user);
+        return bankTransactionRepository.findAllBankTransactionsByUser(user);
     }
 }
