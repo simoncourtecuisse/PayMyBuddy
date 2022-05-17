@@ -89,7 +89,7 @@ public class TransactionController {
     }
 
     @PostMapping("/transfers/{userId}/payment")
-    private ResponseEntity<?> makeTransaction(@PathVariable("userId") Long id, @RequestBody Transaction transaction) {
+    public ResponseEntity<?> makeTransaction(@PathVariable("userId") Long id, @RequestBody Transaction transaction) {
         if (userService.getUserById(id).isEmpty()) {
             LOGGER.error("User not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

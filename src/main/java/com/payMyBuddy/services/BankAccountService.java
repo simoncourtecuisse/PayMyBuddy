@@ -6,6 +6,7 @@ import com.payMyBuddy.models.User;
 import com.payMyBuddy.repositories.BankAccountRepository;
 import com.payMyBuddy.repositories.BankTransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -133,6 +134,6 @@ public class BankAccountService {
     }
 
     public List<BankTransaction> getAllBankTransactionsByUser(User user) {
-        return bankTransactionRepository.findAllBankTransactionsByUserOrderByDateDesc(user);
+        return bankTransactionRepository.findAllBankTransactionsByUser(user);
     }
 }

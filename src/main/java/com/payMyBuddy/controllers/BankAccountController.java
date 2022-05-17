@@ -13,7 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200/", allowedHeaders = "*")
 @RestController
@@ -129,11 +132,11 @@ public class BankAccountController {
     public ResponseEntity<?> getAllBankTransactionsByUser(@PathVariable("userId") Long id) {
         if (userService.getUserById(id).isPresent()) {
             User user = userService.getUserById(id).get();
-            System.out.println(user.getBankTransactionsList());
-            var bankTransactions = bankAccountService.getAllBankTransactionsByUser(user);
-            System.out.println(bankTransactions);
-            //List<BankTransaction> bankTransactionList =
-            return new ResponseEntity<>(bankTransactions,HttpStatus.OK);
+            List<BankTransaction> bankTransactionList = user.getBankTransactionsList();
+            var listOrder = bankTransactionList.stream()
+                    .sorted(Comparator.comparing(BankTransaction::getDate).reversed())
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(listOrder,HttpStatus.OK);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
