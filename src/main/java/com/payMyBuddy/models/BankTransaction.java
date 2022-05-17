@@ -57,13 +57,11 @@ public class BankTransaction {
     //@JsonIgnore
     private BankAccount bankAccount;
 
-    public BankTransaction(){
+    public BankTransaction(){}
 
-    }
-
-    public BankTransaction(double amount) {
+    public BankTransaction(double amount, LocalDate date) {
         this.amount = amount;
-        this.date = LocalDate.now();
+        this.date = date;
     }
 
     public Long getBankTransactionId() {
