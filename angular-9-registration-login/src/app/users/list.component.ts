@@ -6,7 +6,6 @@ import { User } from '@app/_models';
 import { AccountService } from '@app/_services';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { TokenStorageService } from '@app/_services/token-storage.service';
 
 @Component({ templateUrl: 'list.component.html' })
 export class ListComponent implements OnInit {
@@ -14,10 +13,9 @@ export class ListComponent implements OnInit {
     user: any;
     bankAccounts = null;
     bankTransactions = null;
-    
+
 
     constructor(
-        private token: TokenStorageService,
         private cdRef: ChangeDetectorRef,
         private ngZone: NgZone,
         private accountService: AccountService) {
@@ -25,7 +23,7 @@ export class ListComponent implements OnInit {
         this.user.walletBalance =  this.accountService.userValue.walletBalance;
     }
 
-    
+
     // getUpdateWallet(): void {
     //     this.accountService.getById(this.user.id).subscribe(user => {
     //         user = this.user;
@@ -33,16 +31,12 @@ export class ListComponent implements OnInit {
     //         this.cdRef.detectChanges();
     //     });
     // }
-    
+
 
     ngOnInit() {
 
-        this.user = this.token.getUser();
-
        //this.getUpdateWallet();
-        this.accountService.getWalletBalanceUserById()
-              .pipe(first())
-              .subscribe(users => this.users = this.users); 
+        this.accountService.getWalletBalanceUserById();
 
         console.log(this.accountService.userValue.walletBalance);
         // this.ngZone.run(() =>{
@@ -61,7 +55,7 @@ export class ListComponent implements OnInit {
     //     this.accountService.deleteBankAccount(id)
     //         .pipe(first())
     //         .subscribe(() => {
-    //             this.bankAccounts = this.bankAccounts.filter(x => x.bankAccountId !== id) 
+    //             this.bankAccounts = this.bankAccounts.filter(x => x.bankAccountId !== id)
     //         });
     // }
 }

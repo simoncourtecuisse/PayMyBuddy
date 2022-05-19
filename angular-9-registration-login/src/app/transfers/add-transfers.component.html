@@ -9,7 +9,13 @@
                     {{transfer.creditorId}}
                 </option>
             </select> -->
-            <input type="text" formControlName="creditorId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.creditorId.errors }" />
+            <select name="creditorId" (change)="ChangeCreditor($event)" formControlName="creditorId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.creditorId.errors }">
+                <option>--Select--</option>
+                <option [value]="user.userId" *ngFor="let user of ContactList">
+                    {{user.lastName}} {{user.firstName}}
+                </option>
+            </select>
+            <!-- <input type="text" formControlName="creditorId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.creditorId.errors }" /> -->
             <div *ngIf="submitted && f.creditorId.errors" class="invalid-feedback">
                 <div *ngIf="f.creditorId.errors.required">Friend is required</div>
             </div>
@@ -24,10 +30,10 @@
     </div>
     <div class="form-row">
         <div class="form-group col">
-            <label for="transactionLabelId">Description</label>
-            <input type="text" formControlName="transactionLabelId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.transactionLabelId.errors }" />
-            <div *ngIf="submitted && f.transactionLabelId.errors" class="invalid-feedback">
-                <div *ngIf="f.transactionLabelId.errors.required">Description is required</div>
+            <label for="description">Description</label>
+            <input type="text" formControlName="description" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.description.errors }" />
+            <div *ngIf="submitted && f.description.errors" class="invalid-feedback">
+                <div *ngIf="f.description.errors.required">Description is required</div>
             </div>
         </div>
     </div>
@@ -39,3 +45,19 @@
         <a routerLink="/transfers" class="btn btn-link">Cancel</a>
     </div>
 </form>
+
+<!-- <form [formGroup]="formBank" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+        <div class="form-group col">
+            <label for="bankAccountId">Bank Name</label> 
+            <select name="bankAccountId" (change)="ChangeBankAccount($event)" formControlName="bankAccountId" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.bankAccountId.errors }">
+                <option>--Select--</option>
+                <option [value]="bankAccount.bankAccountId" *ngFor="let bankAccount of BankAccountList">
+                    {{bankAccount.bankName}}
+                </option>
+            </select>
+            <div *ngIf="submitted && f.bankAccountId.errors" class="invalid-feedback">
+                <div *ngIf="f.bankAccountId.errors.required">Bank Name is required</div>
+            </div>
+        </div>
+</form> -->

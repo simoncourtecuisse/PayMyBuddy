@@ -5,6 +5,7 @@ import { first } from 'rxjs/operators';
 import { AccountService, AlertService } from '@app/_services';
 import { NumberSymbol } from '@angular/common';
 import { BankAccount } from '@app/_models/bankAccount';
+import { User } from '@app/_models';
 
 
 @Component({ templateUrl: 'credit.component.html' })
@@ -69,6 +70,8 @@ export class CreditComponent implements OnInit {
             return;
         }
 
+        this.accountService.getWalletBalanceUserById();
+            
         this.loading = true;
         if (this.isCreditMode) {
             this.creditAccount();
@@ -105,19 +108,6 @@ export class CreditComponent implements OnInit {
                 });
     }
 
-    // private createUser() {
-    //     this.accountService.register(this.formBank.value)
-    //         .pipe(first())
-    //         .subscribe(
-    //             data => {
-    //                 this.alertService.success('User added successfully', { keepAfterRouteChange: true });
-    //                 this.router.navigate(['.', { relativeTo: this.route }]);
-    //             },
-    //             error => {
-    //                 this.alertService.error(error);
-    //                 this.loading = false;
-    //             });
-    // }
 
     private updateUser() {
         this.accountService.update(this.id, this.formBank.value)

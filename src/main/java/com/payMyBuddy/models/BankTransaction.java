@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import org.apache.tomcat.jni.Local;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -56,13 +57,11 @@ public class BankTransaction {
     //@JsonIgnore
     private BankAccount bankAccount;
 
-    public BankTransaction(){
+    public BankTransaction(){}
 
-    }
-
-    public BankTransaction(double amount) {
+    public BankTransaction(double amount, LocalDate date) {
         this.amount = amount;
-        this.date = LocalDate.now();
+        this.date = date;
     }
 
     public Long getBankTransactionId() {

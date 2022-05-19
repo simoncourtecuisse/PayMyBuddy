@@ -15,7 +15,7 @@
         <tr *ngFor="let transfer of transfers">
             <td>{{transfer.debtor.lastName}} {{transfer.debtor.firstName}}</td>
             <td>{{transfer.creditor.lastName}} {{transfer.creditor.firstName}}</td>
-            <td>{{transfer.transactionLabel.description}}</td>
+            <td>{{transfer.description}}</td>
             <td>{{transfer.amount}}</td>
             <td>{{transfer.date}}</td>
             <td style="white-space: nowrap">

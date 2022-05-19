@@ -2,7 +2,7 @@
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
 import { User } from '@app/_models';
@@ -32,15 +32,15 @@ export class AccountService {
         return this.userSubject.value;
     }
 
-    login(email, password) {
-        return this.http.post<User>(`${environment.apiUrl}/auth/signin`, { email, password })
-            .pipe(map(user => {
-                // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('user', JSON.stringify(user));
-                this.userSubject.next(user);
-                return user;
-            }));
-    }
+    // login(email, password) {
+    //     return this.http.post<User>(`${environment.apiUrl}/auth/signin`, { email, password })
+    //         .pipe(map(user => {
+    //             // store user details and jwt token in local storage to keep user logged in between page refreshes
+    //             localStorage.setItem('user', JSON.stringify(user));
+    //             this.userSubject.next(user);
+    //             return user;
+    //         }));
+    // }
 
     logout() {
         // remove user from local storage and set current user to null
@@ -105,7 +105,12 @@ export class AccountService {
     getWalletBalanceUserById(){
         const userAsString = localStorage.getItem('user');
         const user = JSON.parse(userAsString);
-        return this.http.get<User>(`${environment.apiUrl}/user/${user.userId}/walletBalance`);
+        return this.http.get<string>(`${environment.apiUrl}/user/${user.userId}/walletBalance`)
+            .pipe(first())
+            .subscribe(walletBalance => {
+                this.userValue.walletBalance = walletBalance
+            });
+
     }
 
         // all friends of a user
@@ -161,14 +166,14 @@ export class AccountService {
 
     payment(paymentModel: PaymentModel) {
         const transfer = new Transfer();
-        transfer.user = new User();
-        transfer.transactionLabel = new TransactionLabel();
-        transfer.user.creditorId = paymentModel.creditorId.toString();
-        transfer.transactionLabel.transactionLabelId = paymentModel.transactionLabelId.toString();
+        transfer.creditor = new User();
+        transfer.creditor.userId = paymentModel.creditorId.toString();
         transfer.amount = paymentModel.amount;
+        transfer.description = paymentModel.description;
 
         const userAsString = localStorage.getItem('user');
         const user = JSON.parse(userAsString);
+        console.log(transfer);
         return this.http.post(`${environment.apiUrl}/transaction/transfers/${user.userId}/payment`, transfer);
     }
 

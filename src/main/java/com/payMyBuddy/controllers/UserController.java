@@ -276,7 +276,6 @@ public class UserController {
             return new ResponseEntity<>(authenticatedUser, HttpStatus.OK);
        } else {
             LOGGER.error("Authentication failed");
-
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
        }
     }
