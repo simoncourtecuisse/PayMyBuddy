@@ -7,7 +7,8 @@ const profileModule = () => import('@app/users/profile.module').then(x => x.Prof
 
 
 const routes: Routes = [        
-        { path: '', component: HomeComponent, canActivate: [AuthGuard]},
+        // { path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
+        { path: 'home', component: HomeComponent},
         { path: 'profile', loadChildren: profileModule },
       
     

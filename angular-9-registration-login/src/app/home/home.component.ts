@@ -1,13 +1,22 @@
-﻿import { Component } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 
 import { User } from '@app/_models';
 import { AccountService } from '@app/_services';
+import { TokenStorageService } from '@app/_services/token-storage.service';
 
 @Component({ templateUrl: 'home.component.html' })
-export class HomeComponent {
-    user: User;
+export class HomeComponent implements OnInit {
+    // user: User;
+    user: any;
 
-    constructor(private accountService: AccountService) {
-        this.user = this.accountService.userValue;
+    constructor(
+        private token: TokenStorageService,
+        private accountService: AccountService) {
+        // this.user = this.accountService.userValue;
+    }
+
+    ngOnInit() {
+        console.log(this.user);
+        this.user = this.token.getUser;
     }
 }

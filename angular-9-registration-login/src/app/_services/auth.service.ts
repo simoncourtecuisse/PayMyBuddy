@@ -46,6 +46,8 @@ export class AuthService implements CanActivate {
 }
 
     login(credentials): Observable<any> {
+      console.log(credentials);
+      console.log(credentials.password);
         return this.http.post(`${environment.apiUrl}/auth/signin`, {
           email: credentials.email,
           password: credentials.password
@@ -62,6 +64,7 @@ export class AuthService implements CanActivate {
   // }
 
     register(user): Observable<any> {
+      console.log(user)
       return this.http.post(`${environment.apiUrl}/auth/signup`, {
         firstName: user.firstName,
         lastName: user.lastName,

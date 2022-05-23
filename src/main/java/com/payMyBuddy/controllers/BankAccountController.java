@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
@@ -80,6 +81,7 @@ public class BankAccountController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @RolesAllowed("ADMIN")
     @GetMapping("/user/profile/bankAccounts/{userId}")
     public ResponseEntity<?> getAllBankAccountByUser(@PathVariable("userId") Long id) {
         if (userService.getUserById(id).isPresent()) {
