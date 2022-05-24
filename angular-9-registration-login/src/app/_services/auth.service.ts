@@ -15,7 +15,7 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService implements CanActivate {
+export class AuthService {
     private userSubject: BehaviorSubject<User>;
     public user: Observable<User>;
     public transfer: Observable<Transfer>;
@@ -33,26 +33,46 @@ export class AuthService implements CanActivate {
       return this.userSubject.value;
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const user = this.accountService.userValue;
-    if (user) {
-        // authorised so return true
-        return true;
-    }
+//   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+//     const user = this.accountService.userValue;
+//     if (user) {
+//         // authorised so return true
+//         return true;
+//     }
 
-    // not logged in so redirect to login page with the return url
-    this.router.navigate(['/account/login'], { queryParams: { returnUrl: state.url }});
-    return false;
-}
+//     // not logged in so redirect to login page with the return url
+//     this.router.navigate(['/account/login'], { queryParams: { returnUrl: state.url }});
+//     return false;
+// }
 
-    login(credentials): Observable<any> {
+    login(credentials): Observable<User> {
       console.log(credentials);
       console.log(credentials.password);
-        return this.http.post(`${environment.apiUrl}/auth/signin`, {
+        return this.http.post<User>(`${environment.apiUrl}/auth/signin`, {
           email: credentials.email,
           password: credentials.password
-        }, httpOptions);
+        }, httpOptions)
+        .pipe(map(user => {
+          localStorage.setItem('user', JSON.stringify(user));
+          this.userSubject.next(user)
+          console.log(user);
+          return user;
+        }));
     }
+
+    // login(credentials): Observable<any> {
+    //   console.log(credentials);
+    //   console.log(credentials.password);
+    //     return this.http.post<User>(`${environment.apiUrl}/auth/signin`, {
+    //       email: credentials.email,
+    //       password: credentials.password
+    //     }, httpOptions)
+    //     .pipe(map(user => {
+    //       localStorage.setItem('user', JSON.stringify(user));
+    //       this.userSubject.next(user)
+    //       return user;
+    //     }));
+    // }
 
   //   login(email: string, password: string) {
   //     return this.http.post<any>(`${environment.apiUrl}/auth/signin`, { email, password }, { withCredentials: true })
@@ -63,13 +83,18 @@ export class AuthService implements CanActivate {
   //         }));
   // }
 
-    register(user): Observable<any> {
+    register(user: User) {
       console.log(user)
-      return this.http.post(`${environment.apiUrl}/auth/signup`, {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        password: user.password
-    }, httpOptions);
+      return this.http.post(`${environment.apiUrl}/auth/signup`, user, httpOptions);
   }
+
+//   register(user: User): Observable<any> {
+//     console.log(user)
+//     return this.http.post(`${environment.apiUrl}/auth/signup`, {
+//       firstName: user.firstName,
+//       lastName: user.lastName,
+//       email: user.email,
+//       password: user.password
+//   }, httpOptions);
+// }
 }

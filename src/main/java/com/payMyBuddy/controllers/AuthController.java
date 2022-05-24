@@ -27,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -82,7 +83,12 @@ public class AuthController {
             return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already used!"));
         }
         // Create new user's account
-        User user = new User(signupRequest.getFirstName(), signupRequest.getLastName(), signupRequest.getEmail(), encoder.encode(signupRequest.getPassword()));
+        User user = new User(
+                signupRequest.getFirstName(),
+                signupRequest.getLastName(),
+                signupRequest.getEmail(),
+                encoder.encode(signupRequest.getPassword()));
+
         Set<String> strRoles = signupRequest.getRole();
         Set<Role> roles = new HashSet<>();
         if (strRoles == null) {

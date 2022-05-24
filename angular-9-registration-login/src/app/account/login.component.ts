@@ -111,25 +111,25 @@ export class LoginComponent implements OnInit {
       private router: Router) { }
   
   ngOnInit() {
-    if (this.tokenStorage.getToken()) {
-      this.isLoggedIn = true;
-      this.roles = this.tokenStorage.getUser().roles;
+    // if (this.tokenStorage.getToken()) {
+    //   this.isLoggedIn = true;
+    //   this.roles = this.tokenStorage.getUser().roles;
     
-    };
+    // };
 
-    //this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
   onSubmit() {
     this.authService.login(this.form).subscribe(
       data => {
-        this.tokenStorage.saveToken(data.accessToken);
+        this.tokenStorage.saveToken(data.token);
         this.tokenStorage.saveUser(data);
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.roles = this.tokenStorage.getUser().roles;
-        //this.reloadPage();
-        //this.router.navigate([this.returnUrl]);
-        this.router.navigate(['/home']);
+        // this.reloadPage();
+        this.router.navigate([this.returnUrl]);
+        // this.router.navigate(['/']);
       },
       err => {
         this.errorMessage = err.error.message;
