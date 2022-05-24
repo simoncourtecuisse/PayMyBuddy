@@ -15,7 +15,7 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService implements CanActivate {
+export class AuthService {
     private userSubject: BehaviorSubject<User>;
     public user: Observable<User>;
     public transfer: Observable<Transfer>;
@@ -33,23 +33,30 @@ export class AuthService implements CanActivate {
       return this.userSubject.value;
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const user = this.accountService.userValue;
-    if (user) {
-        // authorised so return true
-        return true;
-    }
+//   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+//     const user = this.accountService.userValue;
+//     if (user) {
+//         // authorised so return true
+//         return true;
+//     }
 
-    // not logged in so redirect to login page with the return url
-    this.router.navigate(['/account/login'], { queryParams: { returnUrl: state.url }});
-    return false;
-}
+//     // not logged in so redirect to login page with the return url
+//     this.router.navigate(['/account/login'], { queryParams: { returnUrl: state.url }});
+//     return false;
+// }
 
     login(credentials): Observable<any> {
-        return this.http.post(`${environment.apiUrl}/auth/signin`, {
-          email: credentials.email,
-          password: credentials.password
-        }, httpOptions);
+      console.log(credentials);
+        return this.http.post<User>(`${environment.apiUrl}/auth/signin`, {
+          email: credentials.value.email,
+          password: credentials.value.password
+        }, httpOptions)
+        .pipe(map(user => {
+          // store user details and jwt token in local storage to keep user logged in between page refreshes
+          localStorage.setItem('user', JSON.stringify(user));
+          this.userSubject.next(user);
+          return user;
+      }));
     }
 
   //   login(email: string, password: string) {
