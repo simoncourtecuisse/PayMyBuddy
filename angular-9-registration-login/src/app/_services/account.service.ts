@@ -1,6 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { first, map } from 'rxjs/operators';
 
@@ -13,7 +13,9 @@ import { CreditWalletModel } from '@app/_models/CreditWalletModel';
 import { PaymentModel } from '@app/_models/paymentModel';
 import { TransactionLabel } from '@app/_models/transactionLabel';
 
-
+const httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
 @Injectable({ providedIn: 'root' })
 export class AccountService {
     private userSubject: BehaviorSubject<User>;
@@ -42,11 +44,36 @@ export class AccountService {
     //         }));
     // }
 
+
+    login(credentials): Observable<any> {
+        console.log(credentials);
+          return this.http.post<User>(`${environment.apiUrl}/auth/signin`, {
+            email: credentials.value.email,
+            password: credentials.value.password
+          }, httpOptions)
+          .pipe(map(user => {
+            // store user details and jwt token in local storage to keep user logged in between page refreshes
+            localStorage.setItem('user', JSON.stringify(user));
+            this.userSubject.next(user);
+            console.log(user);
+            return user;
+        }));
+      }
+
     logout() {
         // remove user from local storage and set current user to null
         localStorage.removeItem('user');
         this.userSubject.next(null);
         this.router.navigate(['/account/login']);
+    }
+
+    register(user): Observable<any> {
+        return this.http.post(`${environment.apiUrl}/auth/signup`, {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          password: user.password
+      }, httpOptions);
     }
 
         // create user
@@ -100,6 +127,17 @@ export class AccountService {
                 }
                 return x;
             }));
+    }
+
+    getUserInfoByEmail(email) {
+        const userAsString = localStorage.getItem('user');
+        const user = JSON.parse(userAsString);
+        return this.http.get<string>(`${environment.apiUrl}/user/userInfo/${user.email}`)
+            .pipe(first())
+            .subscribe(userInfo => {
+                this.userValue.firstName = userInfo
+                this.userValue.userId = userInfo
+            });
     }
 
     getWalletBalanceUserById(){

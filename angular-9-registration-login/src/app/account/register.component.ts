@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '@app/_services';
-import { AuthService } from '@app/_services/auth.service';
+// import { AuthService } from '@app/_services/auth.service';
 
 @Component({ templateUrl: 'register.component.html' })
 export class RegisterComponent implements OnInit {
@@ -20,7 +20,7 @@ export class RegisterComponent implements OnInit {
         private router: Router,
         private accountService: AccountService,
         private alertService: AlertService,
-        private authService: AuthService
+        // private authService: AuthService
     ) { }
 
     ngOnInit() {
@@ -47,7 +47,7 @@ export class RegisterComponent implements OnInit {
         }
 
         this.loading = true;
-        this.authService.register(this.form.value)
+        this.accountService.register(this.form.value)
             .pipe(first())
             .subscribe(
                 data => {

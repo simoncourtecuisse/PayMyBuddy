@@ -84,6 +84,31 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @GetMapping("/userInfo/{email}")
+    public ResponseEntity<?> getUserInfoByEmail (@PathVariable("email") String email) {
+        User user = userService.getUserByEmail(email).get();
+//        if (user.isEmpty()) {
+//            LOGGER.error("Can't find the user based on this email");
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
+//        User userInfo = new User();
+//        userInfo.setUserId(user.get().getUserId());
+//        userInfo.setFirstName(user.get().getFirstName());
+//        userInfo.setLastName(user.get().getLastName());
+//        userInfo.setEmail(email);
+//        userInfo.setPassword(user.get().getPassword());
+
+
+        LOGGER.info("Success find user by email");
+        return new ResponseEntity<>(user, HttpStatus.OK);
+//        if (userService.getUserById(id).isPresent()) {
+//            User user5 = userService.getUserById(id).get();
+//            System.out.println(user.getWalletBalance());
+//            return new ResponseEntity<>(user.getWalletBalance(),HttpStatus.OK);
+//        }
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
     @GetMapping("/users")
     public ResponseEntity<?> getAll() {
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);

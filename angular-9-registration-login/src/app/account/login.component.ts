@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '@app/_services';
-import { AuthService } from '@app/_services/auth.service';
+// import { AuthService } from '@app/_services/auth.service';
 import { TokenStorageService } from '@app/_services/token-storage.service';
 
 @Component({ templateUrl: 'login.component.html' })
@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
         private router: Router,
         private accountService: AccountService,
         private alertService: AlertService,
-        private authService: AuthService,
+        // private authService: AuthService,
         private tokenStorage: TokenStorageService
     ) { }
 
@@ -69,14 +69,15 @@ export class LoginComponent implements OnInit {
         //             this.loading = false;
         //         });
 
-        this.authService.login(this.form).subscribe(
+        this.accountService.login(this.form).subscribe(
             data => {
                 this.tokenStorage.saveToken(data.accessToken);
                 this.tokenStorage.saveUser(data);
                 this.isLoginFailed = false;
                 this.isLoggedIn = true;
                 this.roles = this.tokenStorage.getUser().roles;
-                this.reloadPage();
+                this.router.navigate([this.returnUrl]);
+                // this.reloadPage();
               },
               err => {
                 this.errorMessage = err.error.message;
