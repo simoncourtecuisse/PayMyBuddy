@@ -20,8 +20,8 @@ export class HomeComponent implements OnInit {
         // this.accountService.getById(this.user.userId);
         // this.accountService.getByEmail(this.user.email);
         this.accountService.getUserInfoByEmail(this.user.email);
-        console.log(this.accountService.userValue);
-        console.log(this.user.email);
-        console.log(this.user.userId);
+         console.log(this.user);
+        // console.log(this.user.email);
+        // console.log(this.user.userId);
     }
 }

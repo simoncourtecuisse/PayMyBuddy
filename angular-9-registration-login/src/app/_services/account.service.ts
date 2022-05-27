@@ -12,6 +12,7 @@ import { BankTransaction } from '@app/_models/bankTransaction';
 import { CreditWalletModel } from '@app/_models/CreditWalletModel';
 import { PaymentModel } from '@app/_models/paymentModel';
 import { TransactionLabel } from '@app/_models/transactionLabel';
+import { userInfo } from 'os';
 
 const httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -59,6 +60,57 @@ export class AccountService {
             return user;
         }));
       }
+
+    //   getUserInfoByEmail(email) {
+    //     const userAsString = localStorage.getItem('user');
+    //     const user = JSON.parse(userAsString);
+    //     console.log(user);
+    //     console.log(this.userValue);
+    //     return this.http.get<User>(`${environment.apiUrl}/user/userInfo/${user.email}`)
+    //     .pipe(map(x => {
+    //         // update stored user if the logged in user updated their own record
+    //         if (email == this.userValue.email) {
+    //             // update local storage
+    //             const user = { ...this.userValue };
+    //             localStorage.setItem('user', JSON.stringify(user));
+
+    //             // publish updated user to subscribers
+    //             this.userSubject.next(user);
+    //         }
+    //         return x;
+    //     }));
+    // }
+
+    // getUserInfoByEmail(email) {
+    //     var userAsString = localStorage.getItem('user');
+    //     var user = JSON.parse(userAsString);
+    //     return this.http.get<string>(`${environment.apiUrl}/user/userInfo/${user.email}`)
+    //         // .pipe(first())
+    //         .subscribe(userInfo => {
+    //             //user = userInfo
+    //             this.userValue.userId = userInfo;
+    //             console.log(this.userValue);
+    //             console.log(userInfo);
+    //         });
+    // }
+
+    getUserInfoByEmail(email) {
+        var userAsString = localStorage.getItem('user');
+        var user = JSON.parse(userAsString);
+        return this.http.get<User>(`${environment.apiUrl}/user/userInfo/${user.email}`)
+            .pipe(map(userInfo => {
+                //user = userInfo
+                this.userValue.userId = userInfo.userId;
+                console.log(this.userValue);
+                console.log(userInfo);
+                localStorage.setItem('user', JSON.stringify(userInfo));
+                this.userSubject.next(userInfo);
+                console.log(userInfo)
+                return userInfo;
+            })).subscribe( userInfo =>{
+                user = userInfo;
+            });
+    }
 
     logout() {
         // remove user from local storage and set current user to null
@@ -129,16 +181,7 @@ export class AccountService {
             }));
     }
 
-    getUserInfoByEmail(email) {
-        const userAsString = localStorage.getItem('user');
-        const user = JSON.parse(userAsString);
-        return this.http.get<string>(`${environment.apiUrl}/user/userInfo/${user.email}`)
-            .pipe(first())
-            .subscribe(userInfo => {
-                this.userValue.firstName = userInfo
-                this.userValue.userId = userInfo
-            });
-    }
+    
 
     getWalletBalanceUserById(){
         const userAsString = localStorage.getItem('user');

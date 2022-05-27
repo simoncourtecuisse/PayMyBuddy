@@ -99,6 +99,7 @@ public class UserController {
 //        userInfo.setPassword(user.get().getPassword());
 
 
+        System.out.println(user);
         LOGGER.info("Success find user by email");
         return new ResponseEntity<>(user, HttpStatus.OK);
 //        if (userService.getUserById(id).isPresent()) {

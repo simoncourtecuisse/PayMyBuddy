@@ -42,8 +42,9 @@ public class User {
     private String email;
     @Column(name = "password", nullable = false)
     private String password;
+    // @Column(name = "wallet_balance", precision = 6, scale = 2)
     @Column(name = "wallet_balance", precision = 6, scale = 2)
-    private BigDecimal walletBalance;
+    private BigDecimal walletBalance = BigDecimal.ZERO;
 
     @OneToMany(
             fetch = FetchType.LAZY,
