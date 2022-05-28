@@ -12,7 +12,7 @@ import { BankTransaction } from '@app/_models/bankTransaction';
 import { CreditWalletModel } from '@app/_models/CreditWalletModel';
 import { PaymentModel } from '@app/_models/paymentModel';
 import { TransactionLabel } from '@app/_models/transactionLabel';
-import { userInfo } from 'os';
+
 
 const httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })

@@ -15,6 +15,7 @@ const routes: Routes = [
     { path: 'contacts', loadChildren: contactsModule, canActivate: [AuthGuard] },
     { path: 'transfers', loadChildren: transfersModule, canActivate: [AuthGuard] },
     { path: 'account', loadChildren: accountModule },
+   
 
     // otherwise redirect to home
     { path: '**', redirectTo: '' }

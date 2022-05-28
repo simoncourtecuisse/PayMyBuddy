@@ -16,8 +16,6 @@ export class ListComponent implements OnInit {
 
 
     constructor(
-        private cdRef: ChangeDetectorRef,
-        private ngZone: NgZone,
         private accountService: AccountService) {
         this.user = this.accountService.userValue;
         this.user.walletBalance =  this.accountService.userValue.walletBalance;

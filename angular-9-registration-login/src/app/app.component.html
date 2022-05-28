@@ -5,6 +5,7 @@
         <a class="nav-item nav-link" routerLink="/transfers" routerLinkActive="active">Transfers</a>
         <a class="nav-item nav-link" routerLink="/profile" routerLinkActive="active">Profile</a>
         <a class="nav-item nav-link" routerLink="/contacts" routerLinkActive="active">Contacts</a>
+        <a class="nav-item nav-link" *ngIf="showAdminBoard" routerLink="/profile/admin" routerLinkActive="active">Admin Board</a>
         <a class="nav-item nav-link" (click)="logout()">Logout</a>
     </div>
 </nav>
@@ -17,10 +18,10 @@
 
 <!-- credits -->
 <div class="text-center mt-4">
+    <h5>
+        <a>Pay My Buddy</a>
+    </h5>
     <p>
-        <a href="https://jasonwatmore.com/post/2020/04/28/angular-9-user-registration-and-login-example-tutorial" target="_top">Angular 9 - User Registration and Login Example & Tutorial</a>
-    </p>
-    <p>
-        <a href="https://jasonwatmore.com" target="_top">JasonWatmore.com</a>
+        <a>© 2022 Simon Courtecuisse</a>
     </p>
 </div>
