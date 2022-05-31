@@ -178,7 +178,8 @@ class BankAccountControllerTest {
         // Setup
         // Configure UserService.getUserById(...).
         final Optional<User> user = Optional.of(
-                new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+//                new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+                new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Run the test
@@ -211,7 +212,7 @@ class BankAccountControllerTest {
         // Setup
         // Configure UserService.getUserById(...).
         final Optional<User> user = Optional.of(
-                new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+                new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Run the test
@@ -248,7 +249,7 @@ class BankAccountControllerTest {
     void testRemoveBankAccount() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final User user = new User("simon", "lastName", "email", "password", new BigDecimal("0.00"), List.of());
+        final User user = new User("firstName", "lastName", "email", "password");
         when(mockUserService.getUserById(0L)).thenReturn(Optional.of(user));
 
         // Configure BankAccountService.getBankAccountById(...).
@@ -311,7 +312,7 @@ class BankAccountControllerTest {
         // Setup
         // Configure UserService.getUserById(...).
         final Optional<User> user = Optional.of(
-                new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+                new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         final BankAccount bankAccount = new BankAccount(0, "bankName");
@@ -334,7 +335,7 @@ class BankAccountControllerTest {
         // Setup
         // Configure UserService.getUserById(...).
         final Optional<User> user = Optional.of(
-                new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+                new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         when(mockBankAccountService.getAllBankTransactionsByUser(any(User.class)))
@@ -389,7 +390,7 @@ class BankAccountControllerTest {
         // Setup
         // Configure UserService.getUserById(...).
         final Optional<User> user = Optional.of(
-                new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+                new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         when(mockBankAccountService.createBankAccountTransaction(any(User.class), any(BankAccount.class),
@@ -398,7 +399,7 @@ class BankAccountControllerTest {
         when(mockBankAccountService.saveBankTransaction(any(BankTransaction.class)))
                 .thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
 
-        User user1 = new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of());
+        User user1 = new User("firstName", "lastName", "email", "password");
         user1.setWalletBalance(new BigDecimal("10"));
 
         // Run the test
@@ -438,7 +439,7 @@ class BankAccountControllerTest {
         // Setup
         // Configure UserService.getUserById(...).
         final Optional<User> user = Optional.of(
-                new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+                new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         when(mockBankAccountService.createBankAccountTransaction(any(User.class), any(BankAccount.class),
@@ -447,7 +448,7 @@ class BankAccountControllerTest {
         when(mockBankAccountService.saveBankTransaction(any(BankTransaction.class)))
                 .thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
 
-        User user1 = new User("firstName", "lastName", "email", "password", new BigDecimal("20"), List.of());
+        User user1 = new User("firstName", "lastName", "email", "password");
         user1.setWalletBalance(new BigDecimal("10"));
 
         // Run the test

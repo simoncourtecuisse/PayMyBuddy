@@ -94,7 +94,7 @@ class TransactionControllerTest {
         // Setup
         // Configure UserService.getUserById(...).
         final Optional<User> user = Optional.of(
-                new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+                new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Configure TransactionService.getAllTransactionsByUser(...).
@@ -137,7 +137,7 @@ class TransactionControllerTest {
         // Setup
         // Configure UserService.getUserById(...).
         final Optional<User> user = Optional.of(
-                new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+                new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         when(mockTransactionService.getAllTransactionsByUser(any(User.class))).thenReturn(Collections.emptyList());
