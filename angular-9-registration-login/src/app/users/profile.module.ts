@@ -9,6 +9,8 @@ import { AddEditComponent } from './add-edit.component';
 import { CreditComponent } from './credit.component';
 import { BankAccountComponent } from './bankAccount.component';
 import { WithdrawComponent } from './withdraw.component';
+import { BoardAdminComponent } from './board-admin.component';
+import { AdminEditComponent } from './admin-edit.component';
 
 
 
@@ -24,7 +26,9 @@ import { WithdrawComponent } from './withdraw.component';
         AddEditComponent,
         CreditComponent,
         WithdrawComponent,
-        BankAccountComponent
+        BankAccountComponent,
+        BoardAdminComponent,
+        AdminEditComponent
     ]
 })
 export class ProfileModule { }

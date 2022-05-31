@@ -137,8 +137,20 @@ export class AccountService {
     //     return this.http.get<User[]>(`${environment.apiUrl}/transactions`);
     // }
 
-    getAll() {
+    getAllUser() {
         return this.http.get<User[]>(`${environment.apiUrl}/user/users`);
+    }
+
+    getAllTransactions() {
+        return this.http.get<Transfer[]>(`${environment.apiUrl}/transaction/transfers`);
+    }
+
+    getAllBankAccounts() {
+        return this.http.get<BankAccount[]>(`${environment.apiUrl}/user/profile/bankAccounts`);
+    }
+
+    getAllBankTransactions() {
+        return this.http.get<BankTransaction[]>(`${environment.apiUrl}/user/profile/bankTransactions`);
     }
 
         // get by email
@@ -153,11 +165,12 @@ export class AccountService {
     }
 
         // update user
-    update(id, params) {
-        return this.http.put(`${environment.apiUrl}/user/${id}`, params)
+    updateUser(userId, params) {
+        console.log(userId);
+        return this.http.put(`${environment.apiUrl}/user/${userId}`, params)
             .pipe(map(x => {
                 // update stored user if the logged in user updated their own record
-                if (id == this.userValue.id) {
+                if (userId == this.userValue.userId) {
                     // update local storage
                     const user = { ...this.userValue, ...params };
                     localStorage.setItem('user', JSON.stringify(user));
@@ -170,15 +183,19 @@ export class AccountService {
     }
        
         // delete user
-    delete(id: string) {
-        return this.http.delete(`${environment.apiUrl}/user/${id}`)
+    deleteUser(userId: string) {
+        return this.http.delete(`${environment.apiUrl}/user/${userId}`)
             .pipe(map(x => {
                 // auto logout if the logged in user deleted their own record
-                if (id == this.userValue.id) {
+                if (userId == this.userValue.userId) {
                     this.logout();
                 }
                 return x;
             }));
+    }
+
+    deleteTransaction(transactionId: string) {
+        return this.http.delete(`${environment.apiUrl}/transaction/${transactionId}`)
     }
 
     

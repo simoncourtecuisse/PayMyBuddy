@@ -55,6 +55,12 @@ public class TransactionController {
         return new ResponseEntity<>("Transaction found", HttpStatus.OK);
     }
 
+    @GetMapping("/transfers")
+    public ResponseEntity<?> getAllTransactions() {
+        return new ResponseEntity<>(transactionService.getAllTransactions(), HttpStatus.OK);
+    }
+
+
     @GetMapping("/transfers/{userId}")
     public ResponseEntity<?> getAllTransactionsByUser(@PathVariable("userId") Long id) {
         if (userService.getUserById(id).isPresent()) {

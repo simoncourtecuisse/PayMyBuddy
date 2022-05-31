@@ -98,7 +98,7 @@ export class AddEditComponent implements OnInit {
     // }
 
     private updateUser() {
-        this.accountService.update(this.id, this.form.value)
+        this.accountService.updateUser(this.id, this.form.value)
             .pipe(first())
             .subscribe(
                 data => {

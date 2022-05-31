@@ -110,7 +110,7 @@ export class CreditComponent implements OnInit {
 
 
     private updateUser() {
-        this.accountService.update(this.id, this.formBank.value)
+        this.accountService.updateUser(this.id, this.formBank.value)
             .pipe(first())
             .subscribe(
                 data => {

@@ -103,7 +103,7 @@ public class BankAccountService {
 //        return true;
 //    }
 
-    public Iterable<BankAccount> getAllBankAccounts() {
+    public List<BankAccount> getAllBankAccounts() {
         return bankAccountRepository.findAll();
     }
 
@@ -136,4 +136,6 @@ public class BankAccountService {
     public List<BankTransaction> getAllBankTransactionsByUser(User user) {
         return bankTransactionRepository.findAllBankTransactionsByUser(user);
     }
+
+    public List<BankTransaction> getAllBankTransactions() { return bankTransactionRepository.findAll(); }
 }

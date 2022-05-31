@@ -31,27 +31,3 @@ export class ListContactsComponent implements OnInit {
         
     }
 }
-
-// @Component({ templateUrl: 'list-contacts.component.html' })
-// export class ListContactsComponent implements OnInit {
-//     users = null;
-
-//     constructor(private accountService: AccountService) {}
-
-//     ngOnInit() {
-
-//         this.accountService.getAllFriendsByUserId()
-//             .pipe(first())
-//             .subscribe(users => this.users = users);
-//     }
-
-//     deleteFriend(userFriendId: string) {
-//         const userFriend = this.users.find(x => x.userFriendId === userFriendId);
-//         userFriend.isDeleting = true;
-//         this.accountService.deleteFriend(userFriendId)
-//             .pipe(first())
-//             .subscribe(() => {
-//                 this.users = this.users.filter(x => x.userFriendId !== userFriendId) 
-//             });
-//     }
-//}

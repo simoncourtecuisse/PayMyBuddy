@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -88,7 +89,10 @@ public class User {
 
 
     //@JsonIgnoreProperties("friendList")
-    @ManyToMany (fetch = FetchType.EAGER)
+    @ManyToMany (
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL
+            )
     @JoinTable(name = "contact", joinColumns =
     @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_user_id"))
     @JsonIgnore
