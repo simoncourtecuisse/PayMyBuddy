@@ -128,7 +128,7 @@ class BankAccountControllerTest {
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(put("/bankAccount/{bankAccountId}", 0)
-                        .content("bankAccountId").contentType(MediaType.APPLICATION_JSON)
+//                        .content("bankAccountId").contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -232,7 +232,8 @@ class BankAccountControllerTest {
     @Test
     void testAddBankAccount_UserServiceGetUserByIdReturnsBadRequest() throws Exception {
         // Setup
-        when(mockUserService.getUserById(0L)).thenReturn(Optional.empty());
+//        when(mockUserService.getUserById(0L).isEmpty()).thenReturn(Optional.empty());
+        mockUserService.getUserById(0L).isEmpty();
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(put("/user/profile/{userId}/addBankAccount", 0)
@@ -248,12 +249,16 @@ class BankAccountControllerTest {
     void testRemoveBankAccount() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final User user = new User("simon", "lastName", "email", "password", new BigDecimal("0.00"), List.of());
-        when(mockUserService.getUserById(0L)).thenReturn(Optional.of(user));
+        final Optional<User> user = Optional.of(
+                new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
+        when(mockUserService.getUserById(0L)).thenReturn(user);
+//        final User user = new User("simon", "lastName", "email", "password", new BigDecimal("0.00"), List.of());
+//        when(mockUserService.getUserById(0L)).thenReturn(Optional.of(user));
+
 
         // Configure BankAccountService.getBankAccountById(...).
-        final BankAccount bankAccount = new BankAccount(0, "bankName");
-        when(mockBankAccountService.getBankAccountById(0L)).thenReturn(Optional.of(bankAccount));
+        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(0, "bankName"));
+        when(mockBankAccountService.getBankAccountById(0L)).thenReturn(bankAccount);
 
 //        System.out.println(user.getBankAccountList());
 //
@@ -270,8 +275,11 @@ class BankAccountControllerTest {
 
         // Run the test
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("iban", 0);
-        jsonObject.addProperty("bankName", "bankName");
+        jsonObject.addProperty("firstName", "John");
+        jsonObject.addProperty("lastName", "Smith");
+        jsonObject.addProperty("email", "john.smith@example.com");
+        jsonObject.addProperty("password", "df1s6d21");
+        jsonObject.addProperty("bankAccountList", "[0]");
         //String jsonObject = new Gson().toJson(user2);
         final MockHttpServletResponse response = mockMvc.perform(
                         delete("/user/profile/{userId}/removeBankAccount/{bankAccountId}", 0, 0)
