@@ -34,7 +34,7 @@ public class BankAccountController {
 
     Logger LOGGER = LogManager.getLogger(BankAccount.class);
 
-    @PostMapping
+    @PostMapping("/bankAccount")
     public ResponseEntity<?> createBankAccount(@RequestBody BankAccount bankAccount) {
         bankAccountService.addBankAccount(bankAccount);
         return new ResponseEntity<>("Bank Account Created", HttpStatus.CREATED);
@@ -46,7 +46,7 @@ public class BankAccountController {
 //        return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping
+    @GetMapping("/bankAccount")
     public ResponseEntity<?> getBankAccount(@RequestParam(value = "bankAccountId") Long id) {
         Optional<BankAccount> bankAccount = bankAccountService.getBankAccountById(id);
         if (bankAccount.isEmpty()) {
@@ -57,7 +57,7 @@ public class BankAccountController {
         return new ResponseEntity<>("Bank Account found", HttpStatus.OK);
     }
 
-    @PutMapping("/{bankAccountId}")
+    @PutMapping("/bankAccount/{bankAccountId}")
     public ResponseEntity<?> updateBankAccount(@PathVariable("bankAccountId") Long id, @RequestBody BankAccount bankAccount) {
         if (bankAccountService.getBankAccountById(id).isPresent()) {
             bankAccount.setBankAccountId(id);
@@ -69,7 +69,7 @@ public class BankAccountController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping("/{bankAccountId}")
+    @DeleteMapping("/bankAccount/{bankAccountId}")
     public ResponseEntity<?> deleteBankAccount(@PathVariable("bankAccountId") Long id) {
         if (bankAccountService.getBankAccountById(id).isPresent()) {
             BankAccount bankAccount = bankAccountService.getBankAccountById(id).get();

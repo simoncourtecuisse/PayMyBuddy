@@ -69,8 +69,10 @@ public class UserController {
     public ResponseEntity<?> getUserById(@PathVariable("userId") Long id) {
         if (userService.getUserById(id).isPresent()) {
             User user = userService.getUserById(id).get();
+            LOGGER.info("Success find user by id");
             return new ResponseEntity<>(user,HttpStatus.OK);
         }
+        LOGGER.error("Can't find the user based on this id");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
@@ -79,8 +81,10 @@ public class UserController {
         if (userService.getUserById(id).isPresent()) {
             User user = userService.getUserById(id).get();
             System.out.println(user.getWalletBalance());
+            LOGGER.info("Success find user's walletBalance");
             return new ResponseEntity<>(user.getWalletBalance(),HttpStatus.OK);
         }
+        LOGGER.error("Can't find the user based on this id");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
@@ -112,6 +116,7 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<?> getAll() {
+        LOGGER.info("Success find all users");
         return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
 
@@ -119,8 +124,10 @@ public class UserController {
     public ResponseEntity<?> getAllFriendsByUser(@PathVariable("userId") Long id) {
         if (userService.getUserById(id).isPresent()) {
         User user = userService.getUserById(id).get();
+            LOGGER.info("Success find user's friend");
         return new ResponseEntity<>(user.getFriendList(),HttpStatus.OK);
     }
+        LOGGER.error("Can't find the user based on this id");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
@@ -134,8 +141,10 @@ public class UserController {
                     .collect(Collectors.toList());
 
             //return new ResponseEntity<>(userService.getAllUsers(),HttpStatus.OK);
+            LOGGER.info("Friend successfully added");
             return new ResponseEntity<>(forContactSearch,HttpStatus.OK);
         }
+        LOGGER.error("Can't find the user based on this id");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
@@ -223,74 +232,6 @@ public class UserController {
             return new ResponseEntity<>(user.getFriendList(), HttpStatus.OK);
         }
         LOGGER.error("Remove friend failed because of a bad request");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    }
-
-    @PutMapping("/addCreditorToTransaction")
-    public ResponseEntity<?> addCreditorToTransaction(@RequestParam Long creditorId, @RequestParam Long transactionId) {
-        if (userService.getUserById(creditorId).isEmpty() || transactionService.getTransactionById(transactionId).isEmpty()) {
-            LOGGER.error("User doesn't exist in DB");
-            return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
-        }
-        User creditor = userService.getUserById(creditorId).get();
-        Transaction transaction = transactionService.getTransactionById(transactionId).get();
-        if (!creditor.getCreditorList().contains(transaction)) {
-            userService.addCreditorToTransaction(creditor, transaction);
-            LOGGER.info("Add creditor to transaction success");
-            return new ResponseEntity<>("Creditor Added to Transaction", HttpStatus.CREATED);
-        }
-        LOGGER.error("Add creditor to transaction failed because of a bad request");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    }
-
-    @DeleteMapping("/removeCreditorToTransaction")
-    public ResponseEntity<?> removeCreditorToTransaction(@RequestParam Long creditorId, @RequestParam Long transactionId) {
-        if (userService.getUserById(creditorId).isEmpty() || transactionService.getTransactionById(transactionId).isEmpty()) {
-            LOGGER.error("User doesn't exist in DB");
-            return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
-        }
-        User creditor = userService.getUserById(creditorId).get();
-        Transaction transaction = transactionService.getTransactionById(transactionId).get();
-        if (creditor.getCreditorList().contains(transaction)) {
-            userService.removeCreditorToTransaction(creditor, transaction);
-            LOGGER.info("Remove creditor to transaction success");
-            return new ResponseEntity<>("Creditor Removed to Transaction", HttpStatus.OK);
-        }
-        LOGGER.error("Remove creditor to transaction failed because of a bad request");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    }
-
-    @PutMapping("/addDebtorToTransaction")
-    public ResponseEntity<?> addDebtorToTransaction(@RequestParam Long debtorId, @RequestParam Long transactionId) {
-        if (userService.getUserById(debtorId).isEmpty() || transactionService.getTransactionById(transactionId).isEmpty()) {
-            LOGGER.error("User doesn't exist in DB");
-            return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
-        }
-        User debtor = userService.getUserById(debtorId).get();
-        Transaction transaction = transactionService.getTransactionById(transactionId).get();
-        if (!debtor.getDebtorList().contains(transaction)) {
-            userService.addDebtorToTransaction(debtor, transaction);
-            LOGGER.info("Add debtor to transaction success");
-            return new ResponseEntity<>("Debtor Added to Transaction", HttpStatus.CREATED);
-        }
-        LOGGER.error("Add debtor to transaction failed because of a bad request");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-    }
-
-    @DeleteMapping("/removeDebtorToTransaction")
-    public ResponseEntity<?> removeDebtorToTransaction(@RequestParam Long debtorId, @RequestParam Long transactionId) {
-        if (userService.getUserById(debtorId).isEmpty() || transactionService.getTransactionById(transactionId).isEmpty()) {
-            LOGGER.error("User doesn't exist in DB");
-            return new ResponseEntity<>("User doesn't exist in DB", HttpStatus.NOT_FOUND);
-        }
-        User debtor = userService.getUserById(debtorId).get();
-        Transaction transaction = transactionService.getTransactionById(transactionId).get();
-        if (debtor.getDebtorList().contains(transaction)) {
-            userService.removeDebtorToTransaction(debtor, transaction);
-            LOGGER.info("Remove debtor to transaction success");
-            return new ResponseEntity<>("Debtor Removed to Transaction", HttpStatus.OK);
-        }
-        LOGGER.error("Remove debtor to transaction failed because of a bad request");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
