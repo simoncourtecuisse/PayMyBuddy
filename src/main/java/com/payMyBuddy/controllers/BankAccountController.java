@@ -192,7 +192,6 @@ public class BankAccountController {
         }
     }
 
-    @Query("SELECT a FROM bank_account")
     @GetMapping("/user/profile/bankAccounts")
     public ResponseEntity<?> getAllBankAccounts() {
         return new ResponseEntity<>(bankAccountService.getAllBankAccounts(), HttpStatus.OK);

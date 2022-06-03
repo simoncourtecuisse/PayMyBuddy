@@ -48,7 +48,7 @@ public class UserController {
         if (userService.getUserByEmail(user.getEmail()).isEmpty()) {
             userService.createUser(user);
             LOGGER.info("User {} created successfully", user.getEmail());
-            return new ResponseEntity<>("User Created", HttpStatus.OK);
+            return new ResponseEntity<>("User Created", HttpStatus.CREATED);
         }
         return ResponseEntity.badRequest().build();
     }
@@ -234,39 +234,4 @@ public class UserController {
         LOGGER.error("Remove friend failed because of a bad request");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
-
-    @PostMapping("/authenticate")
-    public ResponseEntity<?> authenticate(@RequestBody User user) {
-        if(userService.getUserByEmail(user.getEmail()).isPresent()) {
-            User authenticatedUser = userService.getUserByEmail(user.getEmail()).get();
-            LOGGER.info("Authentication success");
-            return new ResponseEntity<>(authenticatedUser, HttpStatus.OK);
-       } else {
-            LOGGER.error("Authentication failed");
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-       }
-    }
-
-//    @GetMapping(value = "/transactions")
-//    private ResponseEntity<?> getAllTransactionsByUser(@RequestBody User user) {
-//        List<Transaction> userTransactions = transactionService.getAllTransactionsByUser(user);
-//        if (userTransactions.isEmpty()) {
-//            LOGGER.error("Can't find transactions for this user");
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//        LOGGER.info("Success find user's Transactions ");
-//        return new ResponseEntity<>("User found", HttpStatus.OK);
-//    }
-
-//    @PostMapping("/authenticate")
-//    public ResponseEntity<?> authenticate(@RequestParam String email, @RequestParam String password, @RequestBody User user) {
-//        if(userService.getUserByEmail(email).isPresent() && user.getEmail().equals(email) && user.getPassword().equals(password)) {
-//            LOGGER.info("Authentication success");
-//            return new ResponseEntity<>("Authentication is successful", HttpStatus.OK);
-//        } else {
-//            LOGGER.error("Authentication failed");
-//
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
-//    }
 }

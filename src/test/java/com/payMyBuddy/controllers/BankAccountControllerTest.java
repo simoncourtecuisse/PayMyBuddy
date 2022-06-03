@@ -1,10 +1,12 @@
 package com.payMyBuddy.controllers;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.payMyBuddy.models.BankAccount;
 import com.payMyBuddy.models.BankTransaction;
 import com.payMyBuddy.models.User;
+import com.payMyBuddy.security.jwt.AuthEntryPointJwt;
+import com.payMyBuddy.security.jwt.JwtUtils;
+import com.payMyBuddy.security.services.UserDetailsServiceImpl;
 import com.payMyBuddy.services.BankAccountService;
 import com.payMyBuddy.services.UserService;
 import org.junit.jupiter.api.Test;
@@ -18,7 +20,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -43,6 +44,12 @@ class BankAccountControllerTest {
     private BankAccountService mockBankAccountService;
     @MockBean
     private UserService mockUserService;
+    @MockBean
+    private UserDetailsServiceImpl mockUserDetailsServiceImpl;
+    @MockBean
+    private AuthEntryPointJwt mockAuthEntryPointJwt;
+    @MockBean
+    private JwtUtils mockJwtUtils;
 
     @Test
     void testCreateBankAccount() throws Exception {
@@ -128,7 +135,7 @@ class BankAccountControllerTest {
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(put("/bankAccount/{bankAccountId}", 0)
-                        .content("bankAccountId").contentType(MediaType.APPLICATION_JSON)
+//                        .content("bankAccountId").contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -177,9 +184,7 @@ class BankAccountControllerTest {
     void testGetAllBankAccountByUser() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(
-//                new User("firstName", "lastName", "email", "password", new BigDecimal("0.00"), List.of()));
-                new User("firstName", "lastName", "email", "password"));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Run the test
@@ -211,8 +216,7 @@ class BankAccountControllerTest {
     void testAddBankAccount() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(
-                new User("firstName", "lastName", "email", "password"));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Run the test
@@ -233,7 +237,8 @@ class BankAccountControllerTest {
     @Test
     void testAddBankAccount_UserServiceGetUserByIdReturnsBadRequest() throws Exception {
         // Setup
-        when(mockUserService.getUserById(0L)).thenReturn(Optional.empty());
+//        when(mockUserService.getUserById(0L).isEmpty()).thenReturn(Optional.empty());
+        mockUserService.getUserById(0L).isEmpty();
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(put("/user/profile/{userId}/addBankAccount", 0)
@@ -249,40 +254,22 @@ class BankAccountControllerTest {
     void testRemoveBankAccount() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final User user = new User("firstName", "lastName", "email", "password");
-        when(mockUserService.getUserById(0L)).thenReturn(Optional.of(user));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
+        when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Configure BankAccountService.getBankAccountById(...).
-        final BankAccount bankAccount = new BankAccount(0, "bankName");
-        when(mockBankAccountService.getBankAccountById(0L)).thenReturn(Optional.of(bankAccount));
-
-//        System.out.println(user.getBankAccountList());
-//
-//        User user1 = new User();
-//        user1.setBankAccountList(List.of(bankAccount));
-//
-//        mockUserService.removeBankAccount(user1, bankAccount);
-//        mockBankAccountService.deleteBankAccount(bankAccount);
-//
-//        System.out.println(user.getBankAccountList());
-//        System.out.println(user1);
-//
-//        var user2 = user1.getBankAccountList();
+        final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(0, "bankName"));
+        when(mockBankAccountService.getBankAccountById(0L)).thenReturn(bankAccount);
 
         // Run the test
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("iban", 0);
-        jsonObject.addProperty("bankName", "bankName");
-        //String jsonObject = new Gson().toJson(user2);
         final MockHttpServletResponse response = mockMvc.perform(
                         delete("/user/profile/{userId}/removeBankAccount/{bankAccountId}", 0, 0)
-                                .content(jsonObject.toString()).contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
         // Verify the results
-        assertEquals(HttpStatus.OK.value(), response.getStatus());
-        //assertEquals("[]", response.getContentAsString());
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getContentAsString()).isEqualTo("expectedResponse");
         verify(mockUserService).removeBankAccount(any(User.class), any(BankAccount.class));
         verify(mockBankAccountService).deleteBankAccount(any(BankAccount.class));
     }
@@ -311,8 +298,7 @@ class BankAccountControllerTest {
     void testRemoveBankAccount_BankAccountServiceGetBankAccountByIdReturnsBadRequest() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(
-                new User("firstName", "lastName", "email", "password"));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         final BankAccount bankAccount = new BankAccount(0, "bankName");
@@ -327,19 +313,14 @@ class BankAccountControllerTest {
         // Verify the results
         assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         assertEquals("", response.getContentAsString());
-
     }
 
     @Test
     void testGetAllBankTransactionsByUser() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(
-                new User("firstName", "lastName", "email", "password"));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
-
-        when(mockBankAccountService.getAllBankTransactionsByUser(any(User.class)))
-                .thenReturn(List.of(new BankTransaction(0.0, LocalDate.of(2020, 1, 1))));
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(get("/user/profile/{userId}", 0)
@@ -381,7 +362,7 @@ class BankAccountControllerTest {
                 .andReturn().getResponse();
 
         // Verify the results
-        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
         assertEquals("", response.getContentAsString());
     }
 
@@ -389,22 +370,23 @@ class BankAccountControllerTest {
     void testBankToWallet() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(
-                new User("firstName", "lastName", "email", "password"));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
+        // Configure BankAccountService.createBankAccountTransaction(...).
+        final BankTransaction bankTransaction = new BankTransaction(0.0, LocalDate.of(2020, 1, 1));
         when(mockBankAccountService.createBankAccountTransaction(any(User.class), any(BankAccount.class),
-                eq(0.0))).thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
-        when(mockBankAccountService.bankToWallet(any(BankTransaction.class))).thenReturn(false);
-        when(mockBankAccountService.saveBankTransaction(any(BankTransaction.class)))
-                .thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
+                eq(0.0))).thenReturn(bankTransaction);
 
-        User user1 = new User("firstName", "lastName", "email", "password");
-        user1.setWalletBalance(new BigDecimal("10"));
+        when(mockBankAccountService.bankToWallet(any(BankTransaction.class))).thenReturn(false);
+
+        // Configure BankAccountService.saveBankTransaction(...).
+        final BankTransaction bankTransaction1 = new BankTransaction(0.0, LocalDate.of(2020, 1, 1));
+        when(mockBankAccountService.saveBankTransaction(any(BankTransaction.class))).thenReturn(bankTransaction1);
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(post("/user/profile/{userId}/credit", 0)
-                        .content(user1.toString()).contentType(MediaType.APPLICATION_JSON)
+                        .content("content").contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -418,14 +400,21 @@ class BankAccountControllerTest {
     void testBankToWallet_UserServiceReturnsBadRequest() throws Exception {
         // Setup
         when(mockUserService.getUserById(0L)).thenReturn(Optional.empty());
+
+        // Configure BankAccountService.createBankAccountTransaction(...).
+        final BankTransaction bankTransaction = new BankTransaction(0.0, LocalDate.of(2020, 1, 1));
         when(mockBankAccountService.createBankAccountTransaction(any(User.class), any(BankAccount.class),
-                eq(0.0))).thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
+                eq(0.0))).thenReturn(bankTransaction);
+
         when(mockBankAccountService.bankToWallet(any(BankTransaction.class))).thenReturn(false);
-        when(mockBankAccountService.saveBankTransaction(any(BankTransaction.class)))
-                .thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
+
+        // Configure BankAccountService.saveBankTransaction(...).
+        final BankTransaction bankTransaction1 = new BankTransaction(0.0, LocalDate.of(2020, 1, 1));
+        when(mockBankAccountService.saveBankTransaction(any(BankTransaction.class))).thenReturn(bankTransaction1);
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(post("/user/profile/{userId}/credit", 0)
+                        .content("content").contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -438,22 +427,23 @@ class BankAccountControllerTest {
     void testBankDeposit() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(
-                new User("firstName", "lastName", "email", "password"));
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
+        // Configure BankAccountService.createBankAccountTransaction(...).
+        final BankTransaction bankTransaction = new BankTransaction(0.0, LocalDate.of(2020, 1, 1));
         when(mockBankAccountService.createBankAccountTransaction(any(User.class), any(BankAccount.class),
-                eq(0.0))).thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
-        when(mockBankAccountService.bankDeposit(any(BankTransaction.class))).thenReturn(false);
-        when(mockBankAccountService.saveBankTransaction(any(BankTransaction.class)))
-                .thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
+                eq(0.0))).thenReturn(bankTransaction);
 
-        User user1 = new User("firstName", "lastName", "email", "password");
-        user1.setWalletBalance(new BigDecimal("10"));
+        when(mockBankAccountService.bankDeposit(any(BankTransaction.class))).thenReturn(false);
+
+        // Configure BankAccountService.saveBankTransaction(...).
+        final BankTransaction bankTransaction1 = new BankTransaction(0.0, LocalDate.of(2020, 1, 1));
+        when(mockBankAccountService.saveBankTransaction(any(BankTransaction.class))).thenReturn(bankTransaction1);
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(post("/user/profile/{userId}/withdraw", 0)
-                        .content(user1.toString()).contentType(MediaType.APPLICATION_JSON)
+                        .content("content").contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -464,22 +454,62 @@ class BankAccountControllerTest {
     }
 
     @Test
-    void testBankDeposit_UserServiceReturnsBadRequest() throws Exception {
+    void testBankDeposit_UserServiceReturnsAbsent() throws Exception {
         // Setup
         when(mockUserService.getUserById(0L)).thenReturn(Optional.empty());
+
+        // Configure BankAccountService.createBankAccountTransaction(...).
+        final BankTransaction bankTransaction = new BankTransaction(0.0, LocalDate.of(2020, 1, 1));
         when(mockBankAccountService.createBankAccountTransaction(any(User.class), any(BankAccount.class),
-                eq(0.0))).thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
+                eq(0.0))).thenReturn(bankTransaction);
+
         when(mockBankAccountService.bankDeposit(any(BankTransaction.class))).thenReturn(false);
-        when(mockBankAccountService.saveBankTransaction(any(BankTransaction.class)))
-                .thenReturn(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
+
+        // Configure BankAccountService.saveBankTransaction(...).
+        final BankTransaction bankTransaction1 = new BankTransaction(0.0, LocalDate.of(2020, 1, 1));
+        when(mockBankAccountService.saveBankTransaction(any(BankTransaction.class))).thenReturn(bankTransaction1);
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(post("/user/profile/{userId}/withdraw", 0)
+                        .content("content").contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
         // Verify the results
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        assertEquals("", response.getContentAsString());
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getContentAsString()).isEqualTo("expectedResponse");
+        verify(mockBankAccountService).saveBankTransaction(any(BankTransaction.class));
+    }
+
+    @Test
+    void testGetAllBankAccounts() throws Exception {
+        // Setup
+        when(mockBankAccountService.getAllBankAccounts()).thenReturn(List.of(new BankAccount(0, "bankName")));
+
+        // Run the test
+        final MockHttpServletResponse response = mockMvc.perform(get("/user/profile/bankAccounts")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        // Verify the results
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals("[{\"bankAccountId\":null,\"iban\":0,\"bankName\":\"bankName\"}]", response.getContentAsString());
+    }
+
+    @Test
+    void testGetAllBankTransactions() throws Exception {
+        // Setup
+        // Configure BankAccountService.getAllBankTransactions(...).
+        final List<BankTransaction> list = List.of(new BankTransaction(0.0, LocalDate.of(2020, 1, 1)));
+        when(mockBankAccountService.getAllBankTransactions()).thenReturn(list);
+
+        // Run the test
+        final MockHttpServletResponse response = mockMvc.perform(get("/user/profile/bankTransactions")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        // Verify the results
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals("[{\"bankTransactionId\":null,\"amount\":0.0,\"date\":\"01/01/2020\",\"commission\":0.0,\"user\":null,\"bankAccount\":null}]", response.getContentAsString());
     }
 }
