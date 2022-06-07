@@ -1,12 +1,12 @@
 USE paymybuddy;
 
 INSERT INTO user (user_id, first_name, last_name, email, password, wallet_balance)
-VALUES (0, 'admin', '', 'admin@paymybuddy.com', '$2a$10$GolCHmo.CxLanyXeHagmEOwS9H/zL1xa9ar09.MpEJbE019YWRvJa', 0),
-       (1, 'Simon', 'Courtecuisse', 'simon.courtecuisse@example.com', '123456', 34),
-       (2, 'Simon', 'Soulie', 'simon.soulie@example.com', 'fdsdsdqgf', 67),
-       (3, 'Marion', 'Aillerie', 'marion.aillerie@example.com', 'pooiuyezesd', 91),
-       (4, 'Igor', 'Courtecuisse', 'igor.courtecuisse@example.com', 'azsqdqfbfdf', 95),
-       (5, 'Romain', 'Luscan', 'romain.luscan@example.com', 'sdf65+6sdf', 200);
+VALUES (0, 'admin', '', 'admin@paymybuddy.com', '$2a$10$GolCHmo.CxLanyXeHagmEOwS9H/zL1xa9ar09.MpEJbE019YWRvJa', 0),  -- password: admin123
+       (1, 'Simon', 'Courtecuisse', 'simon.courtecuisse@example.com', '$2a$10$oOf.fKXV2R4jLjwr058nLe8XIBQ4VOF49wVN94QFOvoL9Bmxdk/76', 34), -- password: 123456
+       (2, 'Simon', 'Soulie', 'simon.soulie@example.com', '$2a$10$ya6bHI8p5pgHR/eTuztA3eckV3/qVJU3MG7uY.lK5TUKJK9iBY8YK', 67), -- password: fdsdsdqgf
+       (3, 'Marion', 'Aillerie', 'marion.aillerie@example.com', '$2a$10$XZsHEx8kTZViU4QyT9PccOhLsvCv/dRu6.YFeOd.SbtHMxOBpLF.W', 91), -- password: pooiuyezesd
+       (4, 'Igor', 'Courtecuisse', 'igor.courtecuisse@example.com', '$2a$10$1wmzD89j2dIQofX5NTy0P.VmoLmZIpJhBbH6FriPcCrAc0uVNuKJm', 95), -- password: azsqdqfbfdf
+       (5, 'Romain', 'Luscan', 'romain.luscan@example.com', '$2a$10$NgutpjGDp4WGAl6hgU0QNeboJJxF9JRfJEfuKYV4Dys9V6PyzdbtC', 200); -- password: sdf656sdf
        
 INSERT INTO contact(user_id, friend_user_id)
 VALUES (1, 2),
@@ -29,12 +29,7 @@ VALUES (1, 1, '232625', 'BNP Paribas'),
        (4, 4, '158338', 'ING Direct');
 
 INSERT INTO user_roles (user_id, role_id)
-VALUES (0, 2),
-       (2, 1),
-       (3, 1),
-       (4, 1),
-       (5, 1),
-       (6, 1);
+VALUES (0, 2);
 
 INSERT INTO transaction (transaction_id, description, creditor_id, debtor_id, amount, commission, date)
 VALUES (1, 'knicks game', 1, 2, 300.00, 0.5, '2019-01-01'),
