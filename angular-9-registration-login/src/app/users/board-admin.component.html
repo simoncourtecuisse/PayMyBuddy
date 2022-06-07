@@ -19,11 +19,6 @@
             <td>{{user.walletBalance}}</td>
             <td style="white-space: nowrap">
                 <a routerLink="edit/{{user.userId}}" class="btn btn-sm btn-primary mr-1">Edit</a>
-                <button (click)="deleteUser(user.userId)" class="btn btn-sm btn-danger btn-delete-user"
-                    [disabled]="user.isDeleting">
-                    <span *ngIf="user.isDeleting" class="spinner-border spinner-border-sm"></span>
-                    <span *ngIf="!user.isDeleting">Delete</span>
-                </button>
             </td>
         </tr>
         <tr *ngIf="!users">
@@ -70,58 +65,3 @@
         </tr>
     </tbody>
 </table>
-<!-- 
-<h2 class="text-center">All Bank Accounts</h2>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th style="width: 30%">Bank Name</th>
-            <th style="width: 30%">Iban</th>
-            <th style="width: 10%"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let bankAccount of bankAccounts">
-            <td>{{bankAccount.bankName}}</td>
-            <td>{{bankAccount.iban}}</td>
-            <td style="white-space: nowrap">
-                <button (click)="deleteBankAccount(bankAccount.bankAccountId)"
-                    class="btn btn-sm btn-danger btn-delete-bankAccount" [disabled]="bankAccount.isDeleting">
-                    <span *ngIf="bankAccount.isDeleting" class="spinner-border spinner-border-sm"></span>
-                    <span *ngIf="!bankAccount.isDeleting">Delete</span>
-                </button>
-            </td>
-        </tr>
-        <tr *ngIf="!bankAccounts">
-            <td colspan="4" class="text-center">
-                <span class="spinner-border spinner-border-lg align-center"></span>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-<h2 class="text-center">All Bank Transactions </h2>
-<table class="table table-striped" id="bankTransaction">
-    <thead>
-        <tr>
-            <th style="width: 30%">Bank Name</th>
-            <th style="width: 30%">Amount</th>
-            <th style="width: 30%">Date</th>
-            <th style="width: 10%"></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let bankTransaction of bankTransactions">
-            <td>{{bankTransaction.bankAccount.bankName}}</td>
-            <td>{{bankTransaction.amount}}</td>
-            <td>{{bankTransaction.date}}</td>
-            <td style="white-space: nowrap">
-            </td>
-        </tr>
-        <tr *ngIf="!bankTransactions">
-            <td colspan="4" class="text-center">
-                <span class="spinner-border spinner-border-lg align-center"></span>
-            </td>
-        </tr>
-    </tbody>
-</table> -->

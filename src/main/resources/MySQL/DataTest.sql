@@ -1,7 +1,8 @@
 USE paymybuddy;
 
 INSERT INTO user (user_id, first_name, last_name, email, password, wallet_balance)
-VALUES (1, 'Simon', 'Courtecuisse', 'simon.courtecuisse@example.com', '123456', 34),
+VALUES (0, 'admin', '', 'admin@paymybuddy.com', '$2a$10$GolCHmo.CxLanyXeHagmEOwS9H/zL1xa9ar09.MpEJbE019YWRvJa', 0),
+       (1, 'Simon', 'Courtecuisse', 'simon.courtecuisse@example.com', '123456', 34),
        (2, 'Simon', 'Soulie', 'simon.soulie@example.com', 'fdsdsdqgf', 67),
        (3, 'Marion', 'Aillerie', 'marion.aillerie@example.com', 'pooiuyezesd', 91),
        (4, 'Igor', 'Courtecuisse', 'igor.courtecuisse@example.com', 'azsqdqfbfdf', 95),
@@ -27,13 +28,13 @@ VALUES (1, 1, '232625', 'BNP Paribas'),
        (3, 3, '809572', 'Société Générale'),
        (4, 4, '158338', 'ING Direct');
 
--- INSERT INTO transaction_label (transaction_label_id, description)
--- VALUES (1, 'restaurant bill'),
---        (2, 'knicks game'),
---        (3, 'bar bill'),
---        (4, 'rent bike'),
---        (5, 'birthday dinner'),
---        (6, 'cinema ticket');
+INSERT INTO user_roles (user_id, role_id)
+VALUES (0, 2),
+       (2, 1),
+       (3, 1),
+       (4, 1),
+       (5, 1),
+       (6, 1);
 
 INSERT INTO transaction (transaction_id, description, creditor_id, debtor_id, amount, commission, date)
 VALUES (1, 'knicks game', 1, 2, 300.00, 0.5, '2019-01-01'),
@@ -53,9 +54,6 @@ SET next_val = '6';
 
 UPDATE bank_account_sequence
 SET next_val = '5';
-
--- UPDATE transaction_label_sequence
--- SET next_val = '7';
 
 UPDATE transaction_sequence
 SET next_val = '7';

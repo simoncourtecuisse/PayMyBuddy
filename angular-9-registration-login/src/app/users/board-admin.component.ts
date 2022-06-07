@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from '@app/_services';
-//import { UserRoleService } from '@app/_services/userRole.service';
 import { first } from 'rxjs/operators';
 
 @Component({
@@ -9,23 +8,10 @@ import { first } from 'rxjs/operators';
 export class BoardAdminComponent implements OnInit {
   users = null;
   transfers = null;
-  bankAccounts = null;
-  bankTransactions = null;
   content = '';
-  constructor(
-    private accountService: AccountService,
-    // private userRoleService: UserRoleService
-  ) { }
+  constructor( private accountService: AccountService ) { }
+  
   ngOnInit() {
-    // this.userRoleService.getAdminBoard().subscribe(
-    //   data => {
-    //     this.content = data;
-    //   },
-    //   err => {
-    //     this.content = JSON.parse(err.error).message;
-    //   }
-    // );
-
     this.accountService.getAllUser()
       .pipe(first())
       .subscribe(users => this.users = users);
@@ -33,37 +19,6 @@ export class BoardAdminComponent implements OnInit {
     this.accountService.getAllTransactions()
       .pipe(first())
       .subscribe(transfers => this.transfers = transfers);
-
-    // this.accountService.getAllBankAccounts()
-    //   .pipe(first())
-    //   .subscribe(bankAccounts => this.bankAccounts = bankAccounts);
-
-    // this.accountService.getAllBankTransactions()
-    //   .pipe(first())
-    //   .subscribe(bankTransactions => this.bankTransactions = bankTransactions);
-  }
-
-  deleteUser(deleteId: string) {
-    const user = this.users.find(x => x.userId !== deleteId);
-    user.isDeleting = true;
-    console.log(user.userId);
-    this.accountService.deleteUser(deleteId)
-      .pipe(first())
-      .subscribe(() => {
-        this.users = this.users.filter(x => x.userId !== deleteId)
-      });
-  }
-
-  deleteBankAccount(id: string) {
-    console.log(id);
-    const bankAccount = this.bankAccounts.find(x => x.bankAccountId === id);
-    bankAccount.isDeleting = true;
-    console.log(this.bankAccounts);
-    this.accountService.deleteBankAccount(id)
-      .pipe(first())
-      .subscribe(() => {
-        this.bankAccounts = this.bankAccounts.filter(x => x.bankAccountId !== id)
-      });
   }
 
   deleteTransaction(id: string) {
