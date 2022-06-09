@@ -1,4 +1,9 @@
-# PayMyBuddy Application 
+/*[![shields](https://img.shields.io/badge/project%20status-validated-deepgreen)](https://shields.io/)*/
+[![shields](https://img.shields.io/badge/made%20with-java-orange)](https://shields.io/)
+[![shields](https://img.shields.io/badge/powered%20by-spring-green)](https://shields.io/)
+____________________
+
+# PayMyBuddy Application
 ## - We make moving your money easy! -
 
 ### Build
@@ -21,9 +26,6 @@ Security          | Spring Security & [JSON Web Token](https://jwt.io/)
 Persistence       | JPA (Using Spring Data)
 Client Build Tools| [angular-cli](https://github.com/angular/angular-cli) npm
 Server Build Tools| Maven(Java)
-
-Java 11
-Angular 9
 
 ##### SQL Scripts
 Contains the principal database and the database for the tests.
