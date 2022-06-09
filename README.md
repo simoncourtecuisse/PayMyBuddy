@@ -1,22 +1,19 @@
-/*[![shields](https://img.shields.io/badge/project%20status-validated-deepgreen)](https://shields.io/)*/
 [![shields](https://img.shields.io/badge/made%20with-java-orange)](https://shields.io/)
 [![shields](https://img.shields.io/badge/powered%20by-spring-green)](https://shields.io/)
 ____________________
 
 # PayMyBuddy Application
-## - We make moving your money easy! -
+## - We make moving your money easy ! -
 
-### Build
+## Build
 Build application with the command `mvn clean install` for the back-end side and then with the command `npm run install` for the frond-end side.
 
-### Login to application
-##### Super user
+## Login to application
+### Super user
 You can use user with username '_admin@paymybuddy.com_' and password
 '_admin123_' to connect as a super user with 'ADMIN' authorizations.
 
-### Documentation
-
-##### Technology Stack
+## Technology Stack
 Component         | Technology
 ---               | ---
 Frontend          | [Angular 9](https://github.com/angular/angular)
@@ -27,14 +24,19 @@ Persistence       | JPA (Using Spring Data)
 Client Build Tools| [angular-cli](https://github.com/angular/angular-cli) npm
 Server Build Tools| Maven(Java)
 
-##### SQL Scripts
+## Documentation
+
+### SQL Scripts
 Contains the principal database and the database for the tests.
 https://github.com/simoncourtecuisse/PayMyBuddy/tree/master/src/main/resources/MySQL
 
-##### Model Database (SQL)
+### Model Database (SQL)
 
 ![DatabaseModel_PMB](src/main/resources/Docs/DatabaseModel_PMB.png)
 
-##### UML Diagram
+### UML Diagram
 
 ![UML_PMB](src/main/resources/Docs/UML_PMB.png)
+
+### Other Resources
+See [HELP.md](spring/HELP.md) for helpful documentation regarding Spring Boot and [README.md](angular/README.md) for important commands and documentation relating to Angular and its embedded server.
