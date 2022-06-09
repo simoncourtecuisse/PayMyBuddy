@@ -3,7 +3,8 @@
 ____________________
 
 # PayMyBuddy Application
-## - We make moving your money easy ! -
+> -- ~_We make moving your money easy !_~ --
+
 
 ## Prerequisites
 
