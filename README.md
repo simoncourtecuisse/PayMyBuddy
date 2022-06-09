@@ -18,15 +18,18 @@ ____________________
 - MySQL, Connector/J & Community Server
 
 ## Build
-Build application with the command `mvn clean install` for the back-end side and then with the command `npm run install` for the frond-end side.
+Build application with the command `mvn clean install` for the back-end side and then with the
+command `npm run install` for the frond-end side.
 
-## Login to application
+## Try the application
 
-You can run the
+You can run the [Data Script](/resources/MySQL/DataTest.sql) to have some fake users so you can test all the features.
 
 ### Super user
-You can use user with username '_admin@paymybuddy.com_' and password
+You can use user with email '_admin@paymybuddy.com_' and password
 '_admin123_' to connect as a super user with 'ADMIN' authorizations.
+
+Otherwise you just have to register as a new user.
 
 ## Technology Stack
 Component         | Technology
