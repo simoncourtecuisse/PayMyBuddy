@@ -5,10 +5,24 @@ ____________________
 # PayMyBuddy Application
 ## - We make moving your money easy ! -
 
+## Prerequisites
+
+### Ensure you have this installed before use:
+
+- Java 14.0.1
+- Maven 3.8.4
+- Node v16.14.2
+- npm 8.5.0
+- Angular-cli 9.1.3
+- MySQL, Connector/J & Community Server
+
 ## Build
 Build application with the command `mvn clean install` for the back-end side and then with the command `npm run install` for the frond-end side.
 
 ## Login to application
+
+You can run the
+
 ### Super user
 You can use user with username '_admin@paymybuddy.com_' and password
 '_admin123_' to connect as a super user with 'ADMIN' authorizations.
@@ -17,7 +31,7 @@ You can use user with username '_admin@paymybuddy.com_' and password
 Component         | Technology
 ---               | ---
 Frontend          | [Angular 9](https://github.com/angular/angular)
-Backend (REST)    | [SpringBoot 2.5.6](https://projects.spring.io/spring-boot) (Java 11)
+Backend (REST)    | [SpringBoot 2.5.6](https://projects.spring.io/spring-boot) (Java)
 Database          | [MySQL](https://www.mysql.com/)
 Security          | Spring Security & [JSON Web Token](https://jwt.io/)
 Persistence       | JPA (Using Spring Data)
@@ -39,4 +53,4 @@ https://github.com/simoncourtecuisse/PayMyBuddy/tree/master/src/main/resources/M
 ![UML_PMB](src/main/resources/Docs/UML_PMB.png)
 
 ### Other Resources
-See [HELP.md](spring/HELP.md) for helpful documentation regarding Spring Boot and [README.md](angular/README.md) for important commands and documentation relating to Angular and its embedded server.
+See [HELP.md](https://github.com/simoncourtecuisse/PayMyBuddy/blob/main/PayMyBuddy/HELP.md) for helpful documentation regarding Spring Boot and [README.md](/README.md) for important commands and documentation relating to Angular and its embedded server.

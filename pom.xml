@@ -14,7 +14,7 @@
 	<name>PayMyBuddy</name>
 	<description>Une appli qui permettrait aux clients de transférer de l&apos;argent pour gérer leurs finances ou payer leurs amis.</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>14</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
