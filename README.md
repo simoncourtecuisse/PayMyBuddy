@@ -23,7 +23,7 @@ command `npm run install` for the frond-end side.
 
 ## Try the application
 
-You can run the [Data Script](/resources/MySQL/DataTest.sql) to have some fake users so you can test all the features.
+You can run the [Data Script](src/main/resources/MySQL/DataTest.sql) to have some fake users so you can test all the features.
 
 ### Super user
 You can use user with email '_admin@paymybuddy.com_' and password
