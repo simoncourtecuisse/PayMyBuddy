@@ -18,8 +18,7 @@ ____________________
 - MySQL, Connector/J & Community Server
 
 ## Build
-Build application with the command `mvn clean install` for the back-end side and then with the
-command `npm run install` for the frond-end side.
+Build application with the command `mvn clean install` for the back-end side and then with the command `npm run install` for the frond-end side.
 
 ## Try the application
 
