@@ -10,7 +10,7 @@ import { CreditComponent } from './credit.component';
 import { BankAccountComponent } from './bankAccount.component';
 import { WithdrawComponent } from './withdraw.component';
 import { BoardAdminComponent } from './board-admin.component';
-import { AdminEditComponent } from './admin-edit.component';
+
 
 
 
@@ -27,8 +27,7 @@ import { AdminEditComponent } from './admin-edit.component';
         CreditComponent,
         WithdrawComponent,
         BankAccountComponent,
-        BoardAdminComponent,
-        AdminEditComponent
+        BoardAdminComponent
     ]
 })
 export class ProfileModule { }

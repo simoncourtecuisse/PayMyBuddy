@@ -388,7 +388,7 @@ class UserControllerTest {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("lastName", "lastName");
         jsonObject.addProperty("firstName", "firstName");
-        jsonObject.addProperty("friendList", "[user1]");
+        //jsonObject.addProperty("friendList", List.of());
         final MockHttpServletResponse response = mockMvc.perform(put("/user/contacts/{userId}/addFriend", 0)
                         .content(jsonObject.toString()).contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))

@@ -8,7 +8,7 @@ import { CreditComponent } from './credit.component';
 import { BankAccountComponent } from './bankAccount.component';
 import { WithdrawComponent } from './withdraw.component';
 import { BoardAdminComponent } from './board-admin.component';
-import { AdminEditComponent } from './admin-edit.component';
+
 
 const routes: Routes = [
     {
@@ -19,8 +19,8 @@ const routes: Routes = [
             { path: 'withdraw', component: WithdrawComponent },
             { path: 'bankAccounts', component: BankAccountComponent },
             { path: 'bankAccounts/add', component: AddEditComponent },
-            { path: 'admin', component: BoardAdminComponent },
-            { path: 'admin/edit/:id', component: AdminEditComponent }
+            { path: 'admin', component: BoardAdminComponent }
+            // { path: 'admin/edit/:id', component: AdminEditComponent }
         ]
     },
     

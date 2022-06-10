@@ -18,7 +18,27 @@ ____________________
 - MySQL, Connector/J & Community Server
 
 ## Build
-Build application with the command `mvn clean install` for the back-end side and then with the command `npm run install` for the frond-end side.
+Build application with the command `mvn clean install`
+
+## Run
+To run the application you have to update the `application.properties` in the `resources` folder:
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/paymybuddy?serverTimezone=UTC
+spring.datasource.username=your_username
+spring.datasource.password=your_password
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect
+spring.jpa.show-sql = true
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.jpa.properties.hibernate.format_sql=true
+spring.application.name=PayMyBuddy
+server.port=8080
+#App Properties
+payMyBuddy.app.jwtSecret=payMyBuddySecretKey
+payMyBuddy.app.jwtExpirationMs=86400000
+```
+Modify the `spring.datasource.username=your_username` and the `spring.datasource.password=your_password`.
+for the back-end side and then with the command `npm run start` for the frond-end side.
+
 
 ## Try the application
 

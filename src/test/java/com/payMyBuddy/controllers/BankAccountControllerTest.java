@@ -397,7 +397,7 @@ class BankAccountControllerTest {
     }
 
     @Test
-    void testBankToWallet_UserServiceReturnsBadRequest() throws Exception {
+    void testBankToWallet_UserServiceReturnsNotFound() throws Exception {
         // Setup
         when(mockUserService.getUserById(0L)).thenReturn(Optional.empty());
 
@@ -413,13 +413,16 @@ class BankAccountControllerTest {
         when(mockBankAccountService.saveBankTransaction(any(BankTransaction.class))).thenReturn(bankTransaction1);
 
         // Run the test
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("amount", 0.0);
+
         final MockHttpServletResponse response = mockMvc.perform(post("/user/profile/{userId}/credit", 0)
-                        .content("content").contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonObject.toString()).contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
         // Verify the results
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
         assertEquals("", response.getContentAsString());
     }
 

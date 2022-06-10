@@ -139,7 +139,7 @@ class TransactionServiceTest {
         // Configure TransactionRepository.findById(...).
         final Optional<Transaction> transaction1 = Optional.of(
                 new Transaction(0.0, LocalDate.of(2020, 1, 1), 0.0, "description"));
-        when(mockTransactionRepository.findById(0L)).thenReturn(transaction1);
+        when(mockTransactionRepository.findById(1L)).thenReturn(transaction1);
 
         // Configure TransactionRepository.save(...).
         final Transaction transaction2 = new Transaction(0.0, LocalDate.of(2020, 1, 1), 0.0, "description");
@@ -149,7 +149,7 @@ class TransactionServiceTest {
         transactionServiceUnderTest.updateTransaction(transaction);
 
         // Verify the results
-        verify(mockTransactionRepository).save(any(Transaction.class));
+        verify(mockTransactionRepository).save(transaction2);
     }
 
     @Test
