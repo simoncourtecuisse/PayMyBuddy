@@ -18,7 +18,7 @@ ____________________
 - MySQL, Connector/J & Community Server
 
 ## Build
-Build application with the command `mvn clean install`
+Build application with the command `mvn clean install`.
 
 ## Run
 To run the application you have to update the `application.properties` in the `resources` folder:
@@ -36,8 +36,9 @@ server.port=8080
 payMyBuddy.app.jwtSecret=payMyBuddySecretKey
 payMyBuddy.app.jwtExpirationMs=86400000
 ```
-Modify the `spring.datasource.username=your_username` and the `spring.datasource.password=your_password`.
-for the back-end side and then with the command `npm run start` for the frond-end side.
+Change the `spring.datasource.username=your_username` and the `spring.datasource.password=your_password`.
+
+For the back-end side run the command `mvn spring-boot:run` then navigate to the angular folder and run the command `npm run start` for the frond-end side.
 
 
 ## Try the application
