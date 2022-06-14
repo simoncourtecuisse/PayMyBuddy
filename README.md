@@ -5,6 +5,10 @@ ____________________
 # PayMyBuddy Application
 > -- _We make moving your money easy !_ --
 
+### Pay My Buddy Demo
+![Pay My Buddy Demo](src/main/resources/Demo/PayMyBuddyDemo.mp4)
+
+
 
 ## Prerequisites
 
