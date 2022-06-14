@@ -246,13 +246,25 @@ class TransactionControllerTest {
         // Configure UserService.getUserById(...).
         final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
+        user.get().setUserId(1L);
+
+        final Optional<User> user1 = Optional.of(new User("firstName", "lastName", "email", "password"));
+        when(mockUserService.getUserById(2L)).thenReturn(user1);
+        user1.get().setUserId(3L);
 
         // Configure TransactionService.createTransaction(...).
         final Transaction transaction = new Transaction(0.0, LocalDate.of(2020, 1, 1), 0.0, "description");
-        when(mockTransactionService.createTransaction(any(User.class), any(User.class), eq(0.0),
-                eq("description"))).thenReturn(transaction);
+        transaction.setCreditor(user1.get());
+        when(mockTransactionService.createTransaction(user.get(), user1.get(), 0.0,
+                "description")).thenReturn(transaction);
 
-//        when(mockTransactionService.processUserTransaction(any(Transaction.class))).thenReturn(true);
+        var debtor = user.get();
+        var creditorId = transaction.getCreditor();
+        var creditor = mockUserService.getUserById(creditorId.getUserId());
+
+        final Transaction paymentTransaction = new Transaction(0.0, LocalDate.of(2020, 1, 1), 0.0, "description");
+        when(mockTransactionService.createTransaction(debtor, creditor.orElse(user1.get()), 10.0, "description")).thenReturn(paymentTransaction);
+
         when(mockTransactionService.processUserTransaction(transaction)).thenReturn(true);
         mockTransactionService.saveTransaction(transaction);
 
@@ -261,17 +273,50 @@ class TransactionControllerTest {
                 new Transaction(0.0, LocalDate.of(2020, 1, 1), 0.0, "description"));
         when(mockTransactionService.getAllTransactionsByUser(any(User.class))).thenReturn(transactions);
 
-        // Run the test
+        when(mockTransactionService.getAllTransactionsByUser(debtor)).thenReturn( transactions);
 
+        // Run the test
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.getAsJsonArray(transactions.toString());
         final MockHttpServletResponse response = mockMvc.perform(post("/transaction/transfers/{userId}/payment", 0)
-                        .content(String.valueOf(transactions)).contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonObject.toString()).contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
         // Verify the results
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-        assertThat(response.getContentAsString()).isEqualTo("expectedResponse");
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+        assertEquals("", response.getContentAsString());
         verify(mockTransactionService).saveTransaction(any(Transaction.class));
+    }
+
+    @Test
+    void testMakeTransaction_UserServiceReturnsNotFound() throws Exception {
+        // Setup
+        when(mockUserService.getUserById(0L)).thenReturn(Optional.empty());
+
+        // Configure TransactionService.createTransaction(...).
+        final Transaction transaction = new Transaction(0.0, LocalDate.of(2020, 1, 1), 0.0, "description");
+        when(mockTransactionService.createTransaction(any(User.class), any(User.class), eq(0.0),
+                eq("description"))).thenReturn(transaction);
+
+        when(mockTransactionService.processUserTransaction(any(Transaction.class))).thenReturn(false);
+
+        // Configure TransactionService.getAllTransactionsByUser(...).
+        final List<Transaction> transactions = List.of(
+                new Transaction(0.0, LocalDate.of(2020, 1, 1), 0.0, "description"));
+        when(mockTransactionService.getAllTransactionsByUser(any(User.class))).thenReturn(transactions);
+
+        // Run the test
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.getAsJsonObject(transaction.toString());
+        final MockHttpServletResponse response = mockMvc.perform(post("/transaction/transfers/{userId}/payment", 0)
+                        .content(jsonObject.toString()).contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        // Verify the results
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
+        assertEquals("", response.getContentAsString());
     }
 
     @Test
@@ -292,8 +337,10 @@ class TransactionControllerTest {
         when(mockTransactionService.getAllTransactionsByUser(any(User.class))).thenReturn(transactions);
 
         // Run the test
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.getAsJsonObject(transaction.toString());
         final MockHttpServletResponse response = mockMvc.perform(post("/transaction/transfers/{userId}/payment", 0)
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonObject.toString()).contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -314,17 +361,24 @@ class TransactionControllerTest {
         when(mockTransactionService.createTransaction(any(User.class), any(User.class), eq(0.0),
                 eq("description"))).thenReturn(transaction);
 
+        var debtor = user.get();
+        var creditorId = transaction.getCreditor();
+        //var creditor = mockUserService.getUserById(creditorId.getUserId());
+
+
+
         when(mockTransactionService.processUserTransaction(any(Transaction.class))).thenReturn(false);
         when(mockTransactionService.getAllTransactionsByUser(any(User.class))).thenReturn(Collections.emptyList());
 
         // Run the test
+        JsonObject jsonObject = new JsonObject();
         final MockHttpServletResponse response = mockMvc.perform(post("/transaction/transfers/{userId}/payment", 0)
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonObject.toString()).contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
         // Verify the results
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
         assertEquals("", response.getContentAsString());
     }
 }

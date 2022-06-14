@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -80,11 +81,19 @@ class UserControllerTest {
     @Test
     void testCreateUser_UserServiceGetUserByEmailReturnsBadRequest() throws Exception {
         // Setup
-        when(mockUserService.getUserByEmail("email")).thenReturn(Optional.empty());
+
+        //when(mockUserService.getUserByEmail("email")).thenReturn(Optional.empty());
+
+        // Configure UserService.getUserById(...).
+        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
+        when(mockUserService.getUserByEmail("email")).thenReturn(user);
 
         // Run the test
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("email", "email");
         final MockHttpServletResponse response = mockMvc.perform(post("/user")
-                        .param("email", "email")
+                        //.param("email", "email")
+                        .content(jsonObject.toString()).contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -327,7 +336,9 @@ class UserControllerTest {
         when(mockUserService.getUserById(0L)).thenReturn(Optional.empty());
 
         // Run the test
+        JsonObject jsonObject = new JsonObject();
         final MockHttpServletResponse response = mockMvc.perform(put("/user/{userId}", 0)
+                        .content(jsonObject.toString()).contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -372,23 +383,35 @@ class UserControllerTest {
     @Test
     void testAddFriend() throws Exception {
         // Setup
-        // Configure UserService.getAllUsers(...).
-        final List<User> users = List.of(new User("firstName", "lastName", "email", "password"));
-        when(mockUserService.getAllUsers()).thenReturn(users);
-
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
+        Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Configure UserService.getUserByEmail(...).
-        final Optional<User> user1 = Optional.of(new User("firstName", "lastName", "email", "password"));
-        when(mockUserService.getUserByEmail("email")).thenReturn(user1);
+        final Optional<User> user1 = Optional.of(new User("John", "Smith", "JohnEmail", "password"));
+        when(mockUserService.getUserByEmail("JohnEmail")).thenReturn(user1);
+
+        final List<User> users = List.of(user.get(), user1.get());
+        when(mockUserService.getAllUsers()).thenReturn(users);
+
+        user.get().setFriendList(Collections.emptyList());
+        System.out.println(user.get().getFriendList());
+
+        mockUserService.addFriend(user.get(), user1.get());
+        mockUserService.addFriend(user1.get(), user.get());
+        user.get().setFriendList(user1.stream().collect(Collectors.toList()));
+        user1.get().setFriendList(user.stream().collect(Collectors.toList()));
+
+
 
         // Run the test
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("lastName", "lastName");
-        jsonObject.addProperty("firstName", "firstName");
-        //jsonObject.addProperty("friendList", List.of());
+
+//        jsonObject.addProperty("friendList", userFriendList.toString());
+        var userFriendList= user.get().getFriendList();
+        System.out.println(userFriendList);
+        jsonObject.getAsJsonArray(userFriendList.toString());
+
         final MockHttpServletResponse response = mockMvc.perform(put("/user/contacts/{userId}/addFriend", 0)
                         .content(jsonObject.toString()).contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -407,33 +430,33 @@ class UserControllerTest {
         when(mockUserService.getUserById(0L)).thenReturn(Optional.empty());
 
         // Run the test
+        JsonObject jsonObject = new JsonObject();
         final MockHttpServletResponse response = mockMvc.perform(put("/user/contacts/{userId}/addFriend", 0)
-                        //.content("content").contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonObject.toString()).contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
         // Verify the results
-        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
-        assertEquals("", response.getContentAsString());
+        assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
+        assertEquals("User doesn't exist in DB", response.getContentAsString());
     }
 
     @Test
     void testAddFriend_UserServiceGetUserByIdReturnsBadRequest() throws Exception {
         // Setup
-        // Configure UserService.getAllUsers(...).
-        final List<User> users = List.of(
-                new User("firstName", "lastName", "email", "password"));
-        when(mockUserService.getAllUsers()).thenReturn(users);
-
-        when(mockUserService.getUserById(0L)).thenReturn(Optional.empty());
+        // Configure UserService.getUserById(...).
+        Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
+        when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Configure UserService.getUserByEmail(...).
-        final Optional<User> user = Optional.of(
-                new User("firstName", "lastName", "email", "password"));
-        when(mockUserService.getUserByEmail("email")).thenReturn(user);
+        final Optional<User> user1 = Optional.of(new User("John", "Smith", "JohnEmail", "password"));
+        when(mockUserService.getUserByEmail("JohnEmail")).thenReturn(user1);
+        user.get().setFriendList(user1.stream().collect(Collectors.toList()));
 
         // Run the test
+        JsonObject jsonObject = new JsonObject();
         final MockHttpServletResponse response = mockMvc.perform(put("/user/contacts/{userId}/addFriend", 0)
+                        .content(user1.toString()).contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -447,19 +470,25 @@ class UserControllerTest {
     void testRemoveFriend() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-        final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
+         Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
+
+        // Configure UserService.getUserById(...).
+        final Optional<User> user1 = Optional.of(new User("firstName", "lastName", "email", "password"));
+        when(mockUserService.getUserById(1L)).thenReturn(user1);
+
+        user.get().setFriendList(user1.stream().collect(Collectors.toList()));
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(
-                        delete("/user/contacts/{userId}/removeFriend/{friendUserId}", 0, 0)
+                        delete("/user/contacts/{userId}/removeFriend/{friendUserId}", 0, 1)
                                 .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
         // Verify the results
         assertEquals(HttpStatus.OK.value(), response.getStatus());
-        assertEquals("", response.getContentAsString());
-        verify(mockUserService).removeFriend(any(User.class), any(User.class));
+        assertEquals("[{\"userId\":null,\"firstName\":\"firstName\",\"lastName\":\"lastName\",\"email\":\"email\",\"password\":\"password\",\"walletBalance\":0,\"bankAccountList\":[],\"bankTransactionsList\":[],\"roles\":[]}]", response.getContentAsString());
+        verify(mockUserService).removeFriend(user.get(), user1.get());
     }
 
     @Test
@@ -476,5 +505,29 @@ class UserControllerTest {
         // Verify the results
         assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
         assertEquals("User doesn't exist in DB", response.getContentAsString());
+    }
+
+    @Test
+    void testRemoveFriend_UserServiceGetUserByIdReturnsBadRequest() throws Exception {
+        // Setup
+        // Configure UserService.getUserById(...).
+        Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
+        when(mockUserService.getUserById(0L)).thenReturn(user);
+
+        // Configure UserService.getUserById(...).
+        final Optional<User> user1 = Optional.of(new User("firstName", "lastName", "email", "password"));
+        when(mockUserService.getUserById(1L)).thenReturn(user1);
+
+        user.get().setFriendList(Collections.emptyList());
+
+        // Run the test
+        final MockHttpServletResponse response = mockMvc.perform(
+                        delete("/user/contacts/{userId}/removeFriend/{friendUserId}", 0, 0)
+                                .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        // Verify the results
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
+        assertEquals("", response.getContentAsString());
     }
 }
