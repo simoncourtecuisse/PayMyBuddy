@@ -5,7 +5,6 @@ import com.payMyBuddy.models.User;
 import com.payMyBuddy.repositories.BankAccountRepository;
 import com.payMyBuddy.security.jwt.AuthEntryPointJwt;
 import com.payMyBuddy.security.jwt.JwtUtils;
-import com.payMyBuddy.security.services.UserDetailsImpl;
 import com.payMyBuddy.security.services.UserDetailsServiceImpl;
 import com.payMyBuddy.services.BankAccountService;
 import com.payMyBuddy.services.TransactionService;
@@ -78,12 +77,10 @@ class UserControllerTest {
         assertEquals("User Created", response.getContentAsString());
         verify(mockUserService).createUser(any(User.class));
     }
+
     @Test
     void testCreateUser_UserServiceGetUserByEmailReturnsBadRequest() throws Exception {
         // Setup
-
-        //when(mockUserService.getUserByEmail("email")).thenReturn(Optional.empty());
-
         // Configure UserService.getUserById(...).
         final Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserByEmail("email")).thenReturn(user);
@@ -403,12 +400,11 @@ class UserControllerTest {
         user1.get().setFriendList(user.stream().collect(Collectors.toList()));
 
 
-
         // Run the test
         JsonObject jsonObject = new JsonObject();
 
 //        jsonObject.addProperty("friendList", userFriendList.toString());
-        var userFriendList= user.get().getFriendList();
+        var userFriendList = user.get().getFriendList();
         System.out.println(userFriendList);
         jsonObject.getAsJsonArray(userFriendList.toString());
 
@@ -470,7 +466,7 @@ class UserControllerTest {
     void testRemoveFriend() throws Exception {
         // Setup
         // Configure UserService.getUserById(...).
-         Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
+        Optional<User> user = Optional.of(new User("firstName", "lastName", "email", "password"));
         when(mockUserService.getUserById(0L)).thenReturn(user);
 
         // Configure UserService.getUserById(...).

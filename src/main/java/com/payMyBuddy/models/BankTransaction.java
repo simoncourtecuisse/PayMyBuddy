@@ -1,18 +1,14 @@
 package com.payMyBuddy.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import org.apache.tomcat.jni.Local;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity(name = "Bank Transaction")
@@ -50,14 +46,14 @@ public class BankTransaction {
     @JoinColumn(name = "user_id")
     private User user;
 
-    //@JsonBackReference
     @JsonIgnoreProperties("bankTransactionsList")
-    @ManyToOne(cascade=CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "bank_account_id")
     //@JsonIgnore
     private BankAccount bankAccount;
 
-    public BankTransaction(){}
+    public BankTransaction() {
+    }
 
     public BankTransaction(double amount, LocalDate date) {
         this.amount = amount;

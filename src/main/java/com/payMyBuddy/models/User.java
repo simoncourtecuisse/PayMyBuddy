@@ -2,11 +2,9 @@ package com.payMyBuddy.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,11 +16,33 @@ import java.util.Set;
 @Table(
         name = "user",
         uniqueConstraints = {
-                @UniqueConstraint(name = "user_email_unique",columnNames = "email")
+                @UniqueConstraint(name = "user_email_unique", columnNames = "email")
         }
 )
 public class User {
 
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "user",
+            cascade = CascadeType.ALL)
+    List<BankAccount> bankAccountList = new ArrayList<>();
+    @JsonIgnoreProperties("user")
+    @OneToMany(
+            mappedBy = "user",
+            cascade = CascadeType.ALL)
+    List<BankTransaction> bankTransactionsList = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "creditor",
+            cascade = CascadeType.ALL)
+    List<Transaction> creditorList = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "debtor",
+            cascade = CascadeType.ALL)
+    List<Transaction> debtorList = new ArrayList<>();
     @Id
     @SequenceGenerator(
             name = "user_sequence",
@@ -45,54 +65,10 @@ public class User {
     private String password;
     @Column(name = "wallet_balance", precision = 6, scale = 2)
     private BigDecimal walletBalance = BigDecimal.ZERO;
-
-    @OneToMany(
-            fetch = FetchType.LAZY,
-            mappedBy = "user",
-            cascade = CascadeType.ALL)
-    List<BankAccount> bankAccountList = new ArrayList<>();
-
-//    @OneToMany(
-//            mappedBy = "user",
-//            cascade = CascadeType.ALL)
-//    List<BankAccount> bankAccountList = new ArrayList<>();
-
-//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "creditor_id")
-//    List<Transaction> creditorList = new ArrayList<>();
-
-//    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//    @JoinColumn(name = "debtor_id")
-//    List<Transaction> debtorList = new ArrayList<>();
-
-    @JsonIgnoreProperties("user")
-    @OneToMany(
-            mappedBy = "user",
-            cascade = CascadeType.ALL)
-    List<BankTransaction> bankTransactionsList = new ArrayList<>();
-
-    //@JsonIgnoreProperties("userIdDebtor")
-    @JsonIgnore
-    @OneToMany(
-            fetch = FetchType.LAZY,
-            mappedBy = "creditor",
-            cascade = CascadeType.ALL)
-    List<Transaction> creditorList = new ArrayList<>();
-
-    //@JsonIgnoreProperties("userIdDebtor")
-    @JsonIgnore
-    @OneToMany(
-            fetch = FetchType.LAZY,
-            mappedBy = "debtor",
-            cascade = CascadeType.ALL)
-    List<Transaction> debtorList = new ArrayList<>();
-
-
-    //@JsonIgnoreProperties("friendList")
-    @ManyToMany (
+    @ManyToMany(
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL
-            )
+    )
     @JoinTable(name = "contact", joinColumns =
     @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "friend_user_id"))
     @JsonIgnore
@@ -105,16 +81,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
-    public User() {}
-
-//    public User(String firstName, String lastName, String email, String password, BigDecimal walletBalance, List<User> friendList) {
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.email = email;
-//        this.password = password;
-//        this.walletBalance = walletBalance;
-//        this.friendList = friendList;
-//    }
+    public User() {
+    }
 
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
@@ -179,14 +147,6 @@ public class User {
         this.friendList = friendList;
     }
 
-//    public List<BankAccount> getUserBankAccount() {
-//        return bankAccountId;
-//    }
-//
-//    public void setUserBankAccount(List<BankAccount> bankAccountId) {
-//        this.bankAccountId = bankAccountId;
-//    }
-
     public List<BankAccount> getBankAccountList() {
         return bankAccountList;
     }
@@ -210,14 +170,6 @@ public class User {
     public void setCreditorList(List<Transaction> creditorList) {
         this.creditorList = creditorList;
     }
-
-//    public List<BankAccount> getBankAccountId() {
-//        return bankAccountId;
-//    }
-//
-//    public void setBankAccountId(List<BankAccount> bankAccountId) {
-//        this.bankAccountId = bankAccountId;
-//    }
 
     public List<BankTransaction> getBankTransactionsList() {
         return bankTransactionsList;

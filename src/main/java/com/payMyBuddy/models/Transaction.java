@@ -41,12 +41,6 @@ public class Transaction {
     @Column(name = "commission", nullable = false, precision = 6, scale = 2)
     private double commission;
 
-//    @JsonIgnoreProperties("transactionList")
-//    @ManyToOne
-//    @JoinColumn(name = "transaction_label_id")
-//    //@JsonIgnore
-//    private TransactionLabel transactionLabel;
-
     @Column(name = "description", nullable = false)
     private String description;
 
@@ -54,8 +48,6 @@ public class Transaction {
     @JsonIgnoreProperties("creditorList")
     @ManyToOne
     @JoinColumn(name = "creditor_id")
-    //@JsonIgnore
-    //Long userIdCreditor;
     private User creditor;
 
     @JsonIgnoreProperties("debtorList")
@@ -106,14 +98,6 @@ public class Transaction {
     public void setCommission(double commission) {
         this.commission = commission;
     }
-
-//    public TransactionLabel getTransactionLabel() {
-//        return transactionLabel;
-//    }
-//
-//    public void setTransactionLabel(TransactionLabel transactionLabel) {
-//        this.transactionLabel = transactionLabel;
-//    }
 
     public String getDescription() {
         return description;

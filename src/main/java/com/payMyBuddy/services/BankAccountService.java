@@ -6,7 +6,6 @@ import com.payMyBuddy.models.User;
 import com.payMyBuddy.repositories.BankAccountRepository;
 import com.payMyBuddy.repositories.BankTransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,29 +79,6 @@ public class BankAccountService {
         return true;
     }
 
-//    public boolean processBankTransaction(BankTransaction bankTransaction) {
-//        var amount = bankTransaction.getAmount();
-//        var com = bankTransaction.getCommission();
-//
-//        if (amount == 0) {
-//            return false;
-//        }
-//
-//        User user = bankTransaction.getUser();
-//        //BankAccount bankAccount = bankTransaction.getBankAccount();
-//        double absTotal = Math.abs(com);
-//
-//        if (amount > 0) {
-//            user.setWalletBalance(user.getWalletBalance().add(BigDecimal.valueOf(absTotal)));
-//        } else if (amount < 0 && BigDecimal.valueOf(absTotal).compareTo(user.getWalletBalance()) <= 0) {
-//            user.setWalletBalance(user.getWalletBalance().subtract(BigDecimal.valueOf(absTotal)));
-//        } else {
-//            return false;
-//        }
-//        userService.updateUser(user);
-//        return true;
-//    }
-
     public List<BankAccount> getAllBankAccounts() {
         return bankAccountRepository.findAll();
     }
@@ -121,14 +97,14 @@ public class BankAccountService {
 
     public void updateBankAccount(BankAccount bankAccount) {
         Optional<BankAccount> maj = bankAccountRepository.findById(bankAccount.getBankAccountId());
-        if (maj.isPresent()){
+        if (maj.isPresent()) {
             bankAccountRepository.save(bankAccount);
         }
     }
 
     public void deleteBankAccount(BankAccount bankAccount) {
         Optional<BankAccount> removeBankAccount = bankAccountRepository.findById(bankAccount.getBankAccountId());
-        if(removeBankAccount.isPresent()) {
+        if (removeBankAccount.isPresent()) {
             bankAccountRepository.deleteById(bankAccount.getBankAccountId());
         }
     }
@@ -137,5 +113,7 @@ public class BankAccountService {
         return bankTransactionRepository.findAllBankTransactionsByUser(user);
     }
 
-    public List<BankTransaction> getAllBankTransactions() { return bankTransactionRepository.findAll(); }
+    public List<BankTransaction> getAllBankTransactions() {
+        return bankTransactionRepository.findAll();
+    }
 }

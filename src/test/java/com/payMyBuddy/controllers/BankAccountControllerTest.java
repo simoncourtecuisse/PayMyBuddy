@@ -410,7 +410,7 @@ class BankAccountControllerTest {
         when(mockBankAccountService.getBankAccountById(0L)).thenReturn(bankAccount);
 
 
-        final BankTransaction bankAccountTransaction  = new BankTransaction(0.0, LocalDate.of(2020, 1, 1));
+        final BankTransaction bankAccountTransaction = new BankTransaction(0.0, LocalDate.of(2020, 1, 1));
         when(mockBankAccountService.createBankAccountTransaction(user.get(), bankAccount.get(), 10.0)).thenReturn(bankAccountTransaction);
         System.out.println(bankAccountTransaction);
 
@@ -477,7 +477,7 @@ class BankAccountControllerTest {
         when(mockBankAccountService.getBankAccountById(0L)).thenReturn(bankAccount);
 
 
-        final BankTransaction bankAccountTransaction  = new BankTransaction(0.0, LocalDate.of(2020, 1, 1));
+        final BankTransaction bankAccountTransaction = new BankTransaction(0.0, LocalDate.of(2020, 1, 1));
         when(mockBankAccountService.createBankAccountTransaction(user.get(), bankAccount.get(), 10.0)).thenReturn(bankAccountTransaction);
         System.out.println(bankAccountTransaction);
 
@@ -542,7 +542,7 @@ class BankAccountControllerTest {
         final Optional<BankAccount> bankAccount = Optional.of(new BankAccount(0, "bankName"));
         when(mockBankAccountService.getBankAccountById(0L)).thenReturn(bankAccount);
 
-        final BankTransaction bankAccountTransaction  = new BankTransaction(0.0, LocalDate.of(2020, 1, 1));
+        final BankTransaction bankAccountTransaction = new BankTransaction(0.0, LocalDate.of(2020, 1, 1));
         bankAccountTransaction.setCommission(10);
         when(mockBankAccountService.createBankAccountTransaction(user.get(), bankAccount.get(), 10.0)).thenReturn(bankAccountTransaction);
         System.out.println(bankAccountTransaction);

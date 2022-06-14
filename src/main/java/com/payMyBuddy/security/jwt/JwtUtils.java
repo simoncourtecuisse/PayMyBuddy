@@ -8,10 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.Date;
 
 @Component
@@ -29,8 +25,6 @@ public class JwtUtils {
         return Jwts.builder()
                 .setSubject((userPrincipal.getEmail()))
                 .setIssuedAt(new Date())
-
-                //.setExpiration(new Date(new Date().getTime() + new SimpleDateFormat("MM/dd/yyyy").parse(jwtExpirationMs)))
                 .setExpiration(new Date((new Date()).getTime() + Long.parseLong(jwtExpirationMs)))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();

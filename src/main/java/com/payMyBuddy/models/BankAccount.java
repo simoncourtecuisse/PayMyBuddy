@@ -3,10 +3,8 @@ package com.payMyBuddy.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +13,11 @@ import java.util.List;
 @Table(name = "bank_account")
 public class BankAccount {
 
+    @JsonIgnoreProperties("bankAccount")
+    @OneToMany(
+            mappedBy = "bankAccount",
+            cascade = CascadeType.MERGE)
+    List<BankTransaction> bankTransactionsList = new ArrayList<>();
     @Id
     @SequenceGenerator(
             name = "bank_account_sequence",
@@ -27,29 +30,17 @@ public class BankAccount {
     )
     @Column(name = "bank_account_id")
     private Long bankAccountId;
-
     @Column(name = "iban", nullable = false)
     private int iban;
-
     @Column(name = "bankName")
     private String bankName;
-
-//    @Column(name = "balance", nullable = false, precision = 10, scale = 2)
-//    private BigDecimal balance;
-
-    //@JsonIgnoreProperties("bankAccountList")
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
 
-    @JsonIgnoreProperties("bankAccount")
-    @OneToMany(
-            mappedBy = "bankAccount",
-            cascade = CascadeType.MERGE)
-    List<BankTransaction> bankTransactionsList = new ArrayList<>();
-
-    public BankAccount(){}
+    public BankAccount() {
+    }
 
     public BankAccount(int iban, String bankName) {
         this.iban = iban;
@@ -95,7 +86,6 @@ public class BankAccount {
                 ", iban=" + iban +
                 ", bankName='" + bankName + '\'' +
                 ", user=" + user +
-                //", bankTransactionsList=" + bankTransactionsList +
                 '}';
     }
 }

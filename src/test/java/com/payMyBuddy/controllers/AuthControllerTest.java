@@ -1,7 +1,6 @@
 package com.payMyBuddy.controllers;
 
 import com.google.gson.JsonObject;
-import com.payMyBuddy.models.BankAccount;
 import com.payMyBuddy.models.ERole;
 import com.payMyBuddy.models.Role;
 import com.payMyBuddy.models.User;
@@ -15,7 +14,6 @@ import com.payMyBuddy.security.jwt.JwtUtils;
 import com.payMyBuddy.security.services.UserDetailsImpl;
 import com.payMyBuddy.security.services.UserDetailsServiceImpl;
 import com.payMyBuddy.services.UserService;
-import org.hibernate.mapping.Collection;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +33,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -78,7 +75,7 @@ class AuthControllerTest {
         loginRequest.setPassword("password");
 
 
-        Optional <UserDetailsImpl> userDetails = Optional.of(new UserDetailsImpl(0L, "email", "password", List.of()));
+        Optional<UserDetailsImpl> userDetails = Optional.of(new UserDetailsImpl(0L, "email", "password", List.of()));
         Authentication authentication = mockAuthenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
         //when(mockAuthenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()))).thenReturn(authentif);
         System.out.println(authentication);

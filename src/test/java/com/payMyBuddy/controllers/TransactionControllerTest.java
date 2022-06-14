@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -272,8 +271,7 @@ class TransactionControllerTest {
         final List<Transaction> transactions = List.of(
                 new Transaction(0.0, LocalDate.of(2020, 1, 1), 0.0, "description"));
         when(mockTransactionService.getAllTransactionsByUser(any(User.class))).thenReturn(transactions);
-
-        when(mockTransactionService.getAllTransactionsByUser(debtor)).thenReturn( transactions);
+        when(mockTransactionService.getAllTransactionsByUser(debtor)).thenReturn(transactions);
 
         // Run the test
         JsonObject jsonObject = new JsonObject();
@@ -364,9 +362,6 @@ class TransactionControllerTest {
         var debtor = user.get();
         var creditorId = transaction.getCreditor();
         //var creditor = mockUserService.getUserById(creditorId.getUserId());
-
-
-
         when(mockTransactionService.processUserTransaction(any(Transaction.class))).thenReturn(false);
         when(mockTransactionService.getAllTransactionsByUser(any(User.class))).thenReturn(Collections.emptyList());
 

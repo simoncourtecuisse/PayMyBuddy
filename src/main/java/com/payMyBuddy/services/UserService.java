@@ -38,18 +38,14 @@ public class UserService {
 
     public void updateUser(User user) {
         Optional<User> maj = userRepository.findById(user.getUserId());
-        if (maj.isPresent()){
-              userRepository.save(user);
+        if (maj.isPresent()) {
+            userRepository.save(user);
         }
-//        Optional<User> majUser = userRepository.findById(user.getUserId());
-//        if (majUser.isPresent()){
-//            userRepository.save(user);
-//        }
     }
 
     public void deleteUser(User user) {
         Optional<User> removeUser = userRepository.findByEmail(user.getEmail());
-        if(removeUser.isPresent()) {
+        if (removeUser.isPresent()) {
             userRepository.deleteById(user.getUserId());
         }
     }
@@ -63,10 +59,6 @@ public class UserService {
         user.getFriendList().remove(friendUser);
         userRepository.save(user);
     }
-
-//    public List<User> getAllFriends(User user) {
-//       return userRepository.findAllFriendsByUserId(user.getUserId());
-//    }
 
     public void addBankAccount(User user, BankAccount bankAccount) {
         user.getBankAccountList().add(bankAccount);

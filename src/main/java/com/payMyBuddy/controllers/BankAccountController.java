@@ -8,10 +8,8 @@ import com.payMyBuddy.services.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -21,29 +19,19 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200/", allowedHeaders = "*")
-//@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
 @RestController
-//@RequestMapping("/bankAccount")
 public class BankAccountController {
 
+    Logger LOGGER = LogManager.getLogger(BankAccount.class);
     @Autowired
     private BankAccountService bankAccountService;
-
     @Autowired
     private UserService userService;
-
-    Logger LOGGER = LogManager.getLogger(BankAccount.class);
 
     @PostMapping("/bankAccount")
     public ResponseEntity<?> createBankAccount(@RequestBody BankAccount bankAccount) {
         bankAccountService.addBankAccount(bankAccount);
         return new ResponseEntity<>("Bank Account Created", HttpStatus.CREATED);
-//        if (bankAccountService.getBankAccountById(bankAccount.getBankAccountId()).isPresent()) {
-//            bankAccountService.addBankAccount(bankAccount);
-//            LOGGER.info("Bank Account created successfully");
-//            return new ResponseEntity<>("Bank Account Created", HttpStatus.CREATED);
-//        }
-//        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/bankAccount")
@@ -85,7 +73,7 @@ public class BankAccountController {
     public ResponseEntity<?> getAllBankAccountByUser(@PathVariable("userId") Long id) {
         if (userService.getUserById(id).isPresent()) {
             User user = userService.getUserById(id).get();
-            return new ResponseEntity<>(user.getBankAccountList(),HttpStatus.OK);
+            return new ResponseEntity<>(user.getBankAccountList(), HttpStatus.OK);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
@@ -101,11 +89,7 @@ public class BankAccountController {
         if (!user.getBankAccountList().contains(bankAccount)) {
             bankAccount.setUser(user);
             userService.addBankAccount(user, bankAccount);
-
-
             System.out.println(bankAccount);
-//            bankAccountRepository.save(bankAccount);
-//            bankAccount.setUser(user);
             LOGGER.info("Add bank account success");
             return new ResponseEntity<>(user.getBankAccountList(), HttpStatus.CREATED);
         }
@@ -139,7 +123,7 @@ public class BankAccountController {
             var listOrder = bankTransactionList.stream()
                     .sorted(Comparator.comparing(BankTransaction::getDate).reversed())
                     .collect(Collectors.toList());
-            return new ResponseEntity<>(listOrder,HttpStatus.OK);
+            return new ResponseEntity<>(listOrder, HttpStatus.OK);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
@@ -177,7 +161,7 @@ public class BankAccountController {
 
         var commission = bankAccountTransaction.getCommission();
         var userBalance = user.getWalletBalance();
-        if (userBalance.compareTo(BigDecimal.valueOf(commission)) <  0) {
+        if (userBalance.compareTo(BigDecimal.valueOf(commission)) < 0) {
             LOGGER.error("Not enough found in wallet");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -196,7 +180,7 @@ public class BankAccountController {
     public ResponseEntity<?> getAllBankAccounts() {
         return new ResponseEntity<>(bankAccountService.getAllBankAccounts(), HttpStatus.OK);
     }
-//    @Query("SELECT a FROM bank_transaction")
+
     @GetMapping("/user/profile/bankTransactions")
     public ResponseEntity<?> getAllBankTransactions() {
         List<BankTransaction> bankTransactionList = bankAccountService.getAllBankTransactions();
