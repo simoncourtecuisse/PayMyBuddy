@@ -18,7 +18,9 @@ ____________________
 - MySQL, Connector/J & Community Server
 
 ## Build
-Build application with the command `mvn clean install`.
+Build application with the command `mvn clean install` for the back-end side.
+
+For the front-side, install NodeJS and NPM from https://nodejs.org. Install the Angular CLI globally on your system with the command `npm install -g @angular/cli`.
 
 ## Run
 To run the application you have to update the `application.properties` in the `resources` folder:
@@ -38,7 +40,7 @@ payMyBuddy.app.jwtExpirationMs=86400000
 ```
 Change the `spring.datasource.username=your_username` and the `spring.datasource.password=your_password`.
 
-For the back-end side run the command `mvn spring-boot:run` then navigate to the angular folder and run the command `npm run start` for the frond-end side.
+For the back-end side run the command `mvn spring-boot:run` then navigate to the angular folder and run the command `npm run start` this will compile the Angular app and automatically launch it in the browser on the URL http://localhost:4200.
 
 
 ## Try the application
