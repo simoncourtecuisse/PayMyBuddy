@@ -21,7 +21,7 @@ ____________________
 Build application with the command `mvn clean install` for the back-end side.
 
 For the front-side, install NodeJS and NPM from https://nodejs.org.
-Install the Angular on your system with the command `npm install`.
+Run the command `npm install`.
 
 ## Run
 To run the application you have to update the `application.properties` in the `resources` folder:
